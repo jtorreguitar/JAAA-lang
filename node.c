@@ -2,8 +2,8 @@
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
-#include "y.tab.h"
 #include <math.h>
+#include "y.tab.h"
 
 typedef Node (*converterFunction)(Node n1);
 typedef Node (*operationFunction)(Node typeDefiner, Node typeBetrayer);
@@ -16,11 +16,11 @@ void yyerror (char const *s) {
  }
 
 
-int ftoa(double d, char* buffer)
+int ftoa(double d, char** buffer)
 {
 	int len = snprintf(NULL, 0, "%f", d);
-	buffer = (char *)calloc(len + 1, sizeof(char));
-	snprintf(buffer, len + 1, "%f", d);
+	*buffer = (char *)calloc(len + 1, sizeof(char));
+	snprintf(*buffer, len + 1, "%f", d);
 	return len + 1;
 }
 
@@ -160,6 +160,7 @@ Node subtractByType(Node typeDefiner, Node typeBetrayer)
 			yyerror("invalid operation exception: strings cannot be subtracted");
 			break;
 	}
+	return result;
 }
 
 Node multiplyByType(Node typeDefiner, Node typeBetrayer)
@@ -187,6 +188,7 @@ Node multiplyByType(Node typeDefiner, Node typeBetrayer)
 			yyerror("invalid operation exception: strings cannot be multiplied");
 			break;
 	}
+	return result;
 }
 
 Node divideByType(Node typeDefiner, Node typeBetrayer)
@@ -224,6 +226,7 @@ Node divideByType(Node typeDefiner, Node typeBetrayer)
 			yyerror("invalid operation exception: strings cannot be divided");
 			break;
 	}
+	return result;
 }
 
 Node toInteger(Node n)
@@ -278,7 +281,6 @@ Node toString(Node n)
 {
 	Node ret = malloc(sizeof(node));
 	ret->type = string;
-	int auxint;
 	double auxdouble;
 	char * auxstring;
 	int digits;
@@ -296,7 +298,7 @@ Node toString(Node n)
 			my_itoa(*((int*)n->value), ((char*)ret->value));
 		case floating:
 			auxdouble = *((double*)n->value);
-			ret->dataSize = ftoa(auxdouble, auxstring);
+			ret->dataSize = ftoa(auxdouble, &auxstring);
 			ret->value = calloc(ret->dataSize, sizeof(char));
 			memcpy(ret->value, auxstring, ret->dataSize);
 			break;
