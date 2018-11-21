@@ -8,6 +8,7 @@
 %%
 
 ([0-9]+|[0-9]+\.[0-9]+) {
+	yylval.n = malloc(sizeof(node));
 	double* val = (double*) malloc(sizeof(double));
 	*val = atof(yytext);
 	yylval.n->value = (void*) val;
@@ -17,6 +18,7 @@
 
 [ \t] ;
 [a-z] { 
+	yylval.n = malloc(sizeof(node));
 	yylval.n->name = malloc(sizeof(char)*(strlen(yytext) + 1));
 	strcpy(yylval.n->name, yytext);
 	return NAME;

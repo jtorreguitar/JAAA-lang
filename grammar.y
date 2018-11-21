@@ -78,4 +78,5 @@ expression: expression '+' expression
 int main(int argc, char **argv)
 {
 	symbolList = createListL(cmpFunction, sizeof(node));
+	yyparse();
 }
