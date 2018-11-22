@@ -93,7 +93,7 @@ void printByValue(node n)
 			printf(">> %g\n", *((double*)n.value));
 			break;
 		case string:
-			printf(">> %s\n", ((char*)n.value));
+			printf(">> \"%s\"\n", ((char*)n.value));
 			break;
 	}
 }
