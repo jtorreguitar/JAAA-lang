@@ -14,7 +14,8 @@
 }
 
 %token <n> NAME
-%token <n> NUMBER
+%token <n> FLOAT
+%token <n> INTEGER
 %left '-' '+'
 %right '*' '/'
 %nonassoc UMINUS
@@ -28,7 +29,7 @@ statement_list: statement '\n'
 
 statement: NAME '=' expression 
 				{ 
-					Node n = (Node)getL(symbolList, $1->name);
+					Node n = (Node) getL(symbolList, $1->name);
 					if(n != 0)
 					{
 						free(n->value);
@@ -69,7 +70,8 @@ expression: expression '+' expression
 		  			$$->type = $2->type;
 		  			assignValue($$, $2->value) ;
 		  		}
-		  | NUMBER
+		  | FLOAT
+		  | INTEGER
 		  | NAME { $$ = (Node) getL(symbolList, $$->name); }
 		  ;
 

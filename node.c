@@ -88,10 +88,13 @@ void printByValue(node n)
 	{
 		case integer:
 			printf("=%d\n", *((int*)n.value));
+			break;
 		case floating:
 			printf("=%g\n", *((double*)n.value));
+			break;
 		case string:
 			printf("=%s\n", ((char*)n.value));
+			break;
 	}
 }
 
@@ -110,7 +113,7 @@ Node addByType(Node typeDefiner, Node typeBetrayer)
 	Node result = malloc(sizeof(node));
 	result->type = typeDefiner->type;
 	int auxint;
-	int auxdouble;
+	double auxdouble;
 	switch (typeDefiner->type)
 	{
 		case integer:
@@ -236,13 +239,15 @@ Node toInteger(Node n)
 	ret->dataSize = sizeof(int);
 	ret->type = integer;
 	int auxint;
+	double auxdouble;
 	switch (n->type)
 	{
 		case integer:
 			memcpy(ret->value, n->value, sizeof(int));
 			break;
 		case floating:
-			auxint = *((float*)ret->value);
+			auxdouble = *((double*)n->value);
+			auxint = (int) auxdouble;
 			memcpy(ret->value, &auxint, sizeof(int));
 			break;
 		case string:
@@ -260,13 +265,15 @@ Node toFloating(Node n)
 	ret->dataSize = sizeof(double);
 	ret->type = floating;
 	double auxdouble;
+	int auxint;
 	switch (n->type)
 	{
 		case floating:
 			memcpy(ret->value, n->value, sizeof(double));
 			break;
 		case integer:
-			auxdouble = *((double*)n->value);
+			auxint = *((int*)n->value);
+			auxdouble = (double) auxint;
 			memcpy(ret->value, &auxdouble, sizeof(double));
 			break;
 		case string:

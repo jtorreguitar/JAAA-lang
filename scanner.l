@@ -7,13 +7,22 @@
 
 %%
 
-([0-9]+|[0-9]+\.[0-9]+) {
+[0-9]+\.[0-9]+ {
 	yylval.n = malloc(sizeof(node));
 	double* val = (double*) malloc(sizeof(double));
 	*val = atof(yytext);
 	yylval.n->value = (void*) val;
 	yylval.n->type = floating;
-	return NUMBER;
+	return FLOAT;
+}
+
+[0-9]+ {
+	yylval.n = malloc(sizeof(node));
+	int* val = (int*) malloc(sizeof(node));
+	*val = atoi(yytext);
+	yylval.n->value = (void*) val;
+	yylval.n->type = integer;
+	return INTEGER;
 }
 
 [ \t] ;
