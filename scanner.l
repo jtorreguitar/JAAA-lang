@@ -26,10 +26,13 @@
 }
 
 \"(\\.|[^"\\])*\" {
+	int len = strlen(yytext);
 	yylval.n = malloc(sizeof(node));
-	yylval.n->value = malloc((strlen(yytext) + 1)*sizeof(char));
+	yylval.n->value = malloc((len - 1)*sizeof(char));
 	yylval.n->type = string;
-	memcpy(yylval.n->value, yytext, (strlen(yytext) + 1) * sizeof(char));
+	yylval.n->dataSize = len - 1;
+	memcpy(yylval.n->value, yytext + 1, (len - 2) * sizeof(char));
+	((char*)yylval.n->value)[len - 1] = 0;
 	return STRING;
 }
 

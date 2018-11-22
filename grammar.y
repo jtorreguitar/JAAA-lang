@@ -48,28 +48,48 @@ statement: NAME '=' expression
 expression: expression '+' expression 
 				{
 					$$ = binaryOperation($1, $3, addition);
+					free($1->value);
+					free($1);
+					free($3->value);
+					free($3);
 				}
 		  | expression '-' expression 
 		  		{
 		  			$$ = binaryOperation($1, $3, subtraction); 
+					free($1->value);
+					free($1);
+					free($3->value);
+					free($3);
 		  		}
 		  | expression '*' expression 
 		  		{
-		  			$$ = binaryOperation($1, $3, multiplication); 
+		  			$$ = binaryOperation($1, $3, multiplication);
+					free($1->value);
+					free($1);
+					free($3->value);
+					free($3);
 		  		}
 		  | expression '/' expression 
 		  		{ 
-		  			$$ = binaryOperation($1, $3, division); 
+		  			$$ = binaryOperation($1, $3, division);
+					free($1->value);
+					free($1);
+					free($3->value);
+					free($3);
 		  		}
 		  | '-' expression %prec UMINUS 
 		  		{ 
-		  			$$ = UMinusByType($2); 
+		  			$$ = UMinusByType($2);
+					free($2->value);
+					free($2);
 		  		}
 		  | '(' expression ')' 
 		  		{ 
 		  			$$ = malloc(sizeof(node));
 		  			$$->type = $2->type;
-		  			assignValue($$, $2->value) ;
+		  			assignValue($$, $2->value);
+					free($2->value);
+					free($2);
 		  		}
 		  | FLOAT
 		  | INTEGER

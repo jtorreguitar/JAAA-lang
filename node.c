@@ -87,13 +87,13 @@ void printByValue(node n)
 	switch (n.type)
 	{
 		case integer:
-			printf("=%d\n", *((int*)n.value));
+			printf(">> %d\n", *((int*)n.value));
 			break;
 		case floating:
-			printf("=%g\n", *((double*)n.value));
+			printf(">> %g\n", *((double*)n.value));
 			break;
 		case string:
-			printf("=%s\n", ((char*)n.value));
+			printf(">> %s\n", ((char*)n.value));
 			break;
 	}
 }
@@ -131,10 +131,12 @@ Node addByType(Node typeDefiner, Node typeBetrayer)
 		case string:
 			result->value = malloc(typeDefiner->dataSize + auxBetrayer->dataSize - 1);
 			memcpy(result->value, typeDefiner->value, typeDefiner->dataSize);
-			strcat(result->value, typeDefiner->value);
+			result->value = strcat((char*)result->value, (char*)auxBetrayer->value);
 			result->dataSize = typeDefiner->dataSize + auxBetrayer->dataSize - 1;
 			break;
 	}
+	free(auxBetrayer->value);
+	free(auxBetrayer);
 	return result;
 }
 
@@ -163,6 +165,8 @@ Node subtractByType(Node typeDefiner, Node typeBetrayer)
 			yyerror("invalid operation exception: strings cannot be subtracted");
 			break;
 	}
+	free(auxBetrayer->value);
+	free(auxBetrayer);
 	return result;
 }
 
@@ -191,6 +195,8 @@ Node multiplyByType(Node typeDefiner, Node typeBetrayer)
 			yyerror("invalid operation exception: strings cannot be multiplied");
 			break;
 	}
+	free(auxBetrayer->value);
+	free(auxBetrayer);
 	return result;
 }
 
@@ -229,6 +235,8 @@ Node divideByType(Node typeDefiner, Node typeBetrayer)
 			yyerror("invalid operation exception: strings cannot be divided");
 			break;
 	}
+	free(auxBetrayer->value);
+	free(auxBetrayer);
 	return result;
 }
 
@@ -303,6 +311,7 @@ Node toString(Node n)
 			ret->dataSize = (digits + 1)*sizeof(char);
 			ret->value = calloc(digits + 1, sizeof(char));
 			my_itoa(*((int*)n->value), ((char*)ret->value));
+			break;
 		case floating:
 			auxdouble = *((double*)n->value);
 			ret->dataSize = ftoa(auxdouble, &auxstring);
