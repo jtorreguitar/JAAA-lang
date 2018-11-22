@@ -16,6 +16,7 @@
 %token <n> NAME
 %token <n> FLOAT
 %token <n> INTEGER
+%token <n> STRING
 %left '-' '+'
 %right '*' '/'
 %nonassoc UMINUS
@@ -72,6 +73,7 @@ expression: expression '+' expression
 		  		}
 		  | FLOAT
 		  | INTEGER
+		  | STRING
 		  | NAME { $$ = (Node) getL(symbolList, $$->name); }
 		  ;
 

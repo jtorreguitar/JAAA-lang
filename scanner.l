@@ -25,6 +25,14 @@
 	return INTEGER;
 }
 
+\"(\\.|[^"\\])*\" {
+	yylval.n = malloc(sizeof(node));
+	yylval.n->value = malloc((strlen(yytext) + 1)*sizeof(char));
+	yylval.n->type = string;
+	memcpy(yylval.n->value, yytext, (strlen(yytext) + 1) * sizeof(char));
+	return STRING;
+}
+
 [ \t] ;
 [a-z] { 
 	yylval.n = malloc(sizeof(node));
