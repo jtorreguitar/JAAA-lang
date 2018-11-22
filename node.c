@@ -93,7 +93,7 @@ void printByValue(node n)
 			printf(">> %g\n", *((double*)n.value));
 			break;
 		case string:
-			printf(">> %s\n", ((char*)n.value));
+			printf(">> %s\n", (char*)n.value);
 			break;
 	}
 }
@@ -112,8 +112,8 @@ Node addByType(Node typeDefiner, Node typeBetrayer)
 	Node auxBetrayer = converterFunctions[typeDefiner->type](typeBetrayer);
 	Node result = malloc(sizeof(node));
 	result->type = typeDefiner->type;
-	int auxint;
-	double auxdouble;
+	int auxint = 0;
+	double auxdouble = 0;
 	switch (typeDefiner->type)
 	{
 		case integer:
@@ -129,8 +129,9 @@ Node addByType(Node typeDefiner, Node typeBetrayer)
 			memcpy(result->value, (void*)&auxdouble, sizeof(double));
 			break;
 		case string:
+			((char *) auxBetrayer->value)[auxBetrayer->dataSize - 1] = 0; /* TODO: calloc to avoid this */
 			result->value = malloc(typeDefiner->dataSize + auxBetrayer->dataSize - 1);
-			memcpy(result->value, typeDefiner->value, typeDefiner->dataSize);
+			memcpy(result->value, typeDefiner->value, typeDefiner->dataSize - 1);
 			result->value = strcat((char*)result->value, (char*)auxBetrayer->value);
 			result->dataSize = typeDefiner->dataSize + auxBetrayer->dataSize - 1;
 			break;
