@@ -41,9 +41,9 @@ int cmpFunction(void* node1, void* name)
 
 Node newNode(char* name, TYPE type, void* value)
 {
-	Node n = malloc(sizeof(node));
+	Node n = calloc(1, sizeof(node));
 	n->type = type;
-	n->name = malloc(strlen(name) + 1);
+	n->name = calloc(strlen(name) + 1, sizeof(char));
 	strcpy(n->name, name);
 	assignValue(n, value);
 	assignSize(n, value);
@@ -52,17 +52,22 @@ Node newNode(char* name, TYPE type, void* value)
 
 void assignValue(Node n, void* value)
 {
-	int size;
+	int size = 1;
+	int sizeOfMember;
 	switch (n->type)
 	{
 		case integer:
-			size = sizeof(int);
+			sizeOfMember = sizeof(int);
+			break;
 		case floating:
-			size = sizeof(float);
+			sizeOfMember = sizeof(float);
+			break;
 		case string:
 			size = strlen((char*) value) + 1;
+			sizeOfMember = sizeof(char);
+			break;
 	}
-	n->value = malloc(size);
+	n->value = calloc(size, sizeOfMember);
 	memcpy(n->value, value, size);
 }
 
@@ -110,7 +115,7 @@ Node binaryOperation(Node typeDefiner, Node typeBetrayer, int operation)
 Node addByType(Node typeDefiner, Node typeBetrayer)
 {
 	Node auxBetrayer = converterFunctions[typeDefiner->type](typeBetrayer);
-	Node result = malloc(sizeof(node));
+	Node result = calloc(1, sizeof(node));
 	result->type = typeDefiner->type;
 	int auxint = 0;
 	double auxdouble = 0;
@@ -119,18 +124,18 @@ Node addByType(Node typeDefiner, Node typeBetrayer)
 		case integer:
 			auxint = (*((int*)typeDefiner->value)) + (*((int*)auxBetrayer->value));
 			result->dataSize = sizeof(int);
-			result->value = malloc(sizeof(int));
+			result->value = calloc(1, sizeof(int));
 			memcpy(result->value, (void*)&auxint, sizeof(int));
 			break;
 		case floating:
 			auxdouble = (*((double*)typeDefiner->value)) + (*((double*)auxBetrayer->value));
 			result->dataSize = sizeof(double);
-			result->value = malloc(sizeof(double));
+			result->value = calloc(1, sizeof(double));
 			memcpy(result->value, (void*)&auxdouble, sizeof(double));
 			break;
 		case string:
 			((char *) auxBetrayer->value)[auxBetrayer->dataSize - 1] = 0; /* TODO: calloc to avoid this */
-			result->value = malloc(typeDefiner->dataSize + auxBetrayer->dataSize - 1);
+			result->value = calloc(typeDefiner->dataSize + auxBetrayer->dataSize - 1, sizeof(char));
 			memcpy(result->value, typeDefiner->value, typeDefiner->dataSize - 1);
 			result->value = strcat((char*)result->value, (char*)auxBetrayer->value);
 			result->dataSize = typeDefiner->dataSize + auxBetrayer->dataSize - 1;
@@ -144,7 +149,7 @@ Node addByType(Node typeDefiner, Node typeBetrayer)
 Node subtractByType(Node typeDefiner, Node typeBetrayer)
 {
 	Node auxBetrayer = converterFunctions[typeDefiner->type](typeBetrayer);
-	Node result = malloc(sizeof(node));
+	Node result = calloc(1, sizeof(node));
 	result->type = typeDefiner->type;
 	int auxint;
 	int auxdouble;
@@ -153,13 +158,13 @@ Node subtractByType(Node typeDefiner, Node typeBetrayer)
 		case integer:
 			auxint = (*((int*)typeDefiner->value)) - (*((int*)auxBetrayer->value));
 			result->dataSize = sizeof(int);
-			result->value = malloc(sizeof(int));
+			result->value = calloc(1, sizeof(int));
 			memcpy(result->value, (void*)&auxint, sizeof(int));
 			break;
 		case floating:
 			auxdouble = (*((double*)typeDefiner->value)) - (*((double*)auxBetrayer->value));
 			result->dataSize = sizeof(double);
-			result->value = malloc(sizeof(double));
+			result->value = calloc(1, sizeof(double));
 			memcpy(result->value, (void*)&auxdouble, sizeof(double));
 			break;
 		case string:
@@ -174,7 +179,7 @@ Node subtractByType(Node typeDefiner, Node typeBetrayer)
 Node multiplyByType(Node typeDefiner, Node typeBetrayer)
 {
 	Node auxBetrayer = converterFunctions[typeDefiner->type](typeBetrayer);
-	Node result = malloc(sizeof(node));
+	Node result = calloc(1, sizeof(node));
 	result->type = typeDefiner->type;
 	int auxint;
 	double auxdouble;
@@ -183,13 +188,13 @@ Node multiplyByType(Node typeDefiner, Node typeBetrayer)
 		case integer:
 			auxint = (*((int*)typeDefiner->value)) * (*((int*)auxBetrayer->value));
 			result->dataSize = sizeof(int);
-			result->value = malloc(sizeof(int));
+			result->value = calloc(1, sizeof(int));
 			memcpy(result->value, (void*)&auxint, sizeof(int));
 			break;
 		case floating:
 			auxdouble = (*((double*)typeDefiner->value)) * (*((double*)auxBetrayer->value));
 			result->dataSize = sizeof(double);
-			result->value = malloc(sizeof(double));
+			result->value = calloc(1, sizeof(double));
 			memcpy(result->value, (void*)&auxdouble, sizeof(double));
 			break;
 		case string:
@@ -204,7 +209,7 @@ Node multiplyByType(Node typeDefiner, Node typeBetrayer)
 Node divideByType(Node typeDefiner, Node typeBetrayer)
 {
 	Node auxBetrayer = converterFunctions[typeDefiner->type](typeBetrayer);
-	Node result = malloc(sizeof(node));
+	Node result = calloc(1, sizeof(node));
 	result->type = typeDefiner->type;
 	double auxdouble;
 	int auxint;
@@ -218,7 +223,7 @@ Node divideByType(Node typeDefiner, Node typeBetrayer)
 			}
 			auxint = (*((int*)typeDefiner->value)) / (*((int*)auxBetrayer->value));
 			result->dataSize = sizeof(int);
-			result->value = malloc(sizeof(int));
+			result->value = calloc(1, sizeof(int));
 			memcpy(result->value, (void*)&auxint, sizeof(int));
 			break;
 		case floating:
@@ -229,7 +234,7 @@ Node divideByType(Node typeDefiner, Node typeBetrayer)
 			}
 			auxdouble = (*((double*)typeDefiner->value)) / (*((double*)auxBetrayer->value));
 			result->dataSize = sizeof(double);
-			result->value = malloc(sizeof(double));
+			result->value = calloc(1, sizeof(double));
 			memcpy(result->value, (void*)&auxdouble, sizeof(double));
 			break;
 		case string:
@@ -243,8 +248,8 @@ Node divideByType(Node typeDefiner, Node typeBetrayer)
 
 Node toInteger(Node n)
 {
-	Node ret = malloc(sizeof(node));
-	ret->value = malloc(sizeof(int));
+	Node ret = calloc(1, sizeof(node));
+	ret->value = calloc(1, sizeof(int));
 	ret->dataSize = sizeof(int);
 	ret->type = integer;
 	int auxint;
@@ -260,7 +265,7 @@ Node toInteger(Node n)
 			memcpy(ret->value, &auxint, sizeof(int));
 			break;
 		case string:
-			auxint = atoi((char*)ret->value);
+			auxint = atoi((char*)n->value);
 			memcpy(ret->value, (void*)&auxint, sizeof(int));
 			break;
 	}
@@ -269,8 +274,8 @@ Node toInteger(Node n)
 
 Node toFloating(Node n)
 {
-	Node ret = malloc(sizeof(node));
-	ret->value = malloc(sizeof(double));
+	Node ret = calloc(1, sizeof(node));
+	ret->value = calloc(1, sizeof(double));
 	ret->dataSize = sizeof(double);
 	ret->type = floating;
 	double auxdouble;
@@ -295,7 +300,7 @@ Node toFloating(Node n)
 
 Node toString(Node n)
 {
-	Node ret = malloc(sizeof(node));
+	Node ret = calloc(1, sizeof(node));
 	ret->type = string;
 	double auxdouble;
 	char * auxstring;
@@ -304,7 +309,7 @@ Node toString(Node n)
 	{
 		case string:
 			ret->dataSize = n->dataSize;
-			ret->value = malloc(n->dataSize*sizeof(char));
+			ret->value = calloc(n->dataSize, sizeof(char));
 			memcpy(ret->value, n->value, n->dataSize);
 			break;
 		case integer:
@@ -325,7 +330,7 @@ Node toString(Node n)
 
 Node UMinusByType(Node n)
 {
-	Node ret = malloc(sizeof(node));
+	Node ret = calloc(1, sizeof(node));
 	double auxdouble;
 	int auxint;
 	switch (n->type)
@@ -334,12 +339,12 @@ Node UMinusByType(Node n)
 			yyerror("operation exception: unary minus not applicable to string");
 			return n;
 		case floating:
-			ret->value = malloc(sizeof(double));
+			ret->value = calloc(1, sizeof(double));
 			auxdouble = -*((double*)n->value);
 			memcpy(ret->value, (void*)&auxdouble, sizeof(double));
 			break;
 		case integer:
-			ret->value = malloc(sizeof(int));
+			ret->value = calloc(1, sizeof(int));
 			auxint = -*((int*)n->value);
 			memcpy(ret->value, (void*)&auxint, sizeof(int));
 			break;
