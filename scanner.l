@@ -36,10 +36,34 @@
 	return STRING;
 }
 
+"true" {
+	yylval.n = calloc(1, sizeof(node));
+	yylval.n->type = boolean;
+	yylval.n->dataSize = sizeof(int);
+	yylval.n->value = malloc(sizeof(int));
+	int val = 1;
+	memcpy(yylval.n->value, (void*)&val, sizeof(int));
+	return BOOL;
+}
+
+"false" {
+	yylval.n = calloc(1, sizeof(node));
+	yylval.n->type = boolean;
+	yylval.n->dataSize = sizeof(int);
+	yylval.n->value = malloc(sizeof(int));
+	int val = 0;
+	memcpy(yylval.n->value, (void*)&val, sizeof(int));
+	return BOOL;
+}
+
+"unchanging" {
+	return CONST;
+}
+
 [ \t] ;
-[a-z] { 
-	yylval.n = malloc(sizeof(node));
-	yylval.n->name = malloc(sizeof(char)*(strlen(yytext) + 1));
+[a-z]+ { 
+	yylval.n = calloc(1, sizeof(node));
+	yylval.n->name = calloc(strlen(yytext) + 1, sizeof(char));
 	strcpy(yylval.n->name, yytext);
 	return NAME;
 }

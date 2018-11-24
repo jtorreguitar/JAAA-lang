@@ -6,9 +6,22 @@
 #include "y.tab.h"
 
 typedef Node (*converterFunction)(Node n1);
+typedef void (*typedConverterFunction)(Node n, Node result);
 typedef Node (*operationFunction)(Node typeDefiner, Node typeBetrayer);
-converterFunction converterFunctions[] = { toInteger, toFloating, toString };
+typedef Node (*typedOperationFunction)(Node n1, Node n2);
+
+converterFunction converterFunctions[] = { toInteger, toFloating, toString, toBoolean };
+typedConverterFunction toIntegerFunctions[] = { toIntegerFromInteger, toIntegerFromFloating, toIntegerFromString, toIntegerFromBoolean };
+typedConverterFunction toFloatingFunctions[] = { toFloatingFromInteger, toFloatingFromFloating, toFloatingFromString, toFloatingFromBoolean };
+typedConverterFunction toStringFunctions[] = { toStringFromInteger, toStringFromFloating, toStringFromString, toStringFromBoolean };
+typedConverterFunction toBooleanFunctions[] = { toBooleanFromInteger, toBooleanFromFloating, toBooleanFromString, toBooleanFromBoolean };
+
 operationFunction operationFunctions[] = { addByType, subtractByType, multiplyByType, divideByType };
+typedOperationFunction additionFunctions[] = { addIntegers, addFloats, addStrings, addBooleans };
+typedOperationFunction subtractionFunctions[] = { subtractIntegers, subtractFloats, subtractStrings, subtractBooleans };
+typedOperationFunction multiplicationFunctions[] = { multiplyIntegers, multiplyFloats, multiplyStrings, multiplyBooleans };
+typedOperationFunction divisionFunctions[] = { divideIntegers, divideFloats, divideStrings, divideBooleans };
+
 
 void yyerror (char const *s) {
    fprintf (stderr, "%s\n", s);
@@ -36,13 +49,14 @@ char *my_itoa(int num, char *str)
 
 int cmpFunction(void* node1, void* name)
 {
-	return strcmp(((Node)node1)->name,(char*)name);
+	return !strcmp((char*)((Node)node1)->name,(char*)name);
 }
 
-Node newNode(char* name, TYPE type, void* value)
+Node newNode(char* name, TYPE type, void* value, int constant)
 {
 	Node n = calloc(1, sizeof(node));
 	n->type = type;
+	n->constant = constant;
 	n->name = calloc(strlen(name) + 1, sizeof(char));
 	strcpy(n->name, name);
 	assignValue(n, value);
@@ -66,6 +80,9 @@ void assignValue(Node n, void* value)
 			size = strlen((char*) value) + 1;
 			sizeOfMember = sizeof(char);
 			break;
+		case boolean:
+			sizeOfMember = sizeof(int);
+			break;
 	}
 	n->value = calloc(size, sizeOfMember);
 	memcpy(n->value, value, size);
@@ -84,6 +101,8 @@ void assignSize(Node n, void* value)
 		case string:
 			n->dataSize = (strlen((char*) n->value) + 1)*sizeof(char);
 			break;
+		case boolean:
+			n->dataSize = sizeof(int);
 	}
 }
 
@@ -100,6 +119,8 @@ void printByValue(node n)
 		case string:
 			printf(">> \"%s\"\n", ((char*)n.value));
 			break;
+		case boolean:
+			printf(">> %s\n", (*(int*)n.value) == 0 ? "false":"true");
 	}
 }
 
@@ -115,135 +136,227 @@ Node binaryOperation(Node typeDefiner, Node typeBetrayer, int operation)
 Node addByType(Node typeDefiner, Node typeBetrayer)
 {
 	Node auxBetrayer = converterFunctions[typeDefiner->type](typeBetrayer);
-	Node result = calloc(1, sizeof(node));
-	result->type = typeDefiner->type;
-	int auxint = 0;
-	double auxdouble = 0;
-	switch (typeDefiner->type)
-	{
-		case integer:
-			auxint = (*((int*)typeDefiner->value)) + (*((int*)auxBetrayer->value));
-			result->dataSize = sizeof(int);
-			result->value = calloc(1, sizeof(int));
-			memcpy(result->value, (void*)&auxint, sizeof(int));
-			break;
-		case floating:
-			auxdouble = (*((double*)typeDefiner->value)) + (*((double*)auxBetrayer->value));
-			result->dataSize = sizeof(double);
-			result->value = calloc(1, sizeof(double));
-			memcpy(result->value, (void*)&auxdouble, sizeof(double));
-			break;
-		case string:
-			((char *) auxBetrayer->value)[auxBetrayer->dataSize - 1] = 0; /* TODO: calloc to avoid this */
-			result->value = calloc(typeDefiner->dataSize + auxBetrayer->dataSize - 1, sizeof(char));
-			memcpy(result->value, typeDefiner->value, typeDefiner->dataSize - 1);
-			result->value = strcat((char*)result->value, (char*)auxBetrayer->value);
-			result->dataSize = typeDefiner->dataSize + auxBetrayer->dataSize - 1;
-			break;
-	}
+	Node result = additionFunctions[typeDefiner->type](typeDefiner, auxBetrayer);
 	free(auxBetrayer->value);
 	free(auxBetrayer);
+	return result;
+}
+
+Node addIntegers(Node n1, Node n2)
+{
+	Node result = calloc(1, sizeof(node));
+	result->type = integer;
+	int auxint = (*((int*)n1->value)) + (*((int*)n2->value));
+	result->dataSize = sizeof(int);
+	result->value = calloc(1, sizeof(int));
+	memcpy(result->value, (void*)&auxint, sizeof(int));
+	return result;
+}
+
+Node addFloats(Node n1, Node n2)
+{
+	Node result = calloc(1, sizeof(node));
+	result->type = floating;
+	double auxdouble = (*((double*)n1->value)) + (*((double*)n2->value));
+	result->dataSize = sizeof(double);
+	result->value = calloc(1, sizeof(double));
+	memcpy(result->value, (void*)&auxdouble, sizeof(double));
+	return result;
+}
+
+Node addStrings(Node n1, Node n2)
+{
+	Node result = calloc(1, sizeof(node));
+	result->type = string;
+	result->value = calloc(n1->dataSize + n2->dataSize - 1, sizeof(char));
+	memcpy(result->value, n1->value, n1->dataSize - 1);
+	result->value = strcat((char*)result->value, (char*)n2->value);
+	result->dataSize = n1->dataSize + n2->dataSize - 1;
+	return result;
+}
+
+Node addBooleans(Node n1, Node n2)
+{
+	Node result = calloc(1, sizeof(node));
+	result->type = boolean;
+	result->dataSize = sizeof(int);
+	result->value = calloc(1, sizeof(int));
+	int val1 = *(int*)n1->value;
+	int val2 = *(int*)n2->value;
+	int finalVal;
+	if(val1 + val2 > 0)
+		finalVal = 1;
+	else
+		finalVal = 0;
+	memcpy(result->value, &finalVal, sizeof(int));
 	return result;
 }
 
 Node subtractByType(Node typeDefiner, Node typeBetrayer)
 {
 	Node auxBetrayer = converterFunctions[typeDefiner->type](typeBetrayer);
-	Node result = calloc(1, sizeof(node));
-	result->type = typeDefiner->type;
-	int auxint;
-	int auxdouble;
-	switch (typeDefiner->type)
-	{
-		case integer:
-			auxint = (*((int*)typeDefiner->value)) - (*((int*)auxBetrayer->value));
-			result->dataSize = sizeof(int);
-			result->value = calloc(1, sizeof(int));
-			memcpy(result->value, (void*)&auxint, sizeof(int));
-			break;
-		case floating:
-			auxdouble = (*((double*)typeDefiner->value)) - (*((double*)auxBetrayer->value));
-			result->dataSize = sizeof(double);
-			result->value = calloc(1, sizeof(double));
-			memcpy(result->value, (void*)&auxdouble, sizeof(double));
-			break;
-		case string:
-			yyerror("invalid operation exception: strings cannot be subtracted");
-			break;
-	}
+	Node result = subtractionFunctions[typeDefiner->type](typeDefiner, auxBetrayer);
 	free(auxBetrayer->value);
 	free(auxBetrayer);
+	return result;
+}
+
+Node subtractIntegers(Node n1, Node n2)
+{
+	Node result = calloc(1, sizeof(node));
+	result->type = integer;
+	int auxint = (*((int*)n1->value)) - (*((int*)n2->value));
+	result->dataSize = sizeof(int);
+	result->value = calloc(1, sizeof(int));
+	memcpy(result->value, (void*)&auxint, sizeof(int));
+	return result;
+}
+
+Node subtractFloats(Node n1, Node n2)
+{
+	Node result = calloc(1, sizeof(node));
+	result->type = floating;
+	double auxdouble = (*((double*)n1->value)) - (*((double*)n2->value));
+	result->dataSize = sizeof(double);
+	result->value = calloc(1, sizeof(double));
+	memcpy(result->value, (void*)&auxdouble, sizeof(double));
+	return result;
+}
+
+Node subtractStrings(Node n1, Node n2)
+{
+	yyerror("invalid operation exception: strings cannot be subtracted");
+	return NULL;
+}
+
+Node subtractBooleans(Node n1, Node n2)
+{
+	Node result = calloc(1, sizeof(node));
+	result->type = boolean;
+	result->dataSize = sizeof(int);
+	result->value = calloc(1, sizeof(int));
+	int val1 = *(int*)n1->value;
+	int val2 = *(int*)n2->value;
+	int finalVal;
+	if(val1 - val2 > 0)
+		finalVal = 1;
+	else
+		finalVal = 0;
+	memcpy(result->value, &finalVal, sizeof(int));
 	return result;
 }
 
 Node multiplyByType(Node typeDefiner, Node typeBetrayer)
 {
 	Node auxBetrayer = converterFunctions[typeDefiner->type](typeBetrayer);
-	Node result = calloc(1, sizeof(node));
-	result->type = typeDefiner->type;
-	int auxint;
-	double auxdouble;
-	switch (typeDefiner->type)
-	{
-		case integer:
-			auxint = (*((int*)typeDefiner->value)) * (*((int*)auxBetrayer->value));
-			result->dataSize = sizeof(int);
-			result->value = calloc(1, sizeof(int));
-			memcpy(result->value, (void*)&auxint, sizeof(int));
-			break;
-		case floating:
-			auxdouble = (*((double*)typeDefiner->value)) * (*((double*)auxBetrayer->value));
-			result->dataSize = sizeof(double);
-			result->value = calloc(1, sizeof(double));
-			memcpy(result->value, (void*)&auxdouble, sizeof(double));
-			break;
-		case string:
-			yyerror("invalid operation exception: strings cannot be multiplied");
-			break;
-	}
+	Node result = multiplicationFunctions[typeDefiner->type](typeDefiner, auxBetrayer);
 	free(auxBetrayer->value);
 	free(auxBetrayer);
+	return result;
+}
+
+Node multiplyIntegers(Node n1, Node n2)
+{
+	Node result = calloc(1, sizeof(node));
+	result->type = integer;
+	int auxint = (*((int*)n1->value)) * (*((int*)n2->value));
+	result->dataSize = sizeof(int);
+	result->value = calloc(1, sizeof(int));
+	memcpy(result->value, (void*)&auxint, sizeof(int));
+	return result;
+}
+
+Node multiplyFloats(Node n1, Node n2)
+{
+	Node result = calloc(1, sizeof(node));
+	result->type = floating;
+	double auxdouble = (*((double*)n1->value)) * (*((double*)n2->value));
+	result->dataSize = sizeof(double);
+	result->value = calloc(1, sizeof(double));
+	memcpy(result->value, (void*)&auxdouble, sizeof(double));
+	return result;
+}
+
+Node multiplyStrings(Node n1, Node n2)
+{
+	yyerror("invalid operation exception: strings cannot be multiplied");
+	return NULL;
+}
+
+Node multiplyBooleans(Node n1, Node n2)
+{
+	Node result = calloc(1, sizeof(node));
+	result->type = boolean;
+	result->dataSize = sizeof(int);
+	result->value = calloc(1, sizeof(int));
+	int val1 = *(int*)n1->value;
+	int val2 = *(int*)n2->value;
+	val1 *= val2;
+	memcpy(result->value, &val1, sizeof(int));
 	return result;
 }
 
 Node divideByType(Node typeDefiner, Node typeBetrayer)
 {
 	Node auxBetrayer = converterFunctions[typeDefiner->type](typeBetrayer);
-	Node result = calloc(1, sizeof(node));
-	result->type = typeDefiner->type;
-	double auxdouble;
-	int auxint;
-	switch (typeDefiner->type)
-	{
-		case integer:
-			if(*((int*)typeBetrayer->value) == 0)
-			{
-				yyerror("division by zero");
-				return typeDefiner;
-			}
-			auxint = (*((int*)typeDefiner->value)) / (*((int*)auxBetrayer->value));
-			result->dataSize = sizeof(int);
-			result->value = calloc(1, sizeof(int));
-			memcpy(result->value, (void*)&auxint, sizeof(int));
-			break;
-		case floating:
-			if(*((double*)typeBetrayer->value) == 0)
-			{
-				yyerror("division by zero");
-				return typeDefiner;
-			}
-			auxdouble = (*((double*)typeDefiner->value)) / (*((double*)auxBetrayer->value));
-			result->dataSize = sizeof(double);
-			result->value = calloc(1, sizeof(double));
-			memcpy(result->value, (void*)&auxdouble, sizeof(double));
-			break;
-		case string:
-			yyerror("invalid operation exception: strings cannot be divided");
-			break;
-	}
+	Node result = divisionFunctions[typeDefiner->type](typeDefiner, auxBetrayer);
 	free(auxBetrayer->value);
 	free(auxBetrayer);
 	return result;
+}
+
+Node divideIntegers(Node n1, Node n2)
+{
+	Node result = calloc(1, sizeof(node));
+	if(*((int*)n1->value) == 0)
+	{
+		yyerror("division by zero");
+		return NULL;
+	}
+	int auxint = (*((int*)n1->value)) / (*((int*)n2->value));
+	result->type = integer;
+	result->dataSize = sizeof(int);
+	result->value = calloc(1, sizeof(int));
+	memcpy(result->value, (void*)&auxint, sizeof(int));
+	return result;
+}
+
+Node divideFloats(Node n1, Node n2)
+{
+	Node result = calloc(1, sizeof(node));
+	result->type = floating;
+	if(*((double*)n1->value) == 0)
+	{
+		yyerror("division by zero");
+		return NULL;
+	}
+	double auxdouble = (*((double*)n1->value)) / (*((double*)n2->value));
+	result->dataSize = sizeof(double);
+	result->value = calloc(1, sizeof(double));
+	memcpy(result->value, (void*)&auxdouble, sizeof(double));
+	return result;
+}
+
+Node divideStrings(Node n1, Node n2)
+{
+	yyerror("invalid operation exception: strings cannot be divided");
+	return NULL;
+}
+
+Node divideBooleans(Node n1, Node n2)
+{
+	yyerror("invalid operation exception: booleans cannot be divided");
+	/*
+	Node result = calloc(1, sizeof(node));
+	result->type = boolean;
+	result->dataSize = sizeof(int);
+	result->value = calloc(1, sizeof(int));
+	int val1 = *(int*)n1->value;
+	int val2 = *(int*)n2->value;
+	val1 *= val2;
+	memcpy(result->value, &val1, sizeof(int));
+	*/
+	return NULL;
 }
 
 Node toInteger(Node n)
@@ -252,24 +365,31 @@ Node toInteger(Node n)
 	ret->value = calloc(1, sizeof(int));
 	ret->dataSize = sizeof(int);
 	ret->type = integer;
-	int auxint;
-	double auxdouble;
-	switch (n->type)
-	{
-		case integer:
-			memcpy(ret->value, n->value, sizeof(int));
-			break;
-		case floating:
-			auxdouble = *((double*)n->value);
-			auxint = (int) auxdouble;
-			memcpy(ret->value, &auxint, sizeof(int));
-			break;
-		case string:
-			auxint = atoi((char*)n->value);
-			memcpy(ret->value, (void*)&auxint, sizeof(int));
-			break;
-	}
+	toIntegerFunctions[n->type](n, ret);
 	return ret;
+}
+
+void toIntegerFromInteger(Node n, Node result)
+{
+	memcpy(result->value, n->value, sizeof(int));
+}
+
+void toIntegerFromFloating(Node n, Node result)
+{
+	double auxdouble = *((double*)n->value);
+	int auxint = (int) auxdouble;
+	memcpy(result->value, &auxint, sizeof(int));
+}
+
+void toIntegerFromString(Node n, Node result)
+{
+	int auxint = atoi((char*)n->value);
+	memcpy(result->value, (void*)&auxint, sizeof(int));
+}
+
+void toIntegerFromBoolean(Node n, Node result)
+{
+	memcpy(result->value, n->value, sizeof(int));
 }
 
 Node toFloating(Node n)
@@ -278,54 +398,118 @@ Node toFloating(Node n)
 	ret->value = calloc(1, sizeof(double));
 	ret->dataSize = sizeof(double);
 	ret->type = floating;
-	double auxdouble;
-	int auxint;
-	switch (n->type)
-	{
-		case floating:
-			memcpy(ret->value, n->value, sizeof(double));
-			break;
-		case integer:
-			auxint = *((int*)n->value);
-			auxdouble = (double) auxint;
-			memcpy(ret->value, &auxdouble, sizeof(double));
-			break;
-		case string:
-			auxdouble = atof((char*)n->value);
-			memcpy(ret->value, (void*)&auxdouble, sizeof(double));
-			break;
-	}
+	toFloatingFunctions[n->type](n, ret);
 	return ret;
+}
+
+void toFloatingFromInteger(Node n, Node result)
+{
+	int auxint = *((int*)n->value);
+	double auxdouble = (double) auxint;
+	memcpy(result->value, &auxdouble, sizeof(double));
+}
+
+void toFloatingFromFloating(Node n, Node result)
+{
+	memcpy(result->value, n->value, sizeof(int));
+}
+
+void toFloatingFromString(Node n, Node result)
+{
+	double auxdouble = atof((char*)n->value);
+	memcpy(result->value, (void*)&auxdouble, sizeof(double));
+}
+
+void toFloatingFromBoolean(Node n, Node result)
+{
+	int auxint = *(int*)n->value;
+	int auxdouble = (double) auxint;
+	memcpy(result->value, (void*)&auxdouble, sizeof(double));
 }
 
 Node toString(Node n)
 {
 	Node ret = calloc(1, sizeof(node));
 	ret->type = string;
-	double auxdouble;
-	char * auxstring;
-	int digits;
-	switch (n->type)
-	{
-		case string:
-			ret->dataSize = n->dataSize;
-			ret->value = calloc(n->dataSize, sizeof(char));
-			memcpy(ret->value, n->value, n->dataSize);
-			break;
-		case integer:
-			digits = floor(log10(abs(*((int*)n->value)))) + 1;
-			ret->dataSize = (digits + 1)*sizeof(char);
-			ret->value = calloc(digits + 1, sizeof(char));
-			my_itoa(*((int*)n->value), ((char*)ret->value));
-			break;
-		case floating:
-			auxdouble = *((double*)n->value);
-			ret->dataSize = ftoa(auxdouble, &auxstring);
-			ret->value = calloc(ret->dataSize, sizeof(char));
-			memcpy(ret->value, auxstring, ret->dataSize);
-			break;
-	}
+	toStringFunctions[n->type](n, ret);
 	return ret;
+}
+
+void toStringFromInteger(Node n, Node result)
+{
+	int digits = floor(log10(abs(*((int*)n->value)))) + 1;
+	result->dataSize = (digits + 1)*sizeof(char);
+	result->value = calloc(digits + 1, sizeof(char));
+	my_itoa(*((int*)n->value), ((char*)result->value));
+}
+
+void toStringFromFloating(Node n, Node result)
+{
+	char* auxstring;
+	double auxdouble = *((double*)n->value);
+	result->dataSize = ftoa(auxdouble, &auxstring);
+	result->value = calloc(result->dataSize, sizeof(char));
+	memcpy(result->value, auxstring, result->dataSize);
+}
+
+void toStringFromString(Node n, Node result)
+{
+	result->dataSize = n->dataSize;
+	result->value = calloc(n->dataSize, sizeof(char));
+	memcpy(result->value, n->value, n->dataSize);
+}
+
+void toStringFromBoolean(Node n, Node result)
+{
+	int auxint = *(int*)n->value;
+	char *auxstring;
+	if(auxint == 0)
+		auxstring = "false";
+	else
+		auxstring = "true";
+	result->dataSize = (strlen(auxstring) + 1);
+	result->value = calloc(result->dataSize, sizeof(char));
+	memcpy(result->value, auxstring, result->dataSize);
+}
+
+Node toBoolean(Node n)
+{
+	Node result = calloc(1, sizeof(node));
+	result->type = boolean;
+	result->dataSize = sizeof(int);
+	result->value = calloc(1, sizeof(int));
+	toBooleanFunctions[n->type](n, result);
+	return result;
+}
+
+void toBooleanFromInteger(Node n, Node result)
+{
+	int auxint = *(int*)n->value;
+	int value = auxint == 0 ? 0:1;
+	memcpy(result->value, (void*) &value, sizeof(int));
+}
+
+void toBooleanFromFloating(Node n, Node result)
+{
+	double auxdouble = *(double*)n->value;
+	int value = auxdouble == 0 ? 0:1;
+	memcpy(result->value, (void*) &value, sizeof(int));
+}
+
+void toBooleanFromString(Node n, Node result)
+{
+	char *auxstring = (char*)n->value;
+	int value;
+	if(!strcmp(auxstring, "") || !strcmp(auxstring, "false") || !strcmp(auxstring, "0"))
+		value = 0;
+	else
+		value = 1;
+	memcpy(result->value, (void*) &value, sizeof(int));
+}
+
+void toBooleanFromBoolean(Node n, Node result)
+{
+	memcpy(result->value, n->value, sizeof(int));
 }
 
 Node UMinusByType(Node n)
