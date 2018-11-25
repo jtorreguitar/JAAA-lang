@@ -658,6 +658,41 @@ void notEqualToBoolean(Node n1, Node n2, Node result)
 	memcpy(result->value, &val, sizeof(int));
 }
 
+// -------------------------- LOGICAL OPERATIONS --------------------------
+
+Node logicalOperation(Node n1, Node n2, LOGICAL_OPERATOR operation)
+{
+	Node leftSide = toBoolean(n1);
+	Node rightSide = NULL;
+	if(n2 != NULL)
+		rightSide = toBoolean(n2);
+	Node result = calloc(1, sizeof(node));
+	result->type = boolean;
+	result->dataSize = sizeof(int);
+	result->value = calloc(1, sizeof(int));
+	int val;
+	switch (operation)
+	{
+		case and:
+			if ((*(int*)leftSide->value == 1) && (*(int*)rightSide->value == 1))
+				val = 1;
+			else
+				val = 0;
+			break;
+		case or:
+			if((*(int*)leftSide->value == 1) || (*(int*)rightSide->value == 1))
+				val = 1;
+			else
+				val = 0;
+			break;
+		case not:
+			val = *(int*)leftSide->value == 0;
+			break;
+	}
+	memcpy(result->value, (void*) &val, sizeof(int));
+	return result;
+}
+
 // -------------------------- CONVERSION OPERATIONS --------------------------
 
 Node toInteger(Node n)

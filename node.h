@@ -5,6 +5,7 @@ typedef enum type { integer = 0, floating, string, boolean } TYPE;
 typedef enum binaryOperator { addition = 0, subtraction, multiplication, division } BINARY_OPERATOR;
 typedef enum relationalOperator { LESSTHAN = 0, LESSTHANOREQUALTO, GREATERTHAN, GREATERTHANOREQUALTO, 
 									EQUALTO, NOTEQUALTO } RELATIONAL_OPERATOR;
+typedef enum logicalOperator { and = 0, or, not } LOGICAL_OPERATOR;
 
 struct node
 {
@@ -24,6 +25,8 @@ Node newNode(char* name, TYPE type, void* value, int constant);
 void assignValue(Node n, void* value);
 void assignSize(Node n, void* value);
 void printByValue(node n);
+
+Node logicalOperation(Node n1, Node n2, LOGICAL_OPERATOR operation);
 
 Node binaryOperation(Node typeDefiner, Node typeBetrayer, int operation);
 

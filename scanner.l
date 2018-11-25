@@ -76,6 +76,18 @@
 	return ET;
 }
 
+"&&" {
+	return AND;
+}
+
+"||" {
+	return OR;
+}
+
+"!" {
+	return NOT;
+}
+
 [ \t] ;
 [a-z]+ { 
 	yylval.n = calloc(1, sizeof(node));

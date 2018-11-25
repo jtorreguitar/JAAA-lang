@@ -18,7 +18,7 @@
 %token <n> INTEGER
 %token <n> STRING
 %token <n> BOOL
-%token CONST LTOET GTOET ET NET
+%token CONST LTOET GTOET ET NET AND OR NOT
 %left '<' LTOET '>' GTOET
 %left ET NET
 %left '-' '+'
@@ -112,6 +112,18 @@ expression: expression '+' expression
 		  | expression NET expression
 		  		{
 					$$ = relationalOperation($1, $3, NOTEQUALTO);
+				}
+		  | expression AND expression
+		  		{
+					$$ = logicalOperation($1, $3, and);
+				}
+		  | expression OR expression
+		  		{
+					$$ = logicalOperation($1, $3, or);
+				}
+		  | NOT expression
+		  		{
+				    $$ = logicalOperation($2, NULL, not);
 				}
 		  | FLOAT
 		  | INTEGER
