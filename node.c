@@ -825,14 +825,21 @@ Node UMinusByType(Node n)
 			return n;
 		case floating:
 			ret->value = calloc(1, sizeof(double));
+			ret->type = floating;
 			auxdouble = -*((double*)n->value);
 			memcpy(ret->value, (void*)&auxdouble, sizeof(double));
 			break;
 		case integer:
+			ret->type = integer;
 			ret->value = calloc(1, sizeof(int));
 			auxint = -*((int*)n->value);
 			memcpy(ret->value, (void*)&auxint, sizeof(int));
 			break;
+		case boolean:
+			ret->type = boolean;
+			ret->value = calloc(1, sizeof(int));
+			auxint = *(int*)n->value == 0;
+			memcpy(ret->value, (void*)&auxint, sizeof(int));
 	}
 	return ret;
 }
