@@ -2,4 +2,4 @@ y.tab.c
 y.tab.h
 compiler
 lex.yy.c
-
+\.*

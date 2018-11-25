@@ -56,8 +56,24 @@
 	return BOOL;
 }
 
-"unchanging" {
+"const" {
 	return CONST;
+}
+
+">=" {
+	return GTOET;
+}
+
+"<=" {
+	return LTOET;
+}
+
+"!=" {
+	return NET;
+}
+
+"==" {
+	return ET;
 }
 
 [ \t] ;

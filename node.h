@@ -1,10 +1,10 @@
 #ifndef NODE_H
 #define NODE_H
 
-enum type { integer = 0, floating, string, boolean };
-enum binaryOperator { addition = 0, subtraction, multiplication, division };
-typedef enum type TYPE;
-typedef enum binaryOperator BINARY_OPERATOR; 
+typedef enum type { integer = 0, floating, string, boolean } TYPE;
+typedef enum binaryOperator { addition = 0, subtraction, multiplication, division } BINARY_OPERATOR;
+typedef enum relationalOperator { LESSTHAN = 0, LESSTHANOREQUALTO, GREATERTHAN, GREATERTHANOREQUALTO, 
+									EQUALTO, NOTEQUALTO } RELATIONAL_OPERATOR;
 
 struct node
 {
@@ -24,6 +24,7 @@ Node newNode(char* name, TYPE type, void* value, int constant);
 void assignValue(Node n, void* value);
 void assignSize(Node n, void* value);
 void printByValue(node n);
+
 Node binaryOperation(Node typeDefiner, Node typeBetrayer, int operation);
 
 Node addByType(Node typeDefiner, Node typeBetrayer);
@@ -49,6 +50,44 @@ Node divideIntegers(Node n1, Node n2);
 Node divideFloats(Node n1, Node n2);
 Node divideStrings(Node n1, Node n2);
 Node divideBooleans(Node n1, Node n2);
+
+Node relationalOperation(Node n1, Node n2, int operation);
+
+Node lessThan(Node n1, Node n2, Node result);
+void lessThanInteger(Node n1, Node n2, Node result);
+void lessThanFloating(Node n1, Node n2, Node result);
+void lessThanString(Node n1, Node n2, Node result);
+void lessThanBoolean(Node n1, Node n2, Node result);
+
+Node lessThanOrEqualTo(Node n1, Node n2, Node result);
+void lessThanOrEqualToInteger(Node n1, Node n2, Node result);
+void lessThanOrEqualToFloating(Node n1, Node n2, Node result);
+void lessThanOrEqualToString(Node n1, Node n2, Node result);
+void lessThanOrEqualToBoolean(Node n1, Node n2, Node result);
+
+Node greaterThan(Node n1, Node n2, Node result);
+void greaterThanInteger(Node n1, Node n2, Node result);
+void greaterThanFloating(Node n1, Node n2, Node result);
+void greaterThanString(Node n1, Node n2, Node result);
+void greaterThanBoolean(Node n1, Node n2, Node result);
+
+Node greaterThanOrEqualTo(Node n1, Node n2, Node result);
+void greaterThanOrEqualToInteger(Node n1, Node n2, Node result);
+void greaterThanOrEqualToFloating(Node n1, Node n2, Node result);
+void greaterThanOrEqualToString(Node n1, Node n2, Node result);
+void greaterThanOrEqualToBoolean(Node n1, Node n2, Node result);
+
+Node equalTo(Node n1, Node n2, Node result);
+void equalToInteger(Node n1, Node n2, Node result);
+void equalToFloating(Node n1, Node n2, Node result);
+void equalToString(Node n1, Node n2, Node result);
+void equalToBoolean(Node n1, Node n2, Node result);
+
+Node notEqualTo(Node n1, Node n2, Node result);
+void notEqualToInteger(Node n1, Node n2, Node result);
+void notEqualToFloating(Node n1, Node n2, Node result);
+void notEqualToString(Node n1, Node n2, Node result);
+void notEqualToBoolean(Node n1, Node n2, Node result);
 
 Node UMinusByType(Node n);
 

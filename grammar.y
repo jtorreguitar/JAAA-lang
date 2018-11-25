@@ -18,10 +18,11 @@
 %token <n> INTEGER
 %token <n> STRING
 %token <n> BOOL
-%token CONST
+%token CONST LTOET GTOET ET NET
+%left '<' LTOET '>' GTOET
+%left ET NET
 %left '-' '+'
 %left '*' '/'
-%left '<' '<=' '>' '>=' '=='
 %nonassoc UMINUS
 %type <n> expression
 
@@ -88,6 +89,30 @@ expression: expression '+' expression
 		  		{ 
 		  			$$ = $2;
 		  		}
+		  | expression '<' expression
+				{
+					$$ = relationalOperation($1, $3, LESSTHAN);
+				}
+		  | expression LTOET expression
+		  		{
+					$$ = relationalOperation($1, $3, LESSTHANOREQUALTO);
+				}
+		  | expression '>' expression
+		  		{
+					$$ = relationalOperation($1, $3, GREATERTHAN);  
+				}
+		  | expression GTOET expression
+		  		{
+					$$ = relationalOperation($1, $3, GREATERTHANOREQUALTO);
+				}
+		  | expression ET expression
+		  		{
+					$$ = relationalOperation($1, $3, EQUALTO);
+				}
+		  | expression NET expression
+		  		{
+					$$ = relationalOperation($1, $3, NOTEQUALTO);
+				}
 		  | FLOAT
 		  | INTEGER
 		  | STRING

@@ -9,6 +9,8 @@ typedef Node (*converterFunction)(Node n1);
 typedef void (*typedConverterFunction)(Node n, Node result);
 typedef Node (*operationFunction)(Node typeDefiner, Node typeBetrayer);
 typedef Node (*typedOperationFunction)(Node n1, Node n2);
+typedef Node (*relationalFunction)(Node n1, Node n2, Node result);
+typedef void (*typedRelationalFunction)(Node n1, Node n2, Node result);
 
 converterFunction converterFunctions[] = { toInteger, toFloating, toString, toBoolean };
 typedConverterFunction toIntegerFunctions[] = { toIntegerFromInteger, toIntegerFromFloating, toIntegerFromString, toIntegerFromBoolean };
@@ -21,6 +23,17 @@ typedOperationFunction additionFunctions[] = { addIntegers, addFloats, addString
 typedOperationFunction subtractionFunctions[] = { subtractIntegers, subtractFloats, subtractStrings, subtractBooleans };
 typedOperationFunction multiplicationFunctions[] = { multiplyIntegers, multiplyFloats, multiplyStrings, multiplyBooleans };
 typedOperationFunction divisionFunctions[] = { divideIntegers, divideFloats, divideStrings, divideBooleans };
+
+relationalFunction relationalFunctions[] = { lessThan, lessThanOrEqualTo, greaterThan, greaterThanOrEqualTo, 
+												equalTo, notEqualTo };
+typedRelationalFunction lessThanFunctions[] = { lessThanInteger, lessThanFloating, lessThanString, lessThanBoolean };
+typedRelationalFunction lessThanOrEqualToFunctions[] = { lessThanOrEqualToInteger, lessThanOrEqualToFloating, lessThanOrEqualToString, 
+															lessThanOrEqualToBoolean };
+typedRelationalFunction greaterThanFunctions[] = { greaterThanInteger, greaterThanFloating, greaterThanString, greaterThanBoolean };
+typedRelationalFunction greaterThanOrEqualToFunctions[] = { greaterThanOrEqualToInteger, greaterThanOrEqualToFloating, 
+																greaterThanOrEqualToString, greaterThanOrEqualToBoolean };
+typedRelationalFunction equalToFunctions[] = { equalToInteger, equalToFloating, equalToString, equalToBoolean };
+typedRelationalFunction notEqualToFunctions[] = { notEqualToInteger, notEqualToFloating, notEqualToString, notEqualToBoolean };
 
 
 void yyerror (char const *s) {
@@ -123,6 +136,8 @@ void printByValue(node n)
 			printf(">> %s\n", (*(int*)n.value) == 0 ? "false":"true");
 	}
 }
+
+// -------------------------- ARITHMETIC OPERATIONS --------------------------
 
 // for the following methods the typeDefiner will be the one that defines
 // the type of the resulting node. The typeBetrayer will be the one that
@@ -358,6 +373,292 @@ Node divideBooleans(Node n1, Node n2)
 	*/
 	return NULL;
 }
+
+// -------------------------- RELATIONAL OPERATIONS --------------------------
+
+Node relationalOperation(Node n1, Node n2, int operation)
+{
+	Node result = calloc(1, sizeof(node));
+	result->type = boolean;
+	result->dataSize = sizeof(int);
+	result->value = calloc(1, sizeof(int));
+	return relationalFunctions[operation](n1, n2, result);
+}
+
+Node lessThan(Node typeDefiner, Node typeBetrayer, Node result)
+{
+	// I gotta do this check cause otherwise if the betrayer gets truncated it might end up being equal.
+	if(typeDefiner->type == integer && typeBetrayer->type == floating)
+	{
+		int auxint = *(int*)typeDefiner->value;
+		double auxdouble = *(double*)typeBetrayer->value;
+		int val = auxint < auxdouble ? 1:0;
+		memcpy(result->value, (void*) &val, sizeof(int));
+		return result;
+	}
+	Node auxBetrayer = converterFunctions[typeDefiner->type](typeBetrayer);
+	lessThanFunctions[typeDefiner->type](typeDefiner, auxBetrayer, result);
+	free(auxBetrayer->value);
+	free(auxBetrayer);
+	return result;
+}
+
+void lessThanInteger(Node n1, Node n2, Node result)
+{
+	int auxint1 = *(int*) n1->value;
+	int auxint2 = *(int*) n2->value;
+	int val = auxint1 < auxint2 ? 1:0;
+	memcpy(result->value, &val, sizeof(int));
+}
+
+void lessThanFloating(Node n1, Node n2, Node result)
+{
+	double auxdouble1 = *(double*) n1->value;
+	double auxdouble2 = *(double*) n2->value;
+	int val = auxdouble1 < auxdouble2 ? 1:0;
+	memcpy(result->value, &val, sizeof(int));
+}
+
+void lessThanString(Node n1, Node n2, Node result)
+{
+	char *auxstring1 = (char*) n1->value;
+	char *auxstring2 = (char*) n2->value;
+	int val = strcmp(auxstring1, auxstring2) < 0 ? 1:0;
+	memcpy(result->value, &val, sizeof(int));
+}
+
+void lessThanBoolean(Node n1, Node n2, Node result)
+{
+	int auxint1 = *(int*) n1->value;
+	int auxint2 = *(int*) n2->value;
+	int val = auxint1 < auxint2 ? 1:0;
+	memcpy(result->value, &val, sizeof(int));
+}
+
+Node lessThanOrEqualTo(Node typeDefiner, Node typeBetrayer, Node result)
+{
+	Node auxBetrayer = converterFunctions[typeDefiner->type](typeBetrayer);
+	lessThanOrEqualToFunctions[typeDefiner->type](typeDefiner, auxBetrayer, result);
+	free(auxBetrayer->value);
+	free(auxBetrayer);
+	return result;
+}
+
+void lessThanOrEqualToInteger(Node n1, Node n2, Node result)
+{
+	int auxint1 = *(int*) n1->value;
+	int auxint2 = *(int*) n2->value;
+	int val = auxint1 <= auxint2 ? 1:0;
+	memcpy(result->value, &val, sizeof(int));
+}
+
+void lessThanOrEqualToFloating(Node n1, Node n2, Node result)
+{
+	double auxdouble1 = *(double*) n1->value;
+	double auxdouble2 = *(double*) n2->value;
+	int val = auxdouble1 <= auxdouble2 ? 1:0;
+	memcpy(result->value, &val, sizeof(int));
+}
+
+void lessThanOrEqualToString(Node n1, Node n2, Node result)
+{
+	char *auxstring1 = (char*) n1->value;
+	char *auxstring2 = (char*) n2->value;
+	int val = strcmp(auxstring1, auxstring2) <= 0 ? 1:0;
+	memcpy(result->value, &val, sizeof(int));
+}
+
+// this function, unfortunately, will always return true, however, we gotta include it
+// for consistency and I can't think of a better definition that'd be consistent.
+void lessThanOrEqualToBoolean(Node n1, Node n2, Node result)
+{
+	int auxint1 = *(int*) n1->value;
+	int auxint2 = *(int*) n2->value;
+	int val = auxint1 <= auxint2 ? 1:0;
+	memcpy(result->value, &val, sizeof(int));
+}
+
+Node greaterThan(Node typeDefiner, Node typeBetrayer, Node result)
+{
+	Node auxBetrayer = converterFunctions[typeDefiner->type](typeBetrayer);
+	greaterThanFunctions[typeDefiner->type](typeDefiner, auxBetrayer, result);
+	free(auxBetrayer->value);
+	free(auxBetrayer);
+	return result;
+}
+
+void greaterThanInteger(Node n1, Node n2, Node result)
+{
+	int auxint1 = *(int*) n1->value;
+	int auxint2 = *(int*) n2->value;
+	int val = auxint1 > auxint2 ? 1:0;
+	memcpy(result->value, &val, sizeof(int));
+}
+
+void greaterThanFloating(Node n1, Node n2, Node result)
+{
+	double auxdouble1 = *(double*) n1->value;
+	double auxdouble2 = *(double*) n2->value;
+	int val = auxdouble1 > auxdouble2 ? 1:0;
+	memcpy(result->value, &val, sizeof(int));
+}
+
+void greaterThanString(Node n1, Node n2, Node result)
+{
+	char *auxstring1 = (char*) n1->value;
+	char *auxstring2 = (char*) n2->value;
+	int val = strcmp(auxstring1, auxstring2) > 0 ? 1:0;
+	memcpy(result->value, &val, sizeof(int));
+}
+
+void greaterThanBoolean(Node n1, Node n2, Node result)
+{
+	int auxint1 = *(int*) n1->value;
+	int auxint2 = *(int*) n2->value;
+	int val = auxint1 > auxint2 ? 1:0;
+	memcpy(result->value, &val, sizeof(int));
+}
+
+Node greaterThanOrEqualTo(Node typeDefiner, Node typeBetrayer, Node result)
+{
+	Node auxBetrayer = converterFunctions[typeDefiner->type](typeBetrayer);
+	greaterThanOrEqualToFunctions[typeDefiner->type](typeDefiner, auxBetrayer, result);
+	free(auxBetrayer->value);
+	free(auxBetrayer);
+	return result;
+}
+
+void greaterThanOrEqualToInteger(Node n1, Node n2, Node result)
+{
+	int auxint1 = *(int*) n1->value;
+	int auxint2 = *(int*) n2->value;
+	int val = auxint1 >= auxint2 ? 1:0;
+	memcpy(result->value, &val, sizeof(int));
+}
+
+void greaterThanOrEqualToFloating(Node n1, Node n2, Node result)
+{
+	double auxdouble1 = *(double*) n1->value;
+	double auxdouble2 = *(double*) n2->value;
+	int val = auxdouble1 >= auxdouble2 ? 1:0;
+	memcpy(result->value, &val, sizeof(int));
+}
+
+void greaterThanOrEqualToString(Node n1, Node n2, Node result)
+{
+	char *auxstring1 = (char*) n1->value;
+	char *auxstring2 = (char*) n2->value;
+	int val = strcmp(auxstring1, auxstring2) >= 0 ? 1:0;
+	memcpy(result->value, &val, sizeof(int));
+}
+
+void greaterThanOrEqualToBoolean(Node n1, Node n2, Node result)
+{
+	int auxint1 = *(int*) n1->value;
+	int auxint2 = *(int*) n2->value;
+	int val = auxint1 >= auxint2 ? 1:0;
+	memcpy(result->value, &val, sizeof(int));
+}
+
+Node equalTo(Node typeDefiner, Node typeBetrayer, Node result)
+{
+	// I gotta do this check cause otherwise if the betrayer gets truncated it might end up being equal.
+	if(typeDefiner->type == integer && typeBetrayer->type == floating)
+	{
+		int auxint = *(int*)typeDefiner->value;
+		int auxdouble = *(double*)typeBetrayer->value;
+		int val = auxint == auxdouble ? 1:0;
+		memcpy(result->value, &val, sizeof(int));
+	}
+	Node auxBetrayer = converterFunctions[typeDefiner->type](typeBetrayer);
+	equalToFunctions[typeDefiner->type](typeDefiner, auxBetrayer, result);
+	free(auxBetrayer->value);
+	free(auxBetrayer);
+	return result;
+}
+
+void equalToInteger(Node n1, Node n2, Node result)
+{
+	int auxint1 = *(int*) n1->value;
+	int auxint2 = *(int*) n2->value;
+	int val = auxint1 == auxint2 ? 1:0;
+	memcpy(result->value, &val, sizeof(int));
+}
+
+void equalToFloating(Node n1, Node n2, Node result)
+{
+	double auxdouble1 = *(double*) n1->value;
+	double auxdouble2 = *(double*) n2->value;
+	int val = auxdouble1 == auxdouble2 ? 1:0;
+	memcpy(result->value, &val, sizeof(int));
+}
+
+void equalToString(Node n1, Node n2, Node result)
+{
+	char *auxstring1 = (char*) n1->value;
+	char *auxstring2 = (char*) n2->value;
+	int val = strcmp(auxstring1, auxstring2) == 0 ? 1:0;
+	memcpy(result->value, &val, sizeof(int));
+}
+
+void equalToBoolean(Node n1, Node n2, Node result)
+{
+	int auxint1 = *(int*) n1->value;
+	int auxint2 = *(int*) n2->value;
+	int val = auxint1 == auxint2 ? 1:0;
+	memcpy(result->value, &val, sizeof(int));
+}
+
+Node notEqualTo(Node typeDefiner, Node typeBetrayer, Node result)
+{
+	// I gotta do this check cause otherwise if the betrayer gets truncated it might end up being equal.
+	if(typeDefiner->type == integer && typeBetrayer->type == floating)
+	{
+		int auxint = *(int*)typeDefiner->value;
+		int auxdouble = *(double*)typeBetrayer->value;
+		int val = auxint != auxdouble ? 1:0;
+		memcpy(result->value, &val, sizeof(int));
+	}
+	Node auxBetrayer = converterFunctions[typeDefiner->type](typeBetrayer);
+	notEqualToFunctions[typeDefiner->type](typeDefiner, auxBetrayer, result);
+	free(auxBetrayer->value);
+	free(auxBetrayer);
+	return result;
+}
+
+void notEqualToInteger(Node n1, Node n2, Node result)
+{
+	int auxint1 = *(int*) n1->value;
+	int auxint2 = *(int*) n2->value;
+	int val = auxint1 != auxint2 ? 1:0;
+	memcpy(result->value, &val, sizeof(int));
+}
+
+void notEqualToFloating(Node n1, Node n2, Node result)
+{
+	double auxdouble1 = *(double*) n1->value;
+	double auxdouble2 = *(double*) n2->value;
+	int val = auxdouble1 != auxdouble2 ? 1:0;
+	memcpy(result->value, &val, sizeof(int));
+}
+
+void notEqualToString(Node n1, Node n2, Node result)
+{
+	char *auxstring1 = (char*) n1->value;
+	char *auxstring2 = (char*) n2->value;
+	int val = strcmp(auxstring1, auxstring2) != 0 ? 1:0;
+	memcpy(result->value, &val, sizeof(int));
+}
+
+void notEqualToBoolean(Node n1, Node n2, Node result)
+{
+	int auxint1 = *(int*) n1->value;
+	int auxint2 = *(int*) n2->value;
+	int val = auxint1 != auxint2 ? 1:0;
+	memcpy(result->value, &val, sizeof(int));
+}
+
+// -------------------------- CONVERSION OPERATIONS --------------------------
 
 Node toInteger(Node n)
 {
