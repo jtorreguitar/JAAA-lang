@@ -20,6 +20,7 @@
 %token <n> STRING
 %token <n> BOOL
 %token <printedString> PRINTEXPR
+%token <printedString> PRINTLNEXPR
 %token CONST LTOET GTOET ET NET AND OR NOT VOIDEXPR
 %left '<' LTOET '>' GTOET
 %left ET NET
@@ -146,6 +147,10 @@ expression: expression '+' expression
 printExpression: PRINTEXPR
 					{
 						printf("%s", $1);
+					}
+				| PRINTLNEXPR
+					{
+						printf("%s\n", $1);
 					}
 				;
 
