@@ -22,6 +22,7 @@
 %token <printedString> PRINTEXPR
 %token <printedString> PRINTLNEXPR
 %token CONST LTOET GTOET ET NET AND OR NOT VOIDEXPR
+%left AND OR NOT
 %left '<' LTOET '>' GTOET
 %left ET NET
 %left '-' '+'
