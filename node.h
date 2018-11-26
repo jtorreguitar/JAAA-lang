@@ -118,4 +118,5 @@ void toBooleanFromFloating(Node n, Node result);
 void toBooleanFromString(Node n, Node result);
 void toBooleanFromBoolean(Node n, Node result);
 
+void createVar(int type, char *name, struct node *expression);
 #endif

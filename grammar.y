@@ -2,9 +2,11 @@
 	#include "node.h"
 	#include <stdio.h>
 	#include <stdlib.h>
+	#include <string.h>
 	#include "listADT.h"
 
 	extern void yyeror(char* text);
+	extern int yylex();
 
 	listADT symbolList;
 %}
@@ -45,6 +47,7 @@ statement: NAME '=' expression
 						free(var->value);
 						var->type = $3->type;
 						assignValue(var, $3->value);
+						//createVar(var->type, var->name, $3);
 					}
 					else if(var != 0 && var->constant)
 					{
@@ -53,6 +56,7 @@ statement: NAME '=' expression
 					else
 					{
 						addL(symbolList, newNode($1->name, $3->type, $3->value, 0));
+						createVar($3->type, $1->name, $3);
 					}
 				}
 		 | CONST NAME '=' expression
@@ -160,5 +164,7 @@ printExpression: PRINTEXPR
 int main(int argc, char **argv)
 {
 	symbolList = createListL(cmpFunction, sizeof(node));
+	printf("#include <stdio.h> int main(void) {");
 	yyparse();
+	printf("return 0;}");
 }

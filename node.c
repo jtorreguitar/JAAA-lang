@@ -878,3 +878,21 @@ Node UMinusByType(Node n)
 	}
 	return ret;
 }
+
+void createVar(int type, char *name, struct node *expression) {
+	switch(type) {
+		case integer:
+		case boolean:
+			printf("int %s = %d;", name, *(int *)expression->value);
+			break;
+
+		case floating:
+			printf("float %s = %lf;", name, *(float *)expression->value);
+			break;
+
+		case string:
+			printf("char %s[%d] = \"%s\";", name, expression->dataSize,
+												 (char *)expression->value);
+			break;
+	}
+}
