@@ -88,6 +88,13 @@
 	return NOT;
 }
 
+"print "\"(\\.|[^"\\])*\" {
+	int len = strlen(yytext + 7) - 1;
+	yylval.printedString = calloc(len, sizeof(char));
+	memcpy((void*) yylval.printedString, (void*) (yytext + 7), len*sizeof(char));
+	return PRINTEXPR;
+}
+
 [ \t] ;
 [a-z]+ { 
 	yylval.n = calloc(1, sizeof(node));

@@ -10,6 +10,7 @@
 %}
 
 %union {
+	char *printedString;
 	Node n;
 }
 
@@ -18,7 +19,8 @@
 %token <n> INTEGER
 %token <n> STRING
 %token <n> BOOL
-%token CONST LTOET GTOET ET NET AND OR NOT
+%token <printedString> PRINTEXPR
+%token CONST LTOET GTOET ET NET AND OR NOT VOIDEXPR
 %left '<' LTOET '>' GTOET
 %left ET NET
 %left '-' '+'
@@ -30,6 +32,7 @@
 
 statement_list: statement '\n'
 			  | statement_list statement '\n'
+			  | '\n'
 			  ;
 
 statement: NAME '=' expression 
@@ -63,6 +66,7 @@ statement: NAME '=' expression
 					}
 				}
 		 | expression { printByValue(*$1); }
+		 | printExpression
 		 ;
 
 expression: expression '+' expression 
@@ -138,6 +142,12 @@ expression: expression '+' expression
 						yyerror("undeclared variable");
 				}
 		  ;
+
+printExpression: PRINTEXPR
+					{
+						printf("%s", $1);
+					}
+				;
 
 %%
 
