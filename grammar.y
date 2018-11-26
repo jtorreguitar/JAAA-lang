@@ -47,7 +47,7 @@ statement: NAME '=' expression
 						free(var->value);
 						var->type = $3->type;
 						assignValue(var, $3->value);
-						//createVar(var->type, var->name, $3);
+						//assignVar(var->type, var->name, $3);
 					}
 					else if(var != 0 && var->constant)
 					{
@@ -164,7 +164,7 @@ printExpression: PRINTEXPR
 int main(int argc, char **argv)
 {
 	symbolList = createListL(cmpFunction, sizeof(node));
-	printf("#include <stdio.h> int main(void) {");
+	printf("#include <stdio.h>\nint main(void) {");
 	yyparse();
 	printf("return 0;}");
 }
