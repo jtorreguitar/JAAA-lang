@@ -88,6 +88,18 @@
 	return NOT;
 }
 
+"while" {
+	return WHILE;
+}
+
+"do" {
+	return DO;
+}
+
+"loop" {
+	return LOOP;
+}
+
 "print "\"(\\.|[^"\\])*\" {
 	int len = strlen(yytext + 7) - 1;
 	yylval.printedString = calloc(len, sizeof(char));
@@ -103,7 +115,7 @@
 }
 
 [ \t] ;
-[a-z]+ { 
+[a-z]+ {
 	yylval.n = calloc(1, sizeof(node));
 	yylval.n->name = calloc(strlen(yytext) + 1, sizeof(char));
 	strcpy(yylval.n->name, yytext);

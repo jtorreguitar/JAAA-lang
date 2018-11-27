@@ -21,6 +21,9 @@
 %token <n> INTEGER
 %token <n> STRING
 %token <n> BOOL
+%token WHILE
+%token DO
+%token LOOP
 %token <printedString> PRINTEXPR
 %token <printedString> PRINTLNEXPR
 %token CONST LTOET GTOET ET NET AND OR NOT VOIDEXPR
@@ -31,7 +34,6 @@
 %left '*' '/'
 %nonassoc UMINUS
 %type <n> expression
-
 %%
 
 statement_list: statement '\n'
@@ -39,17 +41,17 @@ statement_list: statement '\n'
 			  | '\n'
 			  ;
 
-statement: NAME '=' expression 
-				{ 
+statement: NAME '=' expression
+				{
 					Node var = (Node) getL(symbolList, $1->name);
 					if(var != 0  && !var->constant)
 					{
 						free(var->value);
-						
+
 						if(var->type != $3->type) {
 							yyerror("variables cannot change their type");
 						}
-						
+
 						//var->type = $3->type;
 						assignValue(var, $3->value);
 						assignVar(var, $3);
@@ -81,28 +83,28 @@ statement: NAME '=' expression
 		 | printExpression
 		 ;
 
-expression: expression '+' expression 
+expression: expression '+' expression
 				{
 					$$ = binaryOperation($1, $3, addition);
 				}
-		  | expression '-' expression 
+		  | expression '-' expression
 		  		{
 		  			$$ = binaryOperation($1, $3, subtraction);
 		  		}
-		  | expression '*' expression 
+		  | expression '*' expression
 		  		{
 		  			$$ = binaryOperation($1, $3, multiplication);
 		  		}
-		  | expression '/' expression 
-				{ 
+		  | expression '/' expression
+				{
 					$$ = binaryOperation($1, $3, division);
 				}
-		  | '-' expression %prec UMINUS 
-		  		{ 
+		  | '-' expression %prec UMINUS
+		  		{
 		  			$$ = UMinusByType($2);
 		  		}
-		  | '(' expression ')' 
-		  		{ 
+		  | '(' expression ')'
+		  		{
 		  			$$ = $2;
 		  		}
 		  | expression '<' expression
@@ -115,7 +117,7 @@ expression: expression '+' expression
 				}
 		  | expression '>' expression
 		  		{
-					$$ = relationalOperation($1, $3, GREATERTHAN);  
+					$$ = relationalOperation($1, $3, GREATERTHAN);
 				}
 		  | expression GTOET expression
 		  		{
@@ -145,15 +147,15 @@ expression: expression '+' expression
 		  | INTEGER
 		  | STRING
 		  | BOOL
-		  | NAME 
+		  | NAME
 		  		{
 					Node n = (Node) getL(symbolList, $1->name);
-					if(n != 0) 
+					if(n != 0)
 						$$ = n;
 					else
 						yyerror("undeclared variable");
 				}
-		  ;
+				;
 
 printExpression: PRINTEXPR
 					{
@@ -164,6 +166,12 @@ printExpression: PRINTEXPR
 						printf("%s\n", $1);
 					}
 				;
+
+whileLoop: WHILE ' ' expression ' ' DO statement_list LOOP
+			{
+				
+			}
+			;
 
 %%
 
