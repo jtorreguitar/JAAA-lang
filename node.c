@@ -891,8 +891,33 @@ void createVar(int type, char *name, struct node *expression) {
 			break;
 
 		case string:
-			printf("char %s[%d] = \"%s\";", name, expression->dataSize,
-												 (char *)expression->value);
+			printf("char *%s = malloc(sizeof(char) * %d);", name,
+												expression->dataSize);
+			printf("if(%s == NULL){", name);
+			printf("fprintf(stderr,\"Cannot allocate memory\");exit(0);}");
+			printf("memcpy(%s, \"%s\", %d);", name, (char *)expression->value,
+														expression->dataSize);
 			break;
+	}
+}
+
+void assignVar(struct node *var, struct node *newValue) {
+	switch(var->type) {
+		case integer:
+		case boolean:
+			printf("%s = %d;",var->name, *(int *)newValue->value);
+			break;
+
+		case floating:
+			printf("%s = %lf;",var->name, *(float *)newValue->value);
+			break;
+
+		case string:
+		// 	if(var->dataSize < newValue->dataSize) {
+		// 		prtinf("")
+		// 	}
+		// 	printf("char %s[%d] = \"%s\";", name, expression->dataSize,
+		// 										 (char *)expression->value);
+		 	break;
 	}
 }

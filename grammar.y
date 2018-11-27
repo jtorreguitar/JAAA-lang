@@ -45,9 +45,14 @@ statement: NAME '=' expression
 					if(var != 0  && !var->constant)
 					{
 						free(var->value);
-						var->type = $3->type;
+						
+						if(var->type != $3->type) {
+							yyerror("variables cannot change their type");
+						}
+						
+						//var->type = $3->type;
 						assignValue(var, $3->value);
-						//assignVar(var->type, var->name, $3);
+						//assignVar(var, $3);
 					}
 					else if(var != 0 && var->constant)
 					{
@@ -164,7 +169,8 @@ printExpression: PRINTEXPR
 int main(int argc, char **argv)
 {
 	symbolList = createListL(cmpFunction, sizeof(node));
-	printf("#include <stdio.h>\nint main(void) {");
+	printf("#include <stdio.h>\n#include<stdlib.h>\n#include<string.h>\n");
+	printf("int main(void) {");
 	yyparse();
 	printf("return 0;}");
 }
