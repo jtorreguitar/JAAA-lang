@@ -1,5 +1,6 @@
 %{
 	#include "node.h"
+	#include "statementList.h"
 	#include <stdio.h>
 	#include <stdlib.h>
 	#include <string.h>
@@ -9,11 +10,14 @@
 	extern int yylex();
 
 	listADT symbolList;
+	sList first = NULL;
+	sList current = NULL;
 %}
 
 %union {
 	char *printedString;
 	Node n;
+	sList l;
 }
 
 %token <n> NAME
@@ -34,15 +38,33 @@
 %left '*' '/'
 %nonassoc UMINUS
 %type <n> expression
+%type <l> statement_list
+%type <l> statement
 %%
 
 statement_list: statement '\n'
-			  | statement_list statement '\n'
-			  | '\n'
+					{
+						$$ = $1;
+						first = $$;
+						current = first;
+						printf("creating only one block\n");
+					}
+				|statement_list statement '\n'
+					{
+						current->next = $2;
+						current = current->next;
+						printf("creating second block\n");
+					}
+			  	| '\n'
+			  		{
+			  			printf("final endline\n");
+			  			current = NULL;
+			  		}
 			  ;
 
 statement: NAME '=' expression
-				{
+				{	
+
 					Node var = (Node) getL(symbolList, $1->name);
 					if(var != 0  && !var->constant)
 					{
@@ -56,6 +78,7 @@ statement: NAME '=' expression
 						assignValue(var, $3->value);
 						assignVar(var, $3);
 						var->dataSize = $3->dataSize;
+						$$ = createAssingStatement(var);
 					}
 					else if(var != 0 && var->constant)
 					{
@@ -65,6 +88,8 @@ statement: NAME '=' expression
 					{
 						addL(symbolList, newNode($1->name, $3->type, $3->value, 0));
 						createVar($3->type, $1->name, $3);
+						Node var = (Node) getL(symbolList, $1->name);
+						$$ = createDeclareStatement(var);
 					}
 				}
 		 | CONST NAME '=' expression
@@ -78,15 +103,17 @@ statement: NAME '=' expression
 					{
 						addL(symbolList, newNode($2->name, $4->type, $4->value, 1));
 						createConstantVar($4->type, $2->name, $4);
+						Node var = (Node) getL(symbolList, $2->name);
+						$$ = createConstDeclareStatement(var);
 					}
 				}
-		 | expression { printByValue(*$1); }
-		 | printExpression
-		 | conditional
-		 | exit_statement
-		 | whileLoop
-			  
+		 | expression {printByValue(*$1); $$ = newList();}
+		 | printExpression {$$ = newList();}
+		 | conditional {$$ = createConditionalStatement();}
+		 | exit_statement {$$ = createExitStatement();}
+		 | whileLoop {$$ = createLoopStatement();}	  
 		 ;
+		 
 
 expression: expression '+' expression
 				{
@@ -202,4 +229,5 @@ int main(int argc, char **argv)
 	printf("int main(void) {");
 	yyparse();
 	printf("return 0;}");
+	printList(first);
 }
