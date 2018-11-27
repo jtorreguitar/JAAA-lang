@@ -21,9 +21,9 @@
 %token <n> INTEGER
 %token <n> STRING
 %token <n> BOOL
-%token WHILE
-%token DO
-%token LOOP
+%token <n> WHILE
+%token <n> DO
+%token <n> LOOP
 %token <printedString> PRINTEXPR
 %token <printedString> PRINTLNEXPR
 %token CONST LTOET GTOET ET NET AND OR NOT VOIDEXPR EXIT IF
@@ -38,6 +38,7 @@
 
 statement_list: statement '\n'
 			  | statement_list statement '\n'
+			  | whileLoop statement_list
 			  | exit_statement statement_list
 			  | conditional statement_list
 			  | '\n'
@@ -169,11 +170,13 @@ printExpression: PRINTEXPR
 						printf("%s\n", $1);
 					}
 				;
+
 whileLoop: WHILE ' ' expression ' ' DO statement_list LOOP
 			{
-				
+				printf("while(expression) {statement;}"); //TODO
 			}
 			;
+
 exit_statement: EXIT '\n'
 				{
 					printf("exit(0);");
@@ -181,7 +184,7 @@ exit_statement: EXIT '\n'
 
 conditional: IF '(' expression ')' '{' statement_list '}'
 				{
-					printf("if(expression){statement;}");
+					printf("if(expression) {statement;}");
 				}
 
 %%

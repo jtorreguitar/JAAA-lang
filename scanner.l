@@ -36,9 +36,13 @@
 	return STRING;
 }
 
-"exit" {return EXIT;}
+"exit" {
+	return EXIT;
+}
 
-"if" {return IF;}
+"if" {
+	return IF;
+}
 
 "true" {
 	yylval.n = calloc(1, sizeof(node));
