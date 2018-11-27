@@ -120,5 +120,7 @@ void toBooleanFromBoolean(Node n, Node result);
 
 void createVar(int type, char *name, struct node *expression);
 void assignVar(struct node *var, struct node*newValue);
+void createConstantVar(int type, char *name, struct node *expression);
+
 
 #endif

@@ -26,7 +26,7 @@
 %token LOOP
 %token <printedString> PRINTEXPR
 %token <printedString> PRINTLNEXPR
-%token CONST LTOET GTOET ET NET AND OR NOT VOIDEXPR
+%token CONST LTOET GTOET ET NET AND OR NOT VOIDEXPR EXIT IF
 %left AND OR NOT
 %left '<' LTOET '>' GTOET
 %left ET NET
@@ -38,6 +38,8 @@
 
 statement_list: statement '\n'
 			  | statement_list statement '\n'
+			  | exit_statement statement_list
+			  | conditional statement_list
 			  | '\n'
 			  ;
 
@@ -77,6 +79,7 @@ statement: NAME '=' expression
 					else
 					{
 						addL(symbolList, newNode($2->name, $4->type, $4->value, 1));
+						createConstantVar($4->type, $2->name, $4);
 					}
 				}
 		 | expression { printByValue(*$1); }
@@ -166,12 +169,20 @@ printExpression: PRINTEXPR
 						printf("%s\n", $1);
 					}
 				;
-
 whileLoop: WHILE ' ' expression ' ' DO statement_list LOOP
 			{
 				
 			}
 			;
+exit_statement: EXIT '\n'
+				{
+					printf("exit(0);");
+				}
+
+conditional: IF '(' expression ')' '{' statement_list '}'
+				{
+					printf("if(expression){statement;}");
+				}
 
 %%
 
