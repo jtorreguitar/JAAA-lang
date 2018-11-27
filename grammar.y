@@ -26,7 +26,7 @@
 %token <n> LOOP
 %token <printedString> PRINTEXPR
 %token <printedString> PRINTLNEXPR
-%token CONST LTOET GTOET ET NET AND OR NOT VOIDEXPR EXIT IF
+%token CONST LTOET GTOET ET NET AND OR NOT VOIDEXPR EXIT IF END
 %left AND OR NOT
 %left '<' LTOET '>' GTOET
 %left ET NET
@@ -184,12 +184,14 @@ exit_statement: EXIT '\n'
 				{
 					printf("exit(0);");
 				}
+				;
 
-conditional: IF '(' expression ')' '{' statement_list '}'
+conditional: IF expression DO statement_list END
 				{
-					printf("if(expression){statement;} exp=%d\n", *(int *)$3->value);
+					printf("if(%d) {}", *(int *)$2->value);
 
 				}
+				;
 
 %%
 
