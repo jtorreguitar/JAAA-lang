@@ -75,6 +75,7 @@ statement: NAME '=' expression
 					else
 					{
 						addL(symbolList, newNode($2->name, $4->type, $4->value, 1));
+						createConstantVar($4->type, $2->name, $4);
 					}
 				}
 		 | expression { printByValue(*$1); }

@@ -926,3 +926,22 @@ void assignVar(struct node *var, struct node *newValue) {
 			break;
 	}
 }
+
+void createConstantVar(int type, char *name, struct node *expression) {
+	switch(type) {
+		case integer:
+		case boolean:
+			printf("const int %s = %d;", name, *(int *)expression->value);
+			break;
+
+		case floating:
+			printf("const float %s = %lf;", name, *(float *)expression->value);
+			break;
+
+		case string:
+			printf("const char *%s = %s);", name, (char *)expression->value);
+		
+			break;
+	}
+
+}
