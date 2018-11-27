@@ -8,6 +8,8 @@
 enum STATEMENT_TYPE { UNDEFINED = 0, DECLARATION, ASIGNATION, CONST_DECLARATION,
 								PRINT, CONDITION_BLOCK, LOOP_BLOCK, EXIT_STATEMENT};
 
+enum OUTPUT_CODE {C = 0, JAVA = 1};
+
 struct statementList {
 	enum STATEMENT_TYPE type;
 	struct statementList *body;
@@ -27,4 +29,8 @@ sList createConditionalStatement();
 sList createExitStatement();
 sList createLoopStatement();
 void printList(sList l);
+void generateConstDeclaration(sList l);
+void generateDeclaration(sList l);
+void generateAsignation(sList l);
+
 #endif

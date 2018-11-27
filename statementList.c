@@ -1,4 +1,7 @@
 #include "statementList.h"
+#include "cBuilder.h"
+
+int language = C;
 
 sList newList() {
 	sList l = malloc(sizeof(*l));
@@ -75,14 +78,17 @@ void printList(sList l) {
 				break;
 
 			case CONST_DECLARATION:
+				generateConstDeclaration(l);
 				printf("const declaration\n");
 				break;
 
 			case DECLARATION:
+				generateDeclaration(l);
 				printf("declaration\n");
 				break;
 
 			case ASIGNATION:
+				generateAsignation(l);
 				printf("asignation\n");
 				break;
 
@@ -100,5 +106,48 @@ void printList(sList l) {
 		}
 
 		l = l->next;
+	}
+}
+
+void setLanguage(int outputLanguage) {
+	language = outputLanguage;
+}
+
+void generateConstDeclaration(sList l) {
+	if(language == C) {
+		createConstantCVar(l->node->type, l->node->name, l->node);
+	}
+	else if(language == JAVA) {
+		fprintf(stderr, "java on development\n");
+	}
+	else {
+		fprintf(stderr, "unsupported language\n");
+
+	}
+}
+
+void generateDeclaration(sList l) {
+	if(language == C) {
+		createCVar(l->node->type, l->node->name, l->node);
+	}
+	else if(language == JAVA) {
+		fprintf(stderr, "java on development\n");
+	}
+	else {
+		fprintf(stderr, "unsupported language\n");
+
+	}
+}
+
+void generateAsignation(sList l) {
+	if(language == C) {
+		assignCVar(l->node, l->node);
+	}
+	else if(language == JAVA) {
+		fprintf(stderr, "java on development\n");
+	}
+	else {
+		fprintf(stderr, "unsupported language\n");
+
 	}
 }

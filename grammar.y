@@ -76,7 +76,7 @@ statement: NAME '=' expression
 
 						//var->type = $3->type;
 						assignValue(var, $3->value);
-						assignVar(var, $3);
+						//assignVar(var, $3);
 						var->dataSize = $3->dataSize;
 						$$ = createAssingStatement(var);
 					}
@@ -87,7 +87,7 @@ statement: NAME '=' expression
 					else
 					{
 						addL(symbolList, newNode($1->name, $3->type, $3->value, 0));
-						createVar($3->type, $1->name, $3);
+						//createVar($3->type, $1->name, $3);
 						Node var = (Node) getL(symbolList, $1->name);
 						$$ = createDeclareStatement(var);
 					}
@@ -102,7 +102,7 @@ statement: NAME '=' expression
 					else
 					{
 						addL(symbolList, newNode($2->name, $4->type, $4->value, 1));
-						createConstantVar($4->type, $2->name, $4);
+						//createConstantVar($4->type, $2->name, $4);
 						Node var = (Node) getL(symbolList, $2->name);
 						$$ = createConstDeclareStatement(var);
 					}
@@ -224,6 +224,7 @@ conditional: IF expression DO statement_list END
 
 int main(int argc, char **argv)
 {
+	//printf("%s\n",argv[1]);
 	symbolList = createListL(cmpFunction, sizeof(node));
 	printf("#include <stdio.h>\n#include<stdlib.h>\n#include<string.h>\n");
 	printf("int main(void) {");
