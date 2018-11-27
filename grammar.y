@@ -225,6 +225,12 @@ conditional: IF expression DO statement_list END
 int main(int argc, char **argv)
 {
 	//printf("%s\n",argv[1]);
+	if(argc == 2) {
+		if(strcmp(argv[1], "-b") == 0) {
+			printf("language setted to JAVA\n");
+			setLanguage(JAVA);
+		}
+	}
 	symbolList = createListL(cmpFunction, sizeof(node));
 	printf("#include <stdio.h>\n#include<stdlib.h>\n#include<string.h>\n");
 	printf("int main(void) {");
