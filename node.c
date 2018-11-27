@@ -913,11 +913,16 @@ void assignVar(struct node *var, struct node *newValue) {
 			break;
 
 		case string:
-		// 	if(var->dataSize < newValue->dataSize) {
-		// 		prtinf("")
-		// 	}
-		// 	printf("char %s[%d] = \"%s\";", name, expression->dataSize,
-		// 										 (char *)expression->value);
-		 	break;
+			if(var->dataSize < newValue->dataSize) {
+				printf("%s = realloc(%s, sizeof(char) * %d);", var->name,
+											var->name, newValue->dataSize);
+				printf("if(%s == NULL){", var->name);
+				printf("fprintf(stderr,\"Cannot allocate memory\");exit(0);}");
+			}
+
+			printf("memcpy(%s, \"%s\", %d);", var->name, (char *)newValue->value,
+																newValue->dataSize);                                                  
+			
+			break;
 	}
 }

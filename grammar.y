@@ -52,7 +52,8 @@ statement: NAME '=' expression
 						
 						//var->type = $3->type;
 						assignValue(var, $3->value);
-						//assignVar(var, $3);
+						assignVar(var, $3);
+						var->dataSize = $3->dataSize;
 					}
 					else if(var != 0 && var->constant)
 					{
