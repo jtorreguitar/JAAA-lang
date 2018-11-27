@@ -85,7 +85,7 @@ statement: NAME '=' expression
 		 | conditional
 		 | exit_statement
 		 | whileLoop
-			  
+
 		 ;
 
 expression: expression '+' expression
@@ -158,7 +158,7 @@ expression: expression '+' expression
 
 					if(n != 0)
 						$$ = n;
-				
+
 					else
 						yyerror("undeclared variable");
 				}
@@ -174,7 +174,7 @@ printExpression: PRINTEXPR
 					}
 				;
 
-whileLoop: WHILE ' ' expression ' ' DO statement_list LOOP
+whileLoop: WHILE expression DO statement_list LOOP
 			{
 				printf("while(expression) {statement;}"); //TODO
 			}
