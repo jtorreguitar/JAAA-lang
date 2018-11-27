@@ -36,8 +36,6 @@
 
 statement_list: statement '\n'
 			  | statement_list statement '\n'
-			  | exit_statement statement_list
-			  | conditional statement_list
 			  | '\n'
 			  ;
 
@@ -82,6 +80,8 @@ statement: NAME '=' expression
 				}
 		 | expression { printByValue(*$1); }
 		 | printExpression
+		 | conditional
+		 | exit_statement
 		 ;
 
 expression: expression '+' expression 
@@ -151,8 +151,10 @@ expression: expression '+' expression
 		  | NAME 
 		  		{
 					Node n = (Node) getL(symbolList, $1->name);
-					if(n != 0) 
+					if(n != 0) {
 						$$ = n;
+						printf("variable found\n");
+					}
 					else
 						yyerror("undeclared variable");
 				}
@@ -175,7 +177,7 @@ exit_statement: EXIT '\n'
 
 conditional: IF '(' expression ')' '{' statement_list '}'
 				{
-					printf("if(expression){statement;}");
+					printf("if(expression){statement;} exp=%d\n", *(int *)$3->value);
 				}
 
 %%
