@@ -36,6 +36,8 @@
 	return STRING;
 }
 
+"exit" {return EXIT;}
+
 "true" {
 	yylval.n = calloc(1, sizeof(node));
 	yylval.n->type = boolean;

@@ -23,7 +23,7 @@
 %token <n> BOOL
 %token <printedString> PRINTEXPR
 %token <printedString> PRINTLNEXPR
-%token CONST LTOET GTOET ET NET AND OR NOT VOIDEXPR
+%token CONST LTOET GTOET ET NET AND OR NOT VOIDEXPR EXIT
 %left AND OR NOT
 %left '<' LTOET '>' GTOET
 %left ET NET
@@ -36,6 +36,7 @@
 
 statement_list: statement '\n'
 			  | statement_list statement '\n'
+			  | exit_statement
 			  | '\n'
 			  ;
 
@@ -165,6 +166,11 @@ printExpression: PRINTEXPR
 						printf("%s\n", $1);
 					}
 				;
+
+exit_statement: EXIT '\n'
+				{
+					printf("exit(0);");
+				}
 
 %%
 
