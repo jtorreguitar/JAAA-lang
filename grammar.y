@@ -21,6 +21,9 @@
 %token <n> INTEGER
 %token <n> STRING
 %token <n> BOOL
+%token <n> WHILE
+%token <n> DO
+%token <n> LOOP
 %token <printedString> PRINTEXPR
 %token <printedString> PRINTLNEXPR
 %token CONST LTOET GTOET ET NET AND OR NOT VOIDEXPR EXIT IF
@@ -31,7 +34,6 @@
 %left '*' '/'
 %nonassoc UMINUS
 %type <n> expression
-
 %%
 
 statement_list: statement '\n'
@@ -39,17 +41,17 @@ statement_list: statement '\n'
 			  | '\n'
 			  ;
 
-statement: NAME '=' expression 
-				{ 
+statement: NAME '=' expression
+				{
 					Node var = (Node) getL(symbolList, $1->name);
 					if(var != 0  && !var->constant)
 					{
 						free(var->value);
-						
+
 						if(var->type != $3->type) {
 							yyerror("variables cannot change their type");
 						}
-						
+
 						//var->type = $3->type;
 						assignValue(var, $3->value);
 						assignVar(var, $3);
@@ -82,30 +84,32 @@ statement: NAME '=' expression
 		 | printExpression
 		 | conditional
 		 | exit_statement
+		 | whileLoop
+			  
 		 ;
 
-expression: expression '+' expression 
+expression: expression '+' expression
 				{
 					$$ = binaryOperation($1, $3, addition);
 				}
-		  | expression '-' expression 
+		  | expression '-' expression
 		  		{
 		  			$$ = binaryOperation($1, $3, subtraction);
 		  		}
-		  | expression '*' expression 
+		  | expression '*' expression
 		  		{
 		  			$$ = binaryOperation($1, $3, multiplication);
 		  		}
-		  | expression '/' expression 
-				{ 
+		  | expression '/' expression
+				{
 					$$ = binaryOperation($1, $3, division);
 				}
-		  | '-' expression %prec UMINUS 
-		  		{ 
+		  | '-' expression %prec UMINUS
+		  		{
 		  			$$ = UMinusByType($2);
 		  		}
-		  | '(' expression ')' 
-		  		{ 
+		  | '(' expression ')'
+		  		{
 		  			$$ = $2;
 		  		}
 		  | expression '<' expression
@@ -118,7 +122,7 @@ expression: expression '+' expression
 				}
 		  | expression '>' expression
 		  		{
-					$$ = relationalOperation($1, $3, GREATERTHAN);  
+					$$ = relationalOperation($1, $3, GREATERTHAN);
 				}
 		  | expression GTOET expression
 		  		{
@@ -148,17 +152,17 @@ expression: expression '+' expression
 		  | INTEGER
 		  | STRING
 		  | BOOL
-		  | NAME 
+		  | NAME
 		  		{
 					Node n = (Node) getL(symbolList, $1->name);
-					if(n != 0) {
+
+					if(n != 0)
 						$$ = n;
-						printf("variable found\n");
-					}
+				
 					else
 						yyerror("undeclared variable");
 				}
-		  ;
+				;
 
 printExpression: PRINTEXPR
 					{
@@ -170,6 +174,12 @@ printExpression: PRINTEXPR
 					}
 				;
 
+whileLoop: WHILE ' ' expression ' ' DO statement_list LOOP
+			{
+				printf("while(expression) {statement;}"); //TODO
+			}
+			;
+
 exit_statement: EXIT '\n'
 				{
 					printf("exit(0);");
@@ -178,6 +188,7 @@ exit_statement: EXIT '\n'
 conditional: IF '(' expression ')' '{' statement_list '}'
 				{
 					printf("if(expression){statement;} exp=%d\n", *(int *)$3->value);
+
 				}
 
 %%
