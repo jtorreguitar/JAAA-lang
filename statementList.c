@@ -97,6 +97,7 @@ void printList(sList l) {
 				break;
 
 			case EXIT_STATEMENT:
+				generateExitCode();
 				printf("exit statement\n");
 				break;
 
@@ -150,4 +151,44 @@ void generateAsignation(sList l) {
 		fprintf(stderr, "unsupported language\n");
 
 	}
+}
+
+void generateExitCode() {
+	if(language == C) {
+		generateCExitCode();
+	}
+	else if(language == JAVA) {
+		fprintf(stderr, "java on development\n");
+	}
+	else {
+		fprintf(stderr, "unsupported language\n");
+
+	}
+}
+
+void generateCodeStart() {
+	if(language == C) {
+		generateCCodeStart();
+	}
+	else if(language == JAVA) {
+		fprintf(stderr, "java on development\n");
+	}
+	else {
+		fprintf(stderr, "unsupported language\n");
+
+	}
+}
+
+void generateCodeEnd() {
+	if(language == C) {
+		generateCCodeEnd();
+	}
+	else if(language == JAVA) {
+		fprintf(stderr, "java on development\n");
+	}
+	else {
+		fprintf(stderr, "unsupported language\n");
+
+	}
+
 }

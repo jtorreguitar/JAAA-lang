@@ -67,3 +67,16 @@ void createConstantCVar(int type, char *name, struct node *expression) {
 	}
 
 }
+
+void generateCExitCode() {
+	printf("exit(0);");
+}
+
+void generateCCodeStart() {
+	printf("#include <stdio.h>\n#include<stdlib.h>\n#include<string.h>\n");
+	printf("int main(void) {");
+}
+
+void generateCCodeEnd() {
+	printf("return 0;}");
+}

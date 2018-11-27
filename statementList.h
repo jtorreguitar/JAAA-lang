@@ -33,4 +33,8 @@ void generateConstDeclaration(sList l);
 void generateDeclaration(sList l);
 void generateAsignation(sList l);
 void setLanguage(int outputLanguage);
+void generateExitCode();
+void generateCodeStart();
+void generateCodeEnd();
+
 #endif

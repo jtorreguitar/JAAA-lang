@@ -6,5 +6,8 @@
 void createCVar(int type, char *name, struct node *expression);
 void assignCVar(struct node *var, struct node*newValue);
 void createConstantCVar(int type, char *name, struct node *expression);
+void generateCExitCode();
+void generateCCodeStart();
+void generateCCodeEnd();
 
 #endif

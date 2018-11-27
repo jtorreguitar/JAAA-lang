@@ -207,11 +207,7 @@ whileLoop: WHILE expression DO statement_list LOOP
 			}
 			;
 
-exit_statement: EXIT '\n'
-				{
-					printf("exit(0);");
-				}
-				;
+exit_statement: EXIT '\n';
 
 conditional: IF expression DO statement_list END
 				{
@@ -224,7 +220,6 @@ conditional: IF expression DO statement_list END
 
 int main(int argc, char **argv)
 {
-	//printf("%s\n",argv[1]);
 	if(argc == 2) {
 		if(strcmp(argv[1], "-b") == 0) {
 			printf("language setted to JAVA\n");
@@ -232,9 +227,10 @@ int main(int argc, char **argv)
 		}
 	}
 	symbolList = createListL(cmpFunction, sizeof(node));
-	printf("#include <stdio.h>\n#include<stdlib.h>\n#include<string.h>\n");
-	printf("int main(void) {");
+	
+	generateCodeStart();
 	yyparse();
-	printf("return 0;}");
+
+	generateCodeEnd();
 	printList(first);
 }
