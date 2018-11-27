@@ -38,6 +38,8 @@
 
 "exit" {return EXIT;}
 
+"if" {return IF;}
+
 "true" {
 	yylval.n = calloc(1, sizeof(node));
 	yylval.n->type = boolean;
