@@ -82,17 +82,17 @@ void printList(sList l) {
 
 			case CONST_DECLARATION:
 				generateConstDeclaration(l);
-				printf("const declaration\n");
+				//printf("const declaration\n"); evans
 				break;
 
 			case DECLARATION:
 				generateDeclaration(l);
-				printf("declaration\n");
+				//printf("declaration\n");evans
 				break;
 
 			case ASIGNATION:
 				generateAsignation(l);
-				printf("asignation\n");
+				//printf("asignation\n");
 				break;
 
 			case LOOP_BLOCK:
@@ -101,7 +101,7 @@ void printList(sList l) {
 
 			case EXIT_STATEMENT:
 				generateExitCode();
-				printf("exit statement\n");
+				//printf("exit statement\n");
 				break;
 
 			case PRINT:
