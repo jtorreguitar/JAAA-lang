@@ -129,19 +129,29 @@ statement: NAME '=' expression
 
 expression: expression '+' expression
 				{
-					$$ = binaryOperation($1, $3, addition);
+					//$$ = binaryOperation($1, $3, addition);
+					$$ = buildBinaryExpression($1, $3, addition);
+					printf("expression = %s\n", $$->name);
 				}
 		  | expression '-' expression
 		  		{
-		  			$$ = binaryOperation($1, $3, subtraction);
+		  			//$$ = binaryOperation($1, $3, subtraction);
+		  			$$ = buildBinaryExpression($1, $3, subtraction);
+		  			printf("expression = %s\n", $$->name);
+
+
 		  		}
 		  | expression '*' expression
 		  		{
-		  			$$ = binaryOperation($1, $3, multiplication);
+		  			//$$ = binaryOperation($1, $3, multiplication);
+		  			$$ = buildBinaryExpression($1, $3, multiplication);
+		  			printf("expression = %s\n", $$->name);
 		  		}
 		  | expression '/' expression
 				{
-					$$ = binaryOperation($1, $3, division);
+					//$$ = binaryOperation($1, $3, division);
+					$$ = buildBinaryExpression($1, $3, division);
+					printf("expression = %s\n", $$->name);
 				}
 		  | '-' expression %prec UMINUS
 		  		{

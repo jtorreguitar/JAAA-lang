@@ -20,6 +20,8 @@ Node buildCStringExpression(Node n);
 Node buildCIntegerExpression(Node n);
 Node buildCFloatExpression(Node n);
 Node buildCNotExpression(Node n);
+Node buildCBinaryExpression(Node first, Node second, int operator);
+
 
 
 

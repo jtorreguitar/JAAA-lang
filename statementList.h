@@ -45,6 +45,8 @@ Node buildStringExpression(Node n);
 Node buildIntegerExpression(Node n);
 Node buildFloatExpression(Node n);
 Node buildNotExpression(Node n);
+Node buildBinaryExpression(Node first, Node second, int operator);
+
 
 
 #endif

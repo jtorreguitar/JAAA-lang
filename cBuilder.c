@@ -155,3 +155,34 @@ Node buildCNotExpression(Node n) {
 	return newNode;
 }
 
+Node buildCBinaryExpression(Node first, Node second, int operator) {
+	Node newNode = clone(first);
+	int length = strlen(first->name) + 1 + strlen(second->name) + 1 +2;
+	newNode->name = calloc(length, sizeof(char));
+
+	if(newNode->name == NULL) {
+		fprintf(stderr, "Cannot allocate memory\n");
+		exit(0);
+	}
+
+	switch(operator) {
+		case addition:
+			sprintf(newNode->name, "%s + %s", first->name, second->name);
+			break;
+		case subtraction:
+			sprintf(newNode->name, "%s - %s", first->name, second->name);
+			break;
+		case multiplication:
+			sprintf(newNode->name, "%s * %s", first->name, second->name);
+			break;
+		case division:
+			sprintf(newNode->name, "%s / %s", first->name, second->name);
+			break;
+	}
+
+	free(first->name);
+	free(first);
+	free(second->name);
+	free(second);
+	return newNode;
+}
