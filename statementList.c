@@ -133,7 +133,7 @@ void generateConstDeclaration(sList l) {
 
 void generateWhileLoopBlockCode(sList l) {
 	if(language == C) {
-		generateCConditionBlock(l);
+		generateCWhileLoopBlock(l);
 	}
 	else if(language == JAVA) {
 		fprintf(stderr, "java on development\n");
