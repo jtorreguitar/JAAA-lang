@@ -17,7 +17,7 @@ void createCVar(int type, char *name, struct node *expression) {
 			printf("char *%s = malloc(sizeof(char) * %d);", name,
 												expression->dataSize);
 			printf("if(%s == NULL){", name);
-			printf("fprintf(stderr,\"Cannot allocate memory\");exit(0);}");
+			printf("fprintf(stderr,\"Cannot allocate memory\");exit(1);}");
 			printf("memcpy(%s, \"%s\", %d);", name, (char *)expression->value,
 														expression->dataSize);
 			break;
@@ -40,7 +40,7 @@ void assignCVar(struct node *var, struct node *newValue) {
 				printf("%s = realloc(%s, sizeof(char) * %d);", var->name,
 											var->name, newValue->dataSize);
 				printf("if(%s == NULL){", var->name);
-				printf("fprintf(stderr,\"Cannot allocate memory\");exit(0);}");
+				printf("fprintf(stderr,\"Cannot allocate memory\");exit(1);}");
 			}
 
 			printf("memcpy(%s, \"%s\", %d);", var->name, (char *)newValue->value,
@@ -132,7 +132,7 @@ Node buildCBooleanExpression(Node n) {
 	n->name = calloc(2, sizeof(char));
 	if(n->name == NULL) {
 		fprintf(stderr, "Cannot allocate memory\n");
-		exit(0);
+		exit(1);
 	}
 
 	if(*((int *)n->value) == 1) {
@@ -149,7 +149,7 @@ Node buildCStringExpression(Node n) {
 	n->name = calloc(n->dataSize, sizeof(char));
 	if(n->name == NULL) {
 		fprintf(stderr, "Cannot allocate memory\n");
-		exit(0);
+		exit(1);
 	}
 
 	memcpy(n->name, n->value, n->dataSize);
@@ -161,7 +161,7 @@ Node buildCIntegerExpression(Node n) {
 
 	if(n->name == NULL) {
 		fprintf(stderr, "Cannot allocate memory\n");
-		exit(0);
+		exit(1);
 	}
 
 	sprintf(n->name, "%d", *((int *)n->value));
@@ -173,7 +173,7 @@ Node buildCFloatExpression(Node n) {
 
 	if(n->name == NULL) {
 		fprintf(stderr, "Cannot allocate memory\n");
-		exit(0);
+		exit(1);
 	}
 
 	sprintf(n->name, "%lf", *((double *)n->value));
@@ -186,7 +186,7 @@ Node buildCNotExpression(Node n) {
 
 	if(newNode->name == NULL) {
 		fprintf(stderr, "Cannot allocate memory\n");
-		exit(0);
+		exit(1);
 	}
 
 	sprintf(newNode->name, "!%s", n->name);
@@ -203,7 +203,7 @@ Node buildCMinusExpression(Node n) {
 
 	if(newNode->name == NULL) {
 		fprintf(stderr, "Cannot allocate memory\n");
-		exit(0);
+		exit(1);
 	}
 
 	sprintf(newNode->name, "-%s", n->name);
@@ -222,7 +222,7 @@ Node buildCBinaryExpression(Node first, Node second, int operator) {
 
 	if(newNode->name == NULL) {
 		fprintf(stderr, "Cannot allocate memory\n");
-		exit(0);
+		exit(1);
 	}
 
 	switch(operator) {
@@ -255,7 +255,7 @@ Node buildCRelationalExpression(Node first, Node second, int operator) {
 
 	if(newNode->name == NULL) {
 		fprintf(stderr, "Cannot allocate memory\n");
-		exit(0);
+		exit(1);
 	}
 
 	switch(operator) {
@@ -294,7 +294,7 @@ Node buildCLogicalExpression(Node first, Node second, int operator) {
 
 	if(newNode->name == NULL) {
 		fprintf(stderr, "Cannot allocate memory\n");
-		exit(0);
+		exit(1);
 	}
 
 	switch(operator) {
@@ -320,7 +320,7 @@ Node buildCParenthesisExpression(Node n) {
 
 	if(newNode->name == NULL) {
 		fprintf(stderr, "Cannot allocate memory\n");
-		exit(0);
+		exit(1);
 	}
 
 	sprintf(newNode->name, "(%s)", n->name);

@@ -282,7 +282,6 @@ conditional: IF expression DO statement_list END
 					$$->block = $4;
 					$$->conditionType = IF_TYPE;
 					//printf("if(%s) {}", $2->name);
-
 				}
 			| IF expression DO statement_list else_block
 				{
@@ -329,7 +328,7 @@ int main(int argc, char **argv)
 {
 	if(argc == 2) {
 		if(strcmp(argv[1], "-b") == 0) {
-			printf("language setted to JAVA\n");
+			printf("language set to JAVA\n");
 			setLanguage(JAVA);
 		}
 	}
