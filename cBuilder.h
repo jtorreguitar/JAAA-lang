@@ -23,7 +23,7 @@ Node buildCNotExpression(Node n);
 Node buildCMinusExpression(Node n);
 Node buildCBinaryExpression(Node first, Node second, int operator);
 Node buildCRelationalExpression(Node first, Node second, int operator);
-
+Node buildCLogicalExpression(Node first, Node second, int operator);
 
 
 

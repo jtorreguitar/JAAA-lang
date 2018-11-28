@@ -204,14 +204,14 @@ expression: expression '+' expression
 				}
 		  | expression AND expression
 		  		{
-					$$ = logicalOperation($1, $3, and);
-					//$$ = buildLogicalExpression($1, $3, and);
+					//$$ = logicalOperation($1, $3, and);
+					$$ = buildLogicalExpression($1, $3, and);
 					printf("expression = %s\n", $$->name);
 				}
 		  | expression OR expression
 		  		{
-					$$ = logicalOperation($1, $3, or);
-					//$$ = buildLogicalExpression($1, $3, or);
+					//$$ = logicalOperation($1, $3, or);
+					$$ = buildLogicalExpression($1, $3, or);
 					printf("expression = %s\n", $$->name);
 				}
 		  | NOT expression
