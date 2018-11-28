@@ -8,7 +8,7 @@ sList newList() {
 
 	if(l == NULL) {
 		fprintf(stderr, "Cannot allocate memory.");
-		exit(0);
+		exit(1);
 	}
 
 	l->type 			= UNDEFINED;
@@ -230,6 +230,7 @@ Node buildBooleanExpression(Node n) {
 	}
 	else {
 		fprintf(stderr, "unsupported language\n");
+		exit(1);
 
 	}
 	exit(0);
@@ -244,7 +245,7 @@ Node buildStringExpression(Node n) {
 	}
 	else {
 		fprintf(stderr, "unsupported language\n");
-
+		exit(1);
 	}
 	exit(0);
 
@@ -259,7 +260,7 @@ Node buildIntegerExpression(Node n) {
 	}
 	else {
 		fprintf(stderr, "unsupported language\n");
-
+		exit(1);
 	}
 	exit(0);
 }
@@ -288,7 +289,7 @@ Node buildNotExpression(Node n) {
 	}
 	else {
 		fprintf(stderr, "unsupported language\n");
-
+		exit(1);
 	}
 	exit(0);
 
@@ -318,7 +319,7 @@ Node buildBinaryExpression(Node first, Node second, int operator) {
 	}
 	else {
 		fprintf(stderr, "unsupported language\n");
-
+		exit(1);
 	}
 	exit(0);
 }
@@ -346,7 +347,7 @@ Node buildLogicalExpression(Node first, Node second, int operator) {
 	}
 	else {
 		fprintf(stderr, "unsupported language\n");
-
+		exit(1);
 	}
 	exit(0);
 }
@@ -360,7 +361,7 @@ Node buildParenthesisExpression(Node n) {
 	}
 	else {
 		fprintf(stderr, "unsupported language\n");
-
+		exit(1);
 	}
 	exit(0);
 }
