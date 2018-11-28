@@ -89,8 +89,7 @@ statement: NAME '=' expression
 							var->dataSize = $3->dataSize;
 						}
 
-						Node newNode = clone(var);
-						$$ = createAssingStatement(oldNode, newNode);
+						$$ = createAssingStatement(oldNode, $3);
 					}
 					else if(var != 0 && var->constant)
 					{
