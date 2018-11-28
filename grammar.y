@@ -161,7 +161,9 @@ expression: expression '+' expression
 		  		}
 		  | '(' expression ')'
 		  		{
-		  			$$ = $2;
+		  			//$$ = $2;
+		  			$$ = buildParenthesisExpression($2);
+		  			printf("expression = %s\n", $$->name);
 		  		}
 		  | expression '<' expression
 				{

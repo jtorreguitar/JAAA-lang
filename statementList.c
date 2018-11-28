@@ -340,3 +340,17 @@ Node buildLogicalExpression(Node first, Node second, int operator) {
 	}
 	exit(0);
 }
+
+Node buildParenthesisExpression(Node n) {
+	if(language == C) {
+		return buildCParenthesisExpression(n);
+	}
+	else if(language == JAVA) {
+		fprintf(stderr, "java on development\n");
+	}
+	else {
+		fprintf(stderr, "unsupported language\n");
+
+	}
+	exit(0);
+}

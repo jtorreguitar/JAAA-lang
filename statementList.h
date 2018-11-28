@@ -49,5 +49,6 @@ Node buildMinusExpression(Node n);
 Node buildBinaryExpression(Node first, Node second, int operator);
 Node buildRelationalExpression(Node first, Node second, int operator);
 Node buildLogicalExpression(Node first, Node second, int operator);
+Node buildParenthesisExpression(Node n);
 
 #endif

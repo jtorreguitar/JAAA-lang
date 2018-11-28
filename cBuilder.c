@@ -274,3 +274,20 @@ Node buildCLogicalExpression(Node first, Node second, int operator) {
 	return newNode;
 }
 
+Node buildCParenthesisExpression(Node n) {
+	Node newNode = clone(n);
+	newNode->name = calloc(strlen(n->name) + 3, sizeof(char));
+
+	if(newNode->name == NULL) {
+		fprintf(stderr, "Cannot allocate memory\n");
+		exit(0);
+	}
+
+	sprintf(newNode->name, "(%s)", n->name);
+	
+	//not to free variables evans
+	//free(n->name);
+	//free(n);
+	return newNode;
+
+}
