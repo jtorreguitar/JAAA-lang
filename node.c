@@ -892,7 +892,6 @@ Node clone(Node aux) {
 	newNode->dataSize 	= aux->dataSize;
 	newNode->constant 	= aux->constant;
 	newNode->value 		= malloc(aux->dataSize);
-	printf("value = %d\ndatasize=%d", *(int *)aux->value, aux->dataSize);
 	memcpy(newNode->value, aux->value, aux->dataSize);
 
 	return newNode;

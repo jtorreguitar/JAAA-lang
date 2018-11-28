@@ -23,7 +23,7 @@ struct statementList {
 typedef struct statementList *sList;
 
 sList newList();
-sList createAssingStatement(Node n);
+sList createAssingStatement(Node oldNode, Node newNode);
 sList createDeclareStatement(Node n);
 sList createConstDeclareStatement(Node n);
 sList createConditionalStatement();

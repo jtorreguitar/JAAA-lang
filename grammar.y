@@ -83,13 +83,14 @@ statement: NAME '=' expression
 
 						//var->type = $3->type;
 						assignValue(var, $3->value);
+						Node oldNode = clone(var);
 
 						if(var->type == string) {
 							var->dataSize = $3->dataSize;
 						}
 
-						Node aux = clone(var);
-						$$ = createAssingStatement(aux);
+						Node newNode = clone(var);
+						$$ = createAssingStatement(oldNode, newNode);
 					}
 					else if(var != 0 && var->constant)
 					{

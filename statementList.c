@@ -21,11 +21,12 @@ sList newList() {
 	return l;
 }
 
-sList createAssingStatement(Node n) {
+sList createAssingStatement(Node oldNode, Node newNode) {
 	printf("in asignation\n");
-	sList l = newList();
-	l->type = ASIGNATION;
-	l->node = n;
+	sList l 	= newList();
+	l->type 	= ASIGNATION;
+	l->node 	= oldNode;
+	l->second 	= newNode;
 	return l;
 }
 
@@ -146,7 +147,7 @@ void generateDeclaration(sList l) {
 
 void generateAsignation(sList l) {
 	if(language == C) {
-		assignCVar(l->node, l->node);
+		assignCVar(l->node, l->second);
 	}
 	else if(language == JAVA) {
 		fprintf(stderr, "java on development\n");
