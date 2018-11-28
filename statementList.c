@@ -1,5 +1,6 @@
 #include "statementList.h"
 #include "cBuilder.h"
+#include "javaBuilder.h"
 
 int language = C;
 
@@ -124,7 +125,7 @@ void generateConstDeclaration(sList l) {
 		createConstantCVar(l->node->type, l->node->name, l->second);
 	}
 	else if(language == JAVA) {
-		fprintf(stderr, "java on development\n");
+		createConstantJavaVar(l->node->type, l->node->name, l->second);
 	}
 	else {
 		fprintf(stderr, "unsupported language\n");
@@ -137,7 +138,7 @@ void generateDeclaration(sList l) {
 		createCVar(l->node->type, l->node->name, l->second);
 	}
 	else if(language == JAVA) {
-		fprintf(stderr, "java on development\n");
+		createJavaVar(l->node->type, l->node->name, l->second);
 	}
 	else {
 		fprintf(stderr, "unsupported language\n");
@@ -150,7 +151,7 @@ void generateAsignation(sList l) {
 		assignCVar(l->node, l->second);
 	}
 	else if(language == JAVA) {
-		fprintf(stderr, "java on development\n");
+		assignJavaVar(l->node, l->second);
 	}
 	else {
 		fprintf(stderr, "unsupported language\n");
@@ -163,11 +164,10 @@ void generateExitCode() {
 		generateCExitCode();
 	}
 	else if(language == JAVA) {
-		fprintf(stderr, "java on development\n");
+		generateJavaExitCode();
 	}
 	else {
 		fprintf(stderr, "unsupported language\n");
-
 	}
 }
 
@@ -176,7 +176,7 @@ void generateCodeStart() {
 		generateCCodeStart();
 	}
 	else if(language == JAVA) {
-		fprintf(stderr, "java on development\n");
+		generateJavaCodeStart();
 	}
 	else {
 		fprintf(stderr, "unsupported language\n");
@@ -189,11 +189,10 @@ void generateCodeEnd() {
 		generateCCodeEnd();
 	}
 	else if(language == JAVA) {
-		fprintf(stderr, "java on development\n");
+		generateJavaCodeEnd();
 	}
 	else {
 		fprintf(stderr, "unsupported language\n");
-
 	}
 
 }
@@ -220,7 +219,6 @@ Node buildBooleanExpression(Node n) {
 	}
 	else {
 		fprintf(stderr, "unsupported language\n");
-
 	}
 	exit(0);
 }
@@ -234,7 +232,6 @@ Node buildStringExpression(Node n) {
 	}
 	else {
 		fprintf(stderr, "unsupported language\n");
-
 	}
 	exit(0);
 
@@ -249,7 +246,6 @@ Node buildIntegerExpression(Node n) {
 	}
 	else {
 		fprintf(stderr, "unsupported language\n");
-
 	}
 	exit(0);
 }
@@ -263,7 +259,6 @@ Node buildFloatExpression(Node n) {
 	}
 	else {
 		fprintf(stderr, "unsupported language\n");
-
 	}
 	exit(0);
 
