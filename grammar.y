@@ -165,42 +165,59 @@ expression: expression '+' expression
 		  		}
 		  | expression '<' expression
 				{
-					$$ = relationalOperation($1, $3, LESSTHAN);
+					//$$ = relationalOperation($1, $3, LESSTHAN);
+					$$ = buildRelationalExpression($1, $3, LESSTHAN);
+					printf("expression = %s\n", $$->name);
+
+
 				}
 		  | expression LTOET expression
 		  		{
-					$$ = relationalOperation($1, $3, LESSTHANOREQUALTO);
+					//$$ = relationalOperation($1, $3, LESSTHANOREQUALTO);
+					$$ = buildRelationalExpression($1, $3, LESSTHANOREQUALTO);
+					printf("expression = %s\n", $$->name);
 				}
 		  | expression '>' expression
 		  		{
-					$$ = relationalOperation($1, $3, GREATERTHAN);
+					//$$ = relationalOperation($1, $3, GREATERTHAN);
+					$$ = buildRelationalExpression($1, $3, GREATERTHAN);
+					printf("expression = %s\n", $$->name);
+
 				}
 		  | expression GTOET expression
 		  		{
-					$$ = relationalOperation($1, $3, GREATERTHANOREQUALTO);
+					//$$ = relationalOperation($1, $3, GREATERTHANOREQUALTO);
+					$$ = buildRelationalExpression($1, $3, GREATERTHANOREQUALTO);
+					printf("expression = %s\n", $$->name);
 				}
 		  | expression ET expression
 		  		{
-					$$ = relationalOperation($1, $3, EQUALTO);
+					//$$ = relationalOperation($1, $3, EQUALTO);
+					$$ = buildRelationalExpression($1, $3, EQUALTO);
+					printf("expression = %s\n", $$->name);
 				}
 		  | expression NET expression
 		  		{
-					$$ = relationalOperation($1, $3, NOTEQUALTO);
+					//$$ = relationalOperation($1, $3, NOTEQUALTO);
+					$$ = buildRelationalExpression($1, $3, NOTEQUALTO);
+					printf("expression = %s\n", $$->name);
 				}
 		  | expression AND expression
 		  		{
 					$$ = logicalOperation($1, $3, and);
+					//$$ = buildLogicalExpression($1, $3, and);
+					printf("expression = %s\n", $$->name);
 				}
 		  | expression OR expression
 		  		{
 					$$ = logicalOperation($1, $3, or);
+					//$$ = buildLogicalExpression($1, $3, or);
+					printf("expression = %s\n", $$->name);
 				}
 		  | NOT expression
 		  		{
-				 //   $$ = logicalOperation($2, NULL, not);
-				 	printf("\n\nname2 was = %s\n\n", $2->name);
-
-					$$ = buildNotExpression($2);
+				    //$$ = logicalOperation($2, NULL, not);
+				 	$$ = buildNotExpression($2);
 					printf("name3= %s", $$->name);
 				}
 		  | FLOAT

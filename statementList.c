@@ -313,3 +313,16 @@ Node buildBinaryExpression(Node first, Node second, int operator) {
 	exit(0);
 }
 
+Node buildRelationalExpression(Node first, Node second, int operator) {
+	if(language == C) {
+		return buildCRelationalExpression(first, second, operator);
+	}
+	else if(language == JAVA) {
+		fprintf(stderr, "java on development\n");
+	}
+	else {
+		fprintf(stderr, "unsupported language\n");
+
+	}
+	exit(0);
+}

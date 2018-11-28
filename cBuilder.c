@@ -207,3 +207,43 @@ Node buildCBinaryExpression(Node first, Node second, int operator) {
 	// free(second);
 	return newNode;
 }
+
+Node buildCRelationalExpression(Node first, Node second, int operator) {
+	Node newNode = clone(first);
+	int length = strlen(first->name) + 1 + strlen(second->name) + 1 +3;
+	newNode->name = calloc(length, sizeof(char));
+
+	if(newNode->name == NULL) {
+		fprintf(stderr, "Cannot allocate memory\n");
+		exit(0);
+	}
+	
+	switch(operator) {
+		case LESSTHAN:
+			sprintf(newNode->name, "%s < %s", first->name, second->name);
+			break;
+		case LESSTHANOREQUALTO:
+			sprintf(newNode->name, "%s <= %s", first->name, second->name);
+			break;
+		case GREATERTHAN:
+			sprintf(newNode->name, "%s > %s", first->name, second->name);
+			break;
+		case GREATERTHANOREQUALTO:
+			sprintf(newNode->name, "%s >= %s", first->name, second->name);
+			break;
+		case EQUALTO:
+			sprintf(newNode->name, "%s == %s", first->name, second->name);
+			break;
+		case NOTEQUALTO:
+			sprintf(newNode->name, "%s != %s", first->name, second->name);
+			break;
+	}
+
+	//not to free variables evans
+	// free(first->name);
+	// free(first);
+	// free(second->name);
+	// free(second);
+	return newNode;
+}
+
