@@ -9,7 +9,7 @@ sList newList() {
 
 	if(l == NULL) {
 		fprintf(stderr, "Cannot allocate memory.");
-		exit(0);
+		exit(1);
 	}
 
 	l->type 			= UNDEFINED;
@@ -220,7 +220,7 @@ Node buildBooleanExpression(Node n) {
 	else {
 		fprintf(stderr, "unsupported language\n");
 	}
-	exit(0);
+	exit(1);
 }
 
 Node buildStringExpression(Node n) {
@@ -233,7 +233,7 @@ Node buildStringExpression(Node n) {
 	else {
 		fprintf(stderr, "unsupported language\n");
 	}
-	exit(0);
+	exit(1);
 }
 
 Node buildIntegerExpression(Node n) {
@@ -246,7 +246,7 @@ Node buildIntegerExpression(Node n) {
 	else {
 		fprintf(stderr, "unsupported language\n");
 	}
-	exit(0);
+	exit(1);
 }
 
 Node buildFloatExpression(Node n) {
@@ -259,7 +259,7 @@ Node buildFloatExpression(Node n) {
 	else {
 		fprintf(stderr, "unsupported language\n");
 	}
-	exit(0);
+	exit(1);
 
 }
 
@@ -274,7 +274,7 @@ Node buildNotExpression(Node n) {
 		fprintf(stderr, "unsupported language\n");
 
 	}
-	exit(0);
+	exit(1);
 
 }
 
@@ -289,7 +289,7 @@ Node buildMinusExpression(Node n) {
 		fprintf(stderr, "unsupported language\n");
 
 	}
-	exit(0);
+	exit(1);
 
 }
 
@@ -304,7 +304,7 @@ Node buildBinaryExpression(Node first, Node second, int operator) {
 		fprintf(stderr, "unsupported language\n");
 
 	}
-	exit(0);
+	exit(1);
 }
 
 Node buildRelationalExpression(Node first, Node second, int operator) {
@@ -318,7 +318,7 @@ Node buildRelationalExpression(Node first, Node second, int operator) {
 		fprintf(stderr, "unsupported language\n");
 
 	}
-	exit(0);
+	exit(1);
 }
 
 Node buildLogicalExpression(Node first, Node second, int operator) {
@@ -332,7 +332,7 @@ Node buildLogicalExpression(Node first, Node second, int operator) {
 		fprintf(stderr, "unsupported language\n");
 
 	}
-	exit(0);
+	exit(1);
 }
 
 Node buildParenthesisExpression(Node n) {
@@ -346,5 +346,5 @@ Node buildParenthesisExpression(Node n) {
 		fprintf(stderr, "unsupported language\n");
 
 	}
-	exit(0);
+	exit(1);
 }
