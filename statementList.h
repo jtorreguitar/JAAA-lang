@@ -13,7 +13,7 @@ enum OUTPUT_CODE {C = 0, JAVA = 1};
 struct statementList {
 	enum STATEMENT_TYPE type;
 	struct statementList *block;
-	int condition;
+	char *condition;
 	struct statementList *next;	
 	Node node;
 	Node second;

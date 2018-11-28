@@ -11,12 +11,12 @@ sList newList() {
 		exit(0);
 	}
 
-	l->type = UNDEFINED;
-	l->block = NULL;
-	l->next = NULL;
-	l->condition = -1;
-	l->node = NULL;
-	l->second = NULL;
+	l->type 		= UNDEFINED;
+	l->block 		= NULL;
+	l->next 		= NULL;
+	l->condition 	= NULL;
+	l->node 		= NULL;
+	l->second 		= NULL;
 
 	return l;
 }
@@ -75,10 +75,9 @@ void printList(sList l) {
 			break;
 
 			case CONDITION_BLOCK:
-				printf("llego aca3\n");
-
+				
 				generateConditionBlockCode(l);
-				printf("if\n");
+				//printf("if condition=%s\n", l->condition);
 				break;
 
 			case CONST_DECLARATION:

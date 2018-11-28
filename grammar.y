@@ -113,9 +113,8 @@ statement: NAME '=' expression
 						$$ = createConstDeclareStatement(var, $4);
 					}
 				}
-		 //| expression {printByValue(*$1); $$ = newList();}
 		 | printExpression {$$ = newList();}
-		 | conditional //{$$ = createConditionalStatement();}
+		 | conditional
 		 | exit_statement {$$ = createExitStatement();}
 		 | whileLoop {$$ = createLoopStatement();}	  
 		 ;
@@ -272,10 +271,11 @@ whileLoop: WHILE expression DO statement_list LOOP
 exit_statement: EXIT;
 
 conditional: IF expression DO statement_list END
-				{
-					//$$->condition = *((int *)($2->value));
-					//$$->block = $4;
-					printf("if(%d) {}", *(int *)$2->value);
+				{	
+					$$ = createConditionalStatement();
+					$$->condition = $2->name;
+					$$->block = $4;
+					//printf("if(%s) {}", $2->name);
 
 				}
 				;
@@ -295,6 +295,6 @@ int main(int argc, char **argv)
 	generateCodeStart();
 	yyparse();
 
-	generateCodeEnd();
 	printList(first);
+	generateCodeEnd();
 }

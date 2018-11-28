@@ -83,8 +83,8 @@ void generateCCodeEnd() {
 }
 
 void generateCConditionBlock(sList l) {
-	printf("llego aca\n");
-	printf("if( %d ) {}", l->condition);
+	//printf("llego aca\n"); evans
+	printf("if( %s ) {}", l->condition);
 	//still needs to iterate in all blocks
 }
 
