@@ -42,6 +42,7 @@
 %type <l> statement
 %type <l> while_loop
 %type <l> conditional
+%type <l> else_block
 %%
 
 statement_list: statement
@@ -279,29 +280,46 @@ conditional: IF expression DO statement_list END
 					$$ = createConditionalStatement();
 					$$->condition = $2->name;
 					$$->block = $4;
+					$$->conditionType = IF_TYPE;
 					//printf("if(%s) {}", $2->name);
 
 				}
 			| IF expression DO statement_list else_block
 				{
-					printf("\n if with else\n");//evans
+					$$ = createConditionalStatement();
+					$$->condition = $2->name;
+					$$->block = $4;
+					$$->elseBlock = $5;
+					$$->conditionType = IF_ELSE_TYPE;
+					//printf("\n if with else\n");//evans
 				}
 			;
 
 else_block: ELSE IF expression DO statement_list END
 				{
-					printf("\n first and final else\n");//evans
+					$$ = createConditionalStatement();
+					$$->condition = $3->name;
+					$$->block = $5;
+					$$->conditionType = ELSE_IF_TYPE;
+					//printf("\n first and final else\n");//evans
 				}
 			|
 			ELSE IF expression DO statement_list else_block
 				{
-					printf("\n midle else\n");//evans
-
+					$$ = createConditionalStatement();
+					$$->condition = $3->name;
+					$$->block = $5;
+					$$->elseBlock = $6;
+					$$->conditionType = ELSE_IF_ELSE_TYPE;
+					//printf("\n midle else\n");//evans
 				}
 			|
 			ELSE DO statement_list END
 				{
-					printf("\n final else\n");//evans
+					$$ = createConditionalStatement();
+					$$->block = $3;
+					$$->conditionType = ELSE_TYPE;
+					//printf("\n final else\n");//evans
 				}
 			;
 

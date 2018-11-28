@@ -11,12 +11,14 @@ sList newList() {
 		exit(0);
 	}
 
-	l->type 		= UNDEFINED;
-	l->block 		= NULL;
-	l->next 		= NULL;
-	l->condition 	= NULL;
-	l->node 		= NULL;
-	l->second 		= NULL;
+	l->type 			= UNDEFINED;
+	l->conditionType 	= UNDEFINED_TYPE;
+	l->block 			= NULL;
+	l->elseBlock		= NULL;
+	l->next 			= NULL;
+	l->condition 		= NULL;
+	l->node 			= NULL;
+	l->second 			= NULL;
 
 	return l;
 }

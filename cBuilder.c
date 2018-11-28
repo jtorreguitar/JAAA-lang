@@ -83,11 +83,43 @@ void generateCCodeEnd() {
 }
 
 void generateCConditionBlock(sList l) {
-	//printf("llego aca\n"); evans
-	printf("if( %s ) {", l->condition);
-	printList(l->block);
-	printf("} ");
-	//still needs to iterate in all blocks
+
+	switch(l->conditionType) {
+		case IF_TYPE:
+			printf("if( %s ) {", l->condition);
+			printList(l->block);
+			printf("}");
+			break;
+
+		case IF_ELSE_TYPE:
+			printf("if( %s ) {", l->condition);
+			printList(l->block);
+			printf("}");
+			printList(l->elseBlock);
+			break;
+
+		case ELSE_IF_TYPE:
+			printf("else if( %s ) {", l->condition);
+			printList(l->block);
+			printf("}");
+			break;
+
+		case ELSE_IF_ELSE_TYPE:
+			printf("else if( %s ) {", l->condition);
+			printList(l->block);
+			printf("}");
+			printList(l->elseBlock);
+			break;
+
+		case ELSE_TYPE:
+			printf("else {");
+			printList(l->block);
+			printf("}");
+			break;
+
+		default:
+			break;
+	}
 }
 
 void generateCWhileLoopBlock(sList l) {
