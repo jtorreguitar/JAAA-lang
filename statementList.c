@@ -200,8 +200,6 @@ void generateCodeEnd() {
 
 void generateConditionBlockCode(sList l) {
 	if(language == C) {
-			printf("llego aca2\n");
-
 		generateCConditionBlock(l);
 	}
 	else if(language == JAVA) {
@@ -213,3 +211,60 @@ void generateConditionBlockCode(sList l) {
 	}
 }
 
+Node buildBooleanExpression(Node n) {
+	if(language == C) {
+		return buildCBooleanExpression(n);
+	}
+	else if(language == JAVA) {
+		fprintf(stderr, "java on development\n");
+	}
+	else {
+		fprintf(stderr, "unsupported language\n");
+
+	}
+	exit(0);
+}
+
+Node buildStringExpression(Node n) {
+	if(language == C) {
+		return buildCStringExpression(n);
+	}
+	else if(language == JAVA) {
+		fprintf(stderr, "java on development\n");
+	}
+	else {
+		fprintf(stderr, "unsupported language\n");
+
+	}
+	exit(0);
+
+}
+
+Node buildIntegerExpression(Node n) {
+	if(language == C) {
+		return buildCIntegerExpression(n);
+	}
+	else if(language == JAVA) {
+		fprintf(stderr, "java on development\n");
+	}
+	else {
+		fprintf(stderr, "unsupported language\n");
+
+	}
+	exit(0);
+}
+
+Node buildFloatExpression(Node n) {
+	if(language == C) {
+		return buildCFloatExpression(n);
+	}
+	else if(language == JAVA) {
+		fprintf(stderr, "java on development\n");
+	}
+	else {
+		fprintf(stderr, "unsupported language\n");
+
+	}
+	exit(0);
+
+}

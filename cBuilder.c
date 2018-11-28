@@ -1,5 +1,6 @@
 #include "cBuilder.h"
 #include <stdio.h>
+#include <string.h>
 
 void createCVar(int type, char *name, struct node *expression) {
 	switch(type) {
@@ -85,4 +86,56 @@ void generateCConditionBlock(sList l) {
 	printf("llego aca\n");
 	printf("if( %d ) {}", l->condition);
 	//still needs to iterate in all blocks
+}
+
+Node buildCBooleanExpression(Node n) {
+	n->name = calloc(2, sizeof(char));
+	if(n->name == NULL) {
+		fprintf(stderr, "Cannot allocate memory\n");
+		exit(0);
+	}
+
+	if(*((int *)n->value) == 1) {	
+		memcpy(n->name, "1", 2);
+	}
+	else {
+		memcpy(n->name, "0", 2);
+	}
+
+	return n;
+}
+
+Node buildCStringExpression(Node n) {
+	n->name = calloc(n->dataSize, sizeof(char));
+	if(n->name == NULL) {
+		fprintf(stderr, "Cannot allocate memory\n");
+		exit(0);
+	}
+
+	memcpy(n->name, n->value, n->dataSize);
+	return n;
+}
+
+Node buildCIntegerExpression(Node n) {
+	n->name = calloc(MAX_NUMBER_LENGTH, sizeof(char));
+	
+	if(n->name == NULL) {
+		fprintf(stderr, "Cannot allocate memory\n");
+		exit(0);
+	}
+
+	sprintf(n->name, "%d", *((int *)n->value));
+	return n;
+}
+
+Node buildCFloatExpression(Node n) {
+	n->name = calloc(MAX_NUMBER_LENGTH, sizeof(char));
+	
+	if(n->name == NULL) {
+		fprintf(stderr, "Cannot allocate memory\n");
+		exit(0);
+	}
+
+	sprintf(n->name, "%f", *((float *)n->value));
+	return n;
 }

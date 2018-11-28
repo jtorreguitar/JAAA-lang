@@ -188,15 +188,32 @@ expression: expression '+' expression
 				    $$ = logicalOperation($2, NULL, not);
 				}
 		  | FLOAT
+		  		{
+		  			$$ = buildFloatExpression($1);
+		  			printf("name= %s", $$->name);
+		  		}
 		  | INTEGER
+		  		{
+		  			$$ = buildIntegerExpression($1);
+		  			printf("name= %s", $$->name);
+		  		}
 		  | STRING
-		  | BOOL
+		  		{
+		  			$$ = buildStringExpression($1);
+		  			printf("name= %s", $$->name);
+		  		}
+		  | BOOL 
+		  		{
+		  			$$ = buildBooleanExpression($1);
+		  			printf("name= %s", $$->name);
+		  		}
 		  | NAME
 		  		{
 					Node n = (Node) getL(symbolList, $1->name);
 
-					if(n != 0)
+					if(n != 0) {
 						$$ = n;
+					}
 
 					else
 						yyerror("undeclared variable");

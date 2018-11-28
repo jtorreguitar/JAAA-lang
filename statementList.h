@@ -39,4 +39,9 @@ void generateCodeStart();
 void generateCodeEnd();
 void generateConditionBlockCode(sList l);
 
+//expressions
+Node buildBooleanExpression(Node n);
+Node buildStringExpression(Node n);
+Node buildIntegerExpression(Node n);
+Node buildFloatExpression(Node n);
 #endif
