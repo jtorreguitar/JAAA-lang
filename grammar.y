@@ -49,14 +49,9 @@ statement_list: statement
 						
 						first = $$;
 						current = first;
-					
-						
-					
-
 						current->next = NULL;
 
-
-						printf("creating only one block\n");
+						//printf("creating only one block\n"); evans
 					}
 				|statement statement_list
 					{
@@ -64,7 +59,7 @@ statement_list: statement
 						current = $$;
 						current->next = first;
 						first = current;						
-						printf("creating second block\n");
+						//printf("creating second block\n"); evans
 					}
 				;
 			  	
@@ -81,7 +76,7 @@ statement: NAME '=' expression
 							yyerror("variables cannot change their type");
 						}
 
-						//var->type = $3->type;
+						//var->type = $3->type; to add weak typed
 						assignValue(var, $3->value);
 						Node oldNode = clone(var);
 
@@ -128,118 +123,122 @@ statement: NAME '=' expression
 
 expression: expression '+' expression
 				{
-					//$$ = binaryOperation($1, $3, addition);
+					//$$ = binaryOperation($1, $3, addition); interpreter mode
 					$$ = buildBinaryExpression($1, $3, addition);
-					printf("expression = %s\n", $$->name);
+					//printf("expression = %s\n", $$->name); evans
 				}
 		  | expression '-' expression
 		  		{
-		  			//$$ = binaryOperation($1, $3, subtraction);
+		  			//$$ = binaryOperation($1, $3, subtraction); interpreter mode
 		  			$$ = buildBinaryExpression($1, $3, subtraction);
-		  			printf("expression = %s\n", $$->name);
+		  			//printf("expression = %s\n", $$->name); evans
 
 
 		  		}
 		  | expression '*' expression
 		  		{
-		  			//$$ = binaryOperation($1, $3, multiplication);
+		  			//$$ = binaryOperation($1, $3, multiplication); interpreter mode
 		  			$$ = buildBinaryExpression($1, $3, multiplication);
-		  			printf("expression = %s\n", $$->name);
+		  			//printf("expression = %s\n", $$->name); evans
 		  		}
 		  | expression '/' expression
 				{
-					//$$ = binaryOperation($1, $3, division);
+					//$$ = binaryOperation($1, $3, division); interpreter mode
 					$$ = buildBinaryExpression($1, $3, division);
-					printf("expression = %s\n", $$->name);
+					//printf("expression = %s\n", $$->name); evans
 				}
 		  | '-' expression %prec UMINUS
 		  		{
-		  			//$$ = UMinusByType($2);
+		  			//$$ = UMinusByType($2); interpreter mode
 		  			$$ = buildMinusExpression($2);
-		  			printf("expression = %s\n", $$->name);
+		  			//printf("expression = %s\n", $$->name); evans
 		  		}
 		  | '(' expression ')'
 		  		{
-		  			//$$ = $2;
+		  			//$$ = $2; interpreter mode
 		  			$$ = buildParenthesisExpression($2);
-		  			printf("expression = %s\n", $$->name);
+		  			//printf("expression = %s\n", $$->name); evans
 		  		}
 		  | expression '<' expression
 				{
-					//$$ = relationalOperation($1, $3, LESSTHAN);
+					//$$ = relationalOperation($1, $3, LESSTHAN); interpreter mode
 					$$ = buildRelationalExpression($1, $3, LESSTHAN);
-					printf("expression = %s\n", $$->name);
+					//printf("expression = %s\n", $$->name); evans
 
 
 				}
 		  | expression LTOET expression
 		  		{
-					//$$ = relationalOperation($1, $3, LESSTHANOREQUALTO);
+					//$$ = relationalOperation($1, $3, LESSTHANOREQUALTO); interpreter
 					$$ = buildRelationalExpression($1, $3, LESSTHANOREQUALTO);
-					printf("expression = %s\n", $$->name);
+					//printf("expression = %s\n", $$->name); evans
 				}
 		  | expression '>' expression
 		  		{
-					//$$ = relationalOperation($1, $3, GREATERTHAN);
+					//$$ = relationalOperation($1, $3, GREATERTHAN); interpreter mode
 					$$ = buildRelationalExpression($1, $3, GREATERTHAN);
-					printf("expression = %s\n", $$->name);
+					//printf("expression = %s\n", $$->name); evans
 
 				}
 		  | expression GTOET expression
 		  		{
-					//$$ = relationalOperation($1, $3, GREATERTHANOREQUALTO);
+					//$$ = relationalOperation($1, $3, GREATERTHANOREQUALTO);interpreter
 					$$ = buildRelationalExpression($1, $3, GREATERTHANOREQUALTO);
-					printf("expression = %s\n", $$->name);
+					//printf("expression = %s\n", $$->name);evans
 				}
 		  | expression ET expression
 		  		{
-					//$$ = relationalOperation($1, $3, EQUALTO);
+					//$$ = relationalOperation($1, $3, EQUALTO); interpreter mode
 					$$ = buildRelationalExpression($1, $3, EQUALTO);
-					printf("expression = %s\n", $$->name);
+					//printf("expression = %s\n", $$->name); evans
 				}
 		  | expression NET expression
 		  		{
-					//$$ = relationalOperation($1, $3, NOTEQUALTO);
+					//$$ = relationalOperation($1, $3, NOTEQUALTO); interpreter mode
 					$$ = buildRelationalExpression($1, $3, NOTEQUALTO);
-					printf("expression = %s\n", $$->name);
+					//printf("expression = %s\n", $$->name); evans
 				}
 		  | expression AND expression
 		  		{
-					//$$ = logicalOperation($1, $3, and);
+					//$$ = logicalOperation($1, $3, and); interpreter mode
 					$$ = buildLogicalExpression($1, $3, and);
-					printf("expression = %s\n", $$->name);
+					//printf("expression = %s\n", $$->name);evans
 				}
 		  | expression OR expression
 		  		{
-					//$$ = logicalOperation($1, $3, or);
+					//$$ = logicalOperation($1, $3, or); interpreter mode
 					$$ = buildLogicalExpression($1, $3, or);
-					printf("expression = %s\n", $$->name);
+					//printf("expression = %s\n", $$->name); evans
 				}
 		  | NOT expression
 		  		{
-				    //$$ = logicalOperation($2, NULL, not);
+				    //$$ = logicalOperation($2, NULL, not); interpreter mode
 				 	$$ = buildNotExpression($2);
-					printf("name3= %s", $$->name);
+					//printf("name3= %s", $$->name); evans
 				}
 		  | FLOAT
 		  		{
+		  			//output mode
 		  			$$ = buildFloatExpression($1);
-		  			printf("name= %s", $$->name);
+		  			//printf("name= %s", $$->name); evans
 		  		}
 		  | INTEGER
 		  		{
+		  			//output mode
 		  			$$ = buildIntegerExpression($1);
-		  			printf("name= %s", $$->name);
+		  			//printf("name= %s", $$->name); evans
 		  		}
 		  | STRING
 		  		{
+		  			//output mode
 		  			$$ = buildStringExpression($1);
-		  			printf("name= %s", $$->name);
+		  			//printf("name= %s", $$->name); evans
 		  		}
 		  | BOOL 
 		  		{
+		  			//output mode
 		  			$$ = buildBooleanExpression($1);
-		  			printf("name= %s", $$->name);
+		  			//printf("name= %s", $$->name); evans
 		  		}
 		  | NAME
 		  		{
@@ -256,11 +255,11 @@ expression: expression '+' expression
 
 printExpression: PRINTEXPR
 					{
-						printf("%s", $1);
+						//printf("%s", $1); TODO
 					}
 				| PRINTLNEXPR
 					{
-						printf("%s\n", $1);
+						//printf("%s\n", $1); TODO
 					}
 				;
 
@@ -276,7 +275,7 @@ conditional: IF expression DO statement_list END
 				{
 					//$$->condition = *((int *)($2->value));
 					//$$->block = $4;
-					//printf("if(%d) {}", *(int *)$2->value);
+					printf("if(%d) {}", *(int *)$2->value);
 
 				}
 				;

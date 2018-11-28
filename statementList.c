@@ -22,7 +22,6 @@ sList newList() {
 }
 
 sList createAssingStatement(Node oldNode, Node newNode) {
-	printf("in asignation\n");
 	sList l 	= newList();
 	l->type 	= ASIGNATION;
 	l->node 	= oldNode;
@@ -31,8 +30,6 @@ sList createAssingStatement(Node oldNode, Node newNode) {
 }
 
 sList createDeclareStatement(Node n, Node expression) {
-		printf("in declaration\n");
-
 	sList l 	= newList();
 	l->type 	= DECLARATION;
 	l->node 	= n;
