@@ -118,7 +118,7 @@ statement: NAME '=' expression
 		 | printExpression {$$ = newList();}
 		 | conditional
 		 | exit_statement {$$ = createExitStatement();}
-		 | while_loop {$$ = createLoopStatement();}
+		 | while_loop
 		 ;
 
 

@@ -13,7 +13,7 @@ void generateCExitCode();
 void generateCCodeStart();
 void generateCCodeEnd();
 void generateCConditionBlock(sList l);
-void generateCWhileLoopBlock(sList l);
+void generateCLoopBlock(sList l);
 
 //expressions
 Node buildCBooleanExpression(Node n);

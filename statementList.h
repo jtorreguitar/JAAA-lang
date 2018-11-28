@@ -42,7 +42,7 @@ void generateExitCode();
 void generateCodeStart();
 void generateCodeEnd();
 void generateConditionBlockCode(sList l);
-void generateWhileLoopBlockCode(sList l);
+void generateLoopBlockCode(sList l);
 
 //expressions
 Node buildBooleanExpression(Node n);

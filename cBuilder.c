@@ -122,7 +122,7 @@ void generateCConditionBlock(sList l) {
 	}
 }
 
-void generateCWhileLoopBlock(sList l) {
+void generateCLoopBlock(sList l) {
 	printf("while( %s ) {", l->condition);
 	printList(l->block);
 	printf("} ");
