@@ -234,7 +234,6 @@ Node buildStringExpression(Node n) {
 		fprintf(stderr, "unsupported language\n");
 	}
 	exit(0);
-
 }
 
 Node buildIntegerExpression(Node n) {

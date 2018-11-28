@@ -40,6 +40,7 @@
 %type <n> expression
 %type <l> statement_list
 %type <l> statement
+%type <l> while_loop
 %type <l> conditional
 %type <l> else_block
 %%
@@ -47,7 +48,7 @@
 statement_list: statement
 					{
 						$$ = $1;
-						
+
 						first = $$;
 						current = first;
 						current->next = NULL;
@@ -59,14 +60,14 @@ statement_list: statement
 						$$ = $1;
 						current = $$;
 						current->next = first;
-						first = current;						
+						first = current;
 						//printf("creating second block\n"); evans
 					}
 				;
-			  	
+
 
 statement: NAME '=' expression
-				{	
+				{
 
 					Node var = (Node) getL(symbolList, $1->name);
 					if(var != 0  && !var->constant)
@@ -117,9 +118,9 @@ statement: NAME '=' expression
 		 | printExpression {$$ = newList();}
 		 | conditional
 		 | exit_statement {$$ = createExitStatement();}
-		 | whileLoop {$$ = createLoopStatement();}	  
+		 | while_loop {$$ = createLoopStatement();}
 		 ;
-		 
+
 
 expression: expression '+' expression
 				{
@@ -234,7 +235,7 @@ expression: expression '+' expression
 		  			$$ = buildStringExpression($1);
 		  			//printf("name= %s", $$->name); evans
 		  		}
-		  | BOOL 
+		  | BOOL
 		  		{
 		  			//output mode
 		  			$$ = buildBooleanExpression($1);
@@ -263,22 +264,24 @@ printExpression: PRINTEXPR
 					}
 				;
 
-whileLoop: WHILE expression DO statement_list LOOP
+while_loop: WHILE expression DO statement_list LOOP
 			{
-				printf("while(expression) {statement;}"); //TODO
+				$$ = createLoopStatement();
+				$$->condition = $2->name;
+				$$->block = $4;
+				/* printf("while(expression) {statement;}"); */
 			}
 			;
 
 exit_statement: EXIT;
 
 conditional: IF expression DO statement_list END
-				{	
+				{
 					$$ = createConditionalStatement();
 					$$->condition = $2->name;
 					$$->block = $4;
 					$$->conditionType = IF_TYPE;
 					//printf("if(%s) {}", $2->name);
-
 				}
 			| IF expression DO statement_list else_block
 				{
@@ -325,12 +328,12 @@ int main(int argc, char **argv)
 {
 	if(argc == 2) {
 		if(strcmp(argv[1], "-b") == 0) {
-			printf("language setted to JAVA\n");
+			printf("language set to JAVA\n");
 			setLanguage(JAVA);
 		}
 	}
 	symbolList = createListL(cmpFunction, sizeof(node));
-	
+
 	generateCodeStart();
 	yyparse();
 
