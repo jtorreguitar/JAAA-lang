@@ -151,11 +151,29 @@ Node buildCNotExpression(Node n) {
 
 	sprintf(newNode->name, "!%s", n->name);
 	
-	//not to free variables
+	//not to free variables evans
 	//free(n->name);
 	//free(n);
 	return newNode;
 }
+
+Node buildCMinusExpression(Node n) {
+	Node newNode = clone(n);
+	newNode->name = calloc(strlen(n->name) + 2, sizeof(char));
+
+	if(newNode->name == NULL) {
+		fprintf(stderr, "Cannot allocate memory\n");
+		exit(0);
+	}
+
+	sprintf(newNode->name, "-%s", n->name);
+	
+	//not to free variables evans
+	//free(n->name);
+	//free(n);
+	return newNode;
+}
+
 
 Node buildCBinaryExpression(Node first, Node second, int operator) {
 	Node newNode = clone(first);
@@ -182,7 +200,7 @@ Node buildCBinaryExpression(Node first, Node second, int operator) {
 			break;
 	}
 
-	//not to free variables
+	//not to free variables evans
 	// free(first->name);
 	// free(first);
 	// free(second->name);

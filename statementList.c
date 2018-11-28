@@ -284,6 +284,21 @@ Node buildNotExpression(Node n) {
 
 }
 
+Node buildMinusExpression(Node n) {
+	if(language == C) {
+		return buildCMinusExpression(n);
+	}
+	else if(language == JAVA) {
+		fprintf(stderr, "java on development\n");
+	}
+	else {
+		fprintf(stderr, "unsupported language\n");
+
+	}
+	exit(0);
+
+}
+
 Node buildBinaryExpression(Node first, Node second, int operator) {
 	if(language == C) {
 		return buildCBinaryExpression(first, second, operator);

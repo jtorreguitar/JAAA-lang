@@ -155,7 +155,9 @@ expression: expression '+' expression
 				}
 		  | '-' expression %prec UMINUS
 		  		{
-		  			$$ = UMinusByType($2);
+		  			//$$ = UMinusByType($2);
+		  			$$ = buildMinusExpression($2);
+		  			printf("expression = %s\n", $$->name);
 		  		}
 		  | '(' expression ')'
 		  		{
