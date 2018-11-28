@@ -127,7 +127,7 @@
 	return PRINTEXPR;
 }
 
-[ \t] ;
+[ \t\n] ;
 [a-z]+ {
 	yylval.n = calloc(1, sizeof(node));
 	yylval.n->name = calloc(strlen(yytext) + 1, sizeof(char));
@@ -135,7 +135,6 @@
 	return NAME;
 }
 "$" { return 0; }
-\n |
 . return yytext[0];
 
 %%

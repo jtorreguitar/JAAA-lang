@@ -16,6 +16,7 @@ sList newList() {
 	l->next = NULL;
 	l->condition = -1;
 	l->node = NULL;
+	l->second = NULL;
 
 	return l;
 }

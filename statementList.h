@@ -16,6 +16,7 @@ struct statementList {
 	int condition;
 	struct statementList *next;	
 	Node node;
+	Node second;
 };
 
 

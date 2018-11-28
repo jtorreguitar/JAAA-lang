@@ -43,25 +43,31 @@
 %type <l> conditional
 %%
 
-statement_list: statement '\n'
+statement_list: statement
 					{
 						$$ = $1;
+						
 						first = $$;
 						current = first;
+					
+						
+					
+
+						current->next = NULL;
+
+
 						printf("creating only one block\n");
 					}
-				|statement_list statement '\n'
+				|statement statement_list
 					{
-						current->next = $2;
-						current = current->next;
+						$$ = $1;
+						current = $$;
+						current->next = first;
+						first = current;						
 						printf("creating second block\n");
 					}
-			  	| '\n'
-			  		{
-			  			printf("final endline\n");
-			  			current = NULL;
-			  		}
-			  ;
+				;
+			  	
 
 statement: NAME '=' expression
 				{	
@@ -108,7 +114,7 @@ statement: NAME '=' expression
 						$$ = createConstDeclareStatement(var);
 					}
 				}
-		 | expression {printByValue(*$1); $$ = newList();}
+		 //| expression {printByValue(*$1); $$ = newList();}
 		 | printExpression {$$ = newList();}
 		 | conditional //{$$ = createConditionalStatement();}
 		 | exit_statement {$$ = createExitStatement();}
@@ -208,7 +214,7 @@ whileLoop: WHILE expression DO statement_list LOOP
 			}
 			;
 
-exit_statement: EXIT '\n';
+exit_statement: EXIT;
 
 conditional: IF expression DO statement_list END
 				{
