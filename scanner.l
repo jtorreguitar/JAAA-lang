@@ -45,7 +45,15 @@
 	return IF;
 }
 
+"else" {
+	return ELSE;
+}
+
 "end" {
+	return END;
+}
+
+"done" {
 	return END;
 }
 

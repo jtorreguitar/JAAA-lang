@@ -30,7 +30,7 @@
 %token <n> LOOP
 %token <printedString> PRINTEXPR
 %token <printedString> PRINTLNEXPR
-%token CONST LTOET GTOET ET NET AND OR NOT VOIDEXPR EXIT IF END
+%token CONST LTOET GTOET ET NET AND OR NOT VOIDEXPR EXIT IF END ELSE
 %left AND OR NOT
 %left '<' LTOET '>' GTOET
 %left ET NET
@@ -278,7 +278,28 @@ conditional: IF expression DO statement_list END
 					//printf("if(%s) {}", $2->name);
 
 				}
-				;
+			| IF expression DO statement_list else_block
+				{
+					printf("\n if with else\n");//evans
+				}
+			;
+
+else_block: ELSE IF expression DO statement_list END
+				{
+					printf("\n first and final else\n");//evans
+				}
+			|
+			ELSE IF expression DO statement_list else_block
+				{
+					printf("\n midle else\n");//evans
+
+				}
+			|
+			ELSE DO statement_list END
+				{
+					printf("\n final else\n");//evans
+				}
+			;
 
 %%
 
