@@ -80,3 +80,9 @@ void generateCCodeStart() {
 void generateCCodeEnd() {
 	printf("return 0;}");
 }
+
+void generateCConditionBlock(sList l) {
+	printf("llego aca\n");
+	printf("if( %d ) {}", l->condition);
+	//still needs to iterate in all blocks
+}

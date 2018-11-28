@@ -12,7 +12,7 @@ sList newList() {
 	}
 
 	l->type = UNDEFINED;
-	l->body = NULL;
+	l->block = NULL;
 	l->next = NULL;
 	l->condition = -1;
 	l->node = NULL;
@@ -74,6 +74,9 @@ void printList(sList l) {
 			break;
 
 			case CONDITION_BLOCK:
+				printf("llego aca3\n");
+
+				generateConditionBlockCode(l);
 				printf("if\n");
 				break;
 
@@ -192,3 +195,19 @@ void generateCodeEnd() {
 	}
 
 }
+
+void generateConditionBlockCode(sList l) {
+	if(language == C) {
+			printf("llego aca2\n");
+
+		generateCConditionBlock(l);
+	}
+	else if(language == JAVA) {
+		fprintf(stderr, "java on development\n");
+	}
+	else {
+		fprintf(stderr, "unsupported language\n");
+
+	}
+}
+

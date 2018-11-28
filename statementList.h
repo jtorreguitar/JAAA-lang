@@ -12,7 +12,7 @@ enum OUTPUT_CODE {C = 0, JAVA = 1};
 
 struct statementList {
 	enum STATEMENT_TYPE type;
-	struct statementList *body;
+	struct statementList *block;
 	int condition;
 	struct statementList *next;	
 	Node node;
@@ -36,5 +36,6 @@ void setLanguage(int outputLanguage);
 void generateExitCode();
 void generateCodeStart();
 void generateCodeEnd();
+void generateConditionBlockCode(sList l);
 
 #endif

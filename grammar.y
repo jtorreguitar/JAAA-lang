@@ -40,6 +40,7 @@
 %type <n> expression
 %type <l> statement_list
 %type <l> statement
+%type <l> conditional
 %%
 
 statement_list: statement '\n'
@@ -109,7 +110,7 @@ statement: NAME '=' expression
 				}
 		 | expression {printByValue(*$1); $$ = newList();}
 		 | printExpression {$$ = newList();}
-		 | conditional {$$ = createConditionalStatement();}
+		 | conditional //{$$ = createConditionalStatement();}
 		 | exit_statement {$$ = createExitStatement();}
 		 | whileLoop {$$ = createLoopStatement();}	  
 		 ;
@@ -211,7 +212,9 @@ exit_statement: EXIT '\n';
 
 conditional: IF expression DO statement_list END
 				{
-					printf("if(%d) {}", *(int *)$2->value);
+					//$$->condition = *((int *)($2->value));
+					//$$->block = $4;
+					//printf("if(%d) {}", *(int *)$2->value);
 
 				}
 				;
