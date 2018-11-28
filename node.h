@@ -118,5 +118,7 @@ void toBooleanFromFloating(Node n, Node result);
 void toBooleanFromString(Node n, Node result);
 void toBooleanFromBoolean(Node n, Node result);
 
+Node clone(Node aux);
+
 
 #endif

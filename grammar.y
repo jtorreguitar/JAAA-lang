@@ -83,9 +83,13 @@ statement: NAME '=' expression
 
 						//var->type = $3->type;
 						assignValue(var, $3->value);
-						//assignVar(var, $3);
-						var->dataSize = $3->dataSize;
-						$$ = createAssingStatement(var);
+
+						if(var->type == string) {
+							var->dataSize = $3->dataSize;
+						}
+
+						Node aux = clone(var);
+						$$ = createAssingStatement(aux);
 					}
 					else if(var != 0 && var->constant)
 					{
@@ -94,9 +98,9 @@ statement: NAME '=' expression
 					else
 					{
 						addL(symbolList, newNode($1->name, $3->type, $3->value, 0));
-						//createVar($3->type, $1->name, $3);
 						Node var = (Node) getL(symbolList, $1->name);
-						$$ = createDeclareStatement(var);
+						Node aux = clone(var);
+						$$ = createDeclareStatement(aux);
 					}
 				}
 		 | CONST NAME '=' expression

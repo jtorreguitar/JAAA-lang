@@ -879,3 +879,21 @@ Node UMinusByType(Node n)
 	}
 	return ret;
 }
+
+Node clone(Node aux) {
+	Node newNode = malloc(sizeof(*newNode));
+	
+	if(newNode == NULL) {
+		fprintf(stderr, "Cannot allocate memory\n");
+	}
+
+	newNode->name 		= aux->name;
+	newNode->type 		= aux->type;
+	newNode->dataSize 	= aux->dataSize;
+	newNode->constant 	= aux->constant;
+	newNode->value 		= malloc(aux->dataSize);
+	printf("value = %d\ndatasize=%d", *(int *)aux->value, aux->dataSize);
+	memcpy(newNode->value, aux->value, aux->dataSize);
+
+	return newNode;
+}
