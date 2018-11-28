@@ -268,3 +268,18 @@ Node buildFloatExpression(Node n) {
 	exit(0);
 
 }
+
+Node buildNotExpression(Node n) {
+	if(language == C) {
+		return buildCNotExpression(n);
+	}
+	else if(language == JAVA) {
+		fprintf(stderr, "java on development\n");
+	}
+	else {
+		fprintf(stderr, "unsupported language\n");
+
+	}
+	exit(0);
+
+}

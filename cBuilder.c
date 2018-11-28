@@ -139,3 +139,19 @@ Node buildCFloatExpression(Node n) {
 	sprintf(n->name, "%lf", *((double *)n->value));
 	return n;
 }
+
+Node buildCNotExpression(Node n) {
+	Node newNode = clone(n);
+	newNode->name = calloc(strlen(n->name) + 2, sizeof(char));
+
+	if(newNode->name == NULL) {
+		fprintf(stderr, "Cannot allocate memory\n");
+		exit(0);
+	}
+
+	sprintf(newNode->name, "!%s", n->name);
+	free(n->name);
+	free(n);
+	return newNode;
+}
+

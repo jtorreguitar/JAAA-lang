@@ -77,7 +77,7 @@ statement: NAME '=' expression
 					{
 						free(var->value);
 
-						if(var->type != $3->type) {
+						if(diferentTypes(var->type, $3->type)) {
 							yyerror("variables cannot change their type");
 						}
 
@@ -185,7 +185,11 @@ expression: expression '+' expression
 				}
 		  | NOT expression
 		  		{
-				    $$ = logicalOperation($2, NULL, not);
+				 //   $$ = logicalOperation($2, NULL, not);
+				 	printf("\n\nname2 was = %s\n\n", $2->name);
+
+					$$ = buildNotExpression($2);
+					printf("name3= %s", $$->name);
 				}
 		  | FLOAT
 		  		{

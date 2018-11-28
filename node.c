@@ -893,6 +893,17 @@ Node clone(Node aux) {
 	newNode->constant 	= aux->constant;
 	newNode->value 		= malloc(aux->dataSize);
 	memcpy(newNode->value, aux->value, aux->dataSize);
-
+	//free memory evans
 	return newNode;
+}
+
+int diferentTypes(int type1, int type2) {
+	if((type1 == integer && type2 == boolean)  ||
+		(type1 == boolean && type2 == integer) ||
+		(type1 == type2)) {
+		return 0;
+	}
+	else {
+		return 1;
+	}
 }
