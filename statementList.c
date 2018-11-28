@@ -75,7 +75,6 @@ void printList(sList l) {
 			break;
 
 			case CONDITION_BLOCK:
-				
 				generateConditionBlockCode(l);
 				//printf("if condition=%s\n", l->condition);
 				break;
@@ -96,7 +95,7 @@ void printList(sList l) {
 				break;
 
 			case LOOP_BLOCK:
-				printf("while\n");
+				generateWhileLoopBlockCode(l);
 				break;
 
 			case EXIT_STATEMENT:
@@ -127,6 +126,18 @@ void generateConstDeclaration(sList l) {
 	else {
 		fprintf(stderr, "unsupported language\n");
 
+	}
+}
+
+void generateWhileLoopBlockCode(sList l) {
+	if(language == C) {
+		generateCConditionBlock(l);
+	}
+	else if(language == JAVA) {
+		fprintf(stderr, "java on development\n");
+	}
+	else {
+		fprintf(stderr, "unsupported language\n");
 	}
 }
 
@@ -205,7 +216,6 @@ void generateConditionBlockCode(sList l) {
 	}
 	else {
 		fprintf(stderr, "unsupported language\n");
-
 	}
 }
 

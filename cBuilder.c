@@ -44,8 +44,8 @@ void assignCVar(struct node *var, struct node *newValue) {
 			}
 
 			printf("memcpy(%s, \"%s\", %d);", var->name, (char *)newValue->value,
-																newValue->dataSize);                                                  
-			
+																newValue->dataSize);
+
 			break;
 	}
 }
@@ -63,7 +63,7 @@ void createConstantCVar(int type, char *name, struct node *expression) {
 
 		case string:
 			printf("const char *%s = %s);", name, expression->name);
-		
+
 			break;
 	}
 
@@ -86,8 +86,14 @@ void generateCConditionBlock(sList l) {
 	//printf("llego aca\n"); evans
 	printf("if( %s ) {", l->condition);
 	printList(l->block);
-	printf("}");
+	printf("} ");
 	//still needs to iterate in all blocks
+}
+
+void generateCWhileLoopBlock(sList l) {
+	printf("while( %s ) {", l->condition);
+	printList(l->block);
+	printf("} ");
 }
 
 Node buildCBooleanExpression(Node n) {
@@ -97,7 +103,7 @@ Node buildCBooleanExpression(Node n) {
 		exit(0);
 	}
 
-	if(*((int *)n->value) == 1) {	
+	if(*((int *)n->value) == 1) {
 		memcpy(n->name, "1", 2);
 	}
 	else {
@@ -120,7 +126,7 @@ Node buildCStringExpression(Node n) {
 
 Node buildCIntegerExpression(Node n) {
 	n->name = calloc(MAX_NUMBER_LENGTH, sizeof(char));
-	
+
 	if(n->name == NULL) {
 		fprintf(stderr, "Cannot allocate memory\n");
 		exit(0);
@@ -132,7 +138,7 @@ Node buildCIntegerExpression(Node n) {
 
 Node buildCFloatExpression(Node n) {
 	n->name = calloc(MAX_NUMBER_LENGTH, sizeof(char));
-	
+
 	if(n->name == NULL) {
 		fprintf(stderr, "Cannot allocate memory\n");
 		exit(0);
@@ -152,7 +158,7 @@ Node buildCNotExpression(Node n) {
 	}
 
 	sprintf(newNode->name, "!%s", n->name);
-	
+
 	//not to free variables evans
 	//free(n->name);
 	//free(n);
@@ -169,7 +175,7 @@ Node buildCMinusExpression(Node n) {
 	}
 
 	sprintf(newNode->name, "-%s", n->name);
-	
+
 	//not to free variables evans
 	//free(n->name);
 	//free(n);
@@ -286,7 +292,7 @@ Node buildCParenthesisExpression(Node n) {
 	}
 
 	sprintf(newNode->name, "(%s)", n->name);
-	
+
 	//not to free variables evans
 	//free(n->name);
 	//free(n);

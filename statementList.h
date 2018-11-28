@@ -14,7 +14,7 @@ struct statementList {
 	enum STATEMENT_TYPE type;
 	struct statementList *block;
 	char *condition;
-	struct statementList *next;	
+	struct statementList *next;
 	Node node;
 	Node second;
 };
@@ -38,6 +38,7 @@ void generateExitCode();
 void generateCodeStart();
 void generateCodeEnd();
 void generateConditionBlockCode(sList l);
+void generateWhileLoopBlockCode(sList l);
 
 //expressions
 Node buildBooleanExpression(Node n);
