@@ -24,8 +24,8 @@ typedef struct statementList *sList;
 
 sList newList();
 sList createAssingStatement(Node oldNode, Node newNode);
-sList createDeclareStatement(Node n);
-sList createConstDeclareStatement(Node n);
+sList createDeclareStatement(Node n, Node expression);
+sList createConstDeclareStatement(Node n, Node expression);
 sList createConditionalStatement();
 sList createExitStatement();
 sList createLoopStatement();

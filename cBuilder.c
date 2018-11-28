@@ -6,11 +6,11 @@ void createCVar(int type, char *name, struct node *expression) {
 	switch(type) {
 		case integer:
 		case boolean:
-			printf("int %s = %d;", name, *(int *)expression->value);
+			printf("int %s = %s;", name, expression->name);
 			break;
 
 		case floating:
-			printf("double %s = %lf;", name, *(double *)expression->value);
+			printf("double %s = %s;", name, expression->name);
 			break;
 
 		case string:
@@ -28,11 +28,11 @@ void assignCVar(struct node *var, struct node *newValue) {
 	switch(var->type) {
 		case integer:
 		case boolean:
-			printf("%s = %d;",var->name, *(int *)newValue->value);
+			printf("%s = %s;",var->name, newValue->name);
 			break;
 
 		case floating:
-			printf("%s = %lf;",var->name, *(double *)newValue->value);
+			printf("%s = %s;",var->name, newValue->name);
 			break;
 
 		case string:
@@ -54,15 +54,15 @@ void createConstantCVar(int type, char *name, struct node *expression) {
 	switch(type) {
 		case integer:
 		case boolean:
-			printf("const int %s = %d;", name, *(int *)expression->value);
+			printf("const int %s = %s;", name, expression->name);
 			break;
 
 		case floating:
-			printf("const double %s = %lf;", name, *(double *)expression->value);
+			printf("const double %s = %s;", name, expression->name);
 			break;
 
 		case string:
-			printf("const char *%s = %s);", name, (char *)expression->value);
+			printf("const char *%s = %s);", name, expression->name);
 		
 			break;
 	}

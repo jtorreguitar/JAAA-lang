@@ -101,7 +101,7 @@ statement: NAME '=' expression
 						addL(symbolList, newNode($1->name, $3->type, $3->value, 0));
 						Node var = (Node) getL(symbolList, $1->name);
 						Node aux = clone(var);
-						$$ = createDeclareStatement(aux);
+						$$ = createDeclareStatement(aux, $3);
 					}
 				}
 		 | CONST NAME '=' expression
@@ -116,7 +116,7 @@ statement: NAME '=' expression
 						addL(symbolList, newNode($2->name, $4->type, $4->value, 1));
 						//createConstantVar($4->type, $2->name, $4);
 						Node var = (Node) getL(symbolList, $2->name);
-						$$ = createConstDeclareStatement(var);
+						$$ = createConstDeclareStatement(var, $4);
 					}
 				}
 		 //| expression {printByValue(*$1); $$ = newList();}

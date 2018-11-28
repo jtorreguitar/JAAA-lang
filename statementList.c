@@ -30,19 +30,21 @@ sList createAssingStatement(Node oldNode, Node newNode) {
 	return l;
 }
 
-sList createDeclareStatement(Node n) {
+sList createDeclareStatement(Node n, Node expression) {
 		printf("in declaration\n");
 
-	sList l = newList();
-	l->type = DECLARATION;
-	l->node = n;
+	sList l 	= newList();
+	l->type 	= DECLARATION;
+	l->node 	= n;
+	l->second 	= expression;
 	return l;
 }
 
-sList createConstDeclareStatement(Node n) {
-	sList l = newList();
-	l->type = CONST_DECLARATION;
-	l->node = n;
+sList createConstDeclareStatement(Node n, Node expression) {
+	sList l 	= newList();
+	l->type 	= CONST_DECLARATION;
+	l->node 	= n;
+	l->second 	= expression;
 	return l;
 }
 
@@ -121,7 +123,7 @@ void setLanguage(int outputLanguage) {
 
 void generateConstDeclaration(sList l) {
 	if(language == C) {
-		createConstantCVar(l->node->type, l->node->name, l->node);
+		createConstantCVar(l->node->type, l->node->name, l->second);
 	}
 	else if(language == JAVA) {
 		fprintf(stderr, "java on development\n");
@@ -134,7 +136,7 @@ void generateConstDeclaration(sList l) {
 
 void generateDeclaration(sList l) {
 	if(language == C) {
-		createCVar(l->node->type, l->node->name, l->node);
+		createCVar(l->node->type, l->node->name, l->second);
 	}
 	else if(language == JAVA) {
 		fprintf(stderr, "java on development\n");
