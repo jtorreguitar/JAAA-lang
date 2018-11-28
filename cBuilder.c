@@ -150,8 +150,10 @@ Node buildCNotExpression(Node n) {
 	}
 
 	sprintf(newNode->name, "!%s", n->name);
-	free(n->name);
-	free(n);
+	
+	//not to free variables
+	//free(n->name);
+	//free(n);
 	return newNode;
 }
 
@@ -180,9 +182,10 @@ Node buildCBinaryExpression(Node first, Node second, int operator) {
 			break;
 	}
 
-	free(first->name);
-	free(first);
-	free(second->name);
-	free(second);
+	//not to free variables
+	// free(first->name);
+	// free(first);
+	// free(second->name);
+	// free(second);
 	return newNode;
 }
