@@ -10,7 +10,7 @@ void createCVar(int type, char *name, struct node *expression) {
 			break;
 
 		case floating:
-			printf("float %s = %lf;", name, *(float *)expression->value);
+			printf("double %s = %lf;", name, *(double *)expression->value);
 			break;
 
 		case string:
@@ -32,7 +32,7 @@ void assignCVar(struct node *var, struct node *newValue) {
 			break;
 
 		case floating:
-			printf("%s = %lf;",var->name, *(float *)newValue->value);
+			printf("%s = %lf;",var->name, *(double *)newValue->value);
 			break;
 
 		case string:
@@ -58,7 +58,7 @@ void createConstantCVar(int type, char *name, struct node *expression) {
 			break;
 
 		case floating:
-			printf("const float %s = %lf;", name, *(float *)expression->value);
+			printf("const double %s = %lf;", name, *(double *)expression->value);
 			break;
 
 		case string:
@@ -136,6 +136,6 @@ Node buildCFloatExpression(Node n) {
 		exit(0);
 	}
 
-	sprintf(n->name, "%f", *((float *)n->value));
+	sprintf(n->name, "%lf", *((double *)n->value));
 	return n;
 }
