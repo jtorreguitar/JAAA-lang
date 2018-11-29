@@ -11,9 +11,9 @@ textToPrint newTextToPrint() {
 		exit(1);
 	}
 
-	text->first = NULL;
-	text->curr  = NULL;
-
+	text->first 	= NULL;
+	text->curr  	= NULL;
+	text->type 		= -1;
 	return text;
 }
 

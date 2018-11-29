@@ -162,22 +162,34 @@ void generateCPrintCode(sList l) {
 	textNode aux = text;
 	int vars = 0;
 	printf("printf(\"");
+
 	while(aux != NULL) {
 		vars += printNode(aux);
 		aux = aux->next;
 	}
 
 	if(vars > 0) {
-		printf("\"");
+		if(l->text->type == ONE_LINE) {
+			printf("\"");
+		}
+		else {
+			printf("\\n\"");
+		}
 
 		while(vars > 0) {
 			text = printVariables(text, &vars);
 		}
-
+		
 		printf(");");
+		
 	}
 	else {
-		printf("\");");
+		if(l->text->type == ONE_LINE) {
+			printf("\");");
+		}
+		else {
+			printf("\\n\");");
+		}
 	}
 }
 

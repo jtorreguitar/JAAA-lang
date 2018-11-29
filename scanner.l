@@ -46,6 +46,10 @@
 	return PRINT_TEXT;
 }
 
+"println" {
+	return PRINT_TEXT_NEW_LINE;
+}
+
 "if" {
 	return IF;
 }

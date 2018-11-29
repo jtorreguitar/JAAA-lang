@@ -31,6 +31,7 @@
 %token <n> DO
 %token <n> LOOP
 %token CONST LTOET GTOET ET NET AND OR NOT VOIDEXPR EXIT IF END ELSE PRINT_TEXT
+%token PRINT_TEXT_NEW_LINE
 %left AND OR NOT
 %left '<' LTOET '>' GTOET
 %left ET NET
@@ -265,12 +266,13 @@ expression: expression '+' expression
 printExpression: PRINT_TEXT text ';'
 					{
 						$$ = $2;
-						//printf("in text\n"); //TODO
+						$$->type = ONE_LINE;
 					}
-				//| PRINTLN
-				//	{
-				//		//printf("%s\n", $1); TODO
-				//	}
+				| PRINT_TEXT_NEW_LINE text ';'
+					{
+						$$ = $2;
+						$$->type = NEW_LINE;
+					}
 				;
 
 	text:	STRING ',' text
