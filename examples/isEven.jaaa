@@ -1,17 +1,17 @@
 number = 10
-isEven = 1
+iseven = 1
 
 while number != 0 do
 	number = number - 1
-	
-	if isEven == 1 do
-		isEven = 0
+
+	if iseven == 1 do
+		iseven = 0
 	else do
-		isEven = 1
+		iseven = 1
 	end
 loop
 
-if isEven == 1 do
+if iseven == 1 do
 	print "Is even" ;
 else do
 	print "Is odd" ;
