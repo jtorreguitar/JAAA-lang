@@ -116,7 +116,11 @@ statement: NAME '=' expression
 						$$ = createConstDeclareStatement(var, $4);
 					}
 				}
-		 | printExpression {$$ = newList();}
+		 | printExpression 
+		 	{
+		 		$$ = createPrintStatement();
+		 		$$->text = $1;
+		 	}
 		 | conditional
 		 | exit_statement {$$ = createExitStatement();}
 		 | while_loop
@@ -257,7 +261,8 @@ expression: expression '+' expression
 
 printExpression: PRINT_TEXT text ';'
 					{
-						printf("in text\n"); //TODO
+						$$ = $2;
+						//printf("in text\n"); //TODO
 					}
 				//| PRINTLN
 				//	{
@@ -267,24 +272,34 @@ printExpression: PRINT_TEXT text ';'
 
 	text:	STRING text
 				{
-					//$$ = $1;
-					printf("string text\n");
+					$$ = newTextToPrint();
+					textNode n = createNode(NULL, $1->value, $1->dataSize, 0);
+					$$ = addNode($$, n);
+					$$ = concatenate($$, $2);
+					//printf("string text\n"); evans
 				}
 			| NAME text
 				{
-					//$$ = $1;
-					printf("name text\n");
+					$$ = newTextToPrint();
+					textNode n = createNode($1->name, NULL, 0, $1->type);
+					$$ = addNode($$, n);
+					$$ = concatenate($$, $2);
+					//printf("name text\n"); evans
 				}
 			| STRING
 				{
-					//$$ = $1;
-					printf("string1\n");
+					$$ = newTextToPrint();
+					textNode n = createNode(NULL, $1->value, $1->dataSize, 0);
+					$$ = addNode($$, n);
+					//printf("string1\n"); evans
 
 				}
 			| NAME
 				{
-					//$$ = $1;
-					printf("name1\n");
+					$$ = newTextToPrint();
+					textNode n = createNode($1->name, NULL, 0, $1->type);
+					$$ = addNode($$, n);
+					//printf("name1\n"); evans
 				}
 			;
 

@@ -4,6 +4,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include "node.h"
+#include "text.h"
 
 enum STATEMENT_TYPE { UNDEFINED = 0, DECLARATION, ASIGNATION, CONST_DECLARATION,
 								PRINT, CONDITION_BLOCK, LOOP_BLOCK, EXIT_STATEMENT};
@@ -21,6 +22,8 @@ struct statementList {
 	struct statementList *next;
 	Node node;
 	Node second;
+	textToPrint text;
+
 };
 
 
@@ -33,6 +36,7 @@ sList createConstDeclareStatement(Node n, Node expression);
 sList createConditionalStatement();
 sList createExitStatement();
 sList createLoopStatement();
+sList createPrintStatement();
 void printList(sList l);
 void generateConstDeclaration(sList l);
 void generateDeclaration(sList l);

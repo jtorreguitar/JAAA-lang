@@ -20,6 +20,7 @@ sList newList() {
 	l->condition 		= NULL;
 	l->node 			= NULL;
 	l->second 			= NULL;
+	l->text				= NULL;
 
 	return l;
 }
@@ -63,6 +64,12 @@ sList createExitStatement() {
 sList createLoopStatement() {
 	sList l = newList();
 	l->type = LOOP_BLOCK;
+	return l;
+}
+
+sList createPrintStatement() {
+	sList l = newList();
+	l->type = PRINT;
 	return l;
 }
 
