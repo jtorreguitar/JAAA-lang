@@ -70,3 +70,260 @@ void generateJavaCodeStart() {
 void generateJavaCodeEnd() {
 	printf("}}");
 }
+
+void generateJavaConditionBlock(sList l) {
+
+	switch(l->conditionType) {
+		case IF_TYPE:
+			printf("if( %s ) {", l->condition);
+			printList(l->block);
+			printf("}");
+			break;
+
+		case IF_ELSE_TYPE:
+			printf("if( %s ) {", l->condition);
+			printList(l->block);
+			printf("}");
+			printList(l->elseBlock);
+			break;
+
+		case ELSE_IF_TYPE:
+			printf("else if( %s ) {", l->condition);
+			printList(l->block);
+			printf("}");
+			break;
+
+		case ELSE_IF_ELSE_TYPE:
+			printf("else if( %s ) {", l->condition);
+			printList(l->block);
+			printf("}");
+			printList(l->elseBlock);
+			break;
+
+		case ELSE_TYPE:
+			printf("else {");
+			printList(l->block);
+			printf("}");
+			break;
+
+		default:
+			break;
+	}
+}
+
+void generateJavaPrintCode(sList l) {
+	textNode text = l->text->first;
+	textNode aux = text;
+	printf("System.out.print(");
+	while(aux != NULL) {
+		printf("\"%s\"", aux->value);
+		aux = aux->next;
+		if(aux != NULL) {
+			printf(" + \" \" + ");
+		}
+	}
+	printf(");");
+}
+
+Node buildJavaBooleanExpression(Node n) {
+	n->name = calloc(2, sizeof(char));
+	if(n->name == NULL) {
+		fprintf(stderr, "Cannot allocate memory\n");
+		exit(1);
+	}
+
+	if(*((int *)n->value) == 1) {
+		memcpy(n->name, "1", 2);
+	}
+	else {
+		memcpy(n->name, "0", 2);
+	}
+
+	return n;
+}
+
+Node buildJavaStringExpression(Node n) {
+	n->name = calloc(n->dataSize, sizeof(char));
+	if(n->name == NULL) {
+		fprintf(stderr, "Cannot allocate memory\n");
+		exit(1);
+	}
+
+	memcpy(n->name, n->value, n->dataSize);
+	return n;
+}
+
+Node buildJavaIntegerExpression(Node n) {
+	n->name = calloc(MAX_NUMBER_LENGTH, sizeof(char));
+
+	if(n->name == NULL) {
+		fprintf(stderr, "Cannot allocate memory\n");
+		exit(1);
+	}
+
+	sprintf(n->name, "%d", *((int *)n->value));
+	return n;
+}
+
+Node buildJavaFloatExpression(Node n) {
+	n->name = calloc(MAX_NUMBER_LENGTH, sizeof(char));
+
+	if(n->name == NULL) {
+		fprintf(stderr, "Cannot allocate memory\n");
+		exit(1);
+	}
+
+	sprintf(n->name, "%lf", *((double *)n->value));
+	return n;
+}
+
+Node buildJavaNotExpression(Node n) {
+	Node newNode = clone(n);
+	newNode->name = calloc(strlen(n->name) + 2, sizeof(char));
+
+	if(newNode->name == NULL) {
+		fprintf(stderr, "Cannot allocate memory\n");
+		exit(1);
+	}
+
+	sprintf(newNode->name, "!%s", n->name);
+
+	//not to free variables evans
+	//free(n->name);
+	//free(n);
+	return newNode;
+}
+
+Node buildJavaMinusExpression(Node n) {
+	Node newNode = clone(n);
+	newNode->name = calloc(strlen(n->name) + 2, sizeof(char));
+
+	if(newNode->name == NULL) {
+		fprintf(stderr, "Cannot allocate memory\n");
+		exit(1);
+	}
+
+	sprintf(newNode->name, "-%s", n->name);
+
+	//not to free variables evans
+	//free(n->name);
+	//free(n);
+	return newNode;
+}
+
+Node buildJavaBinaryExpression(Node first, Node second, int operator) {
+	Node newNode = clone(first);
+	int length = strlen(first->name) + 1 + strlen(second->name) + 1 +2;
+	newNode->name = calloc(length, sizeof(char));
+
+	if(newNode->name == NULL) {
+		fprintf(stderr, "Cannot allocate memory\n");
+		exit(1);
+	}
+
+	switch(operator) {
+		case addition:
+			sprintf(newNode->name, "%s + %s", first->name, second->name);
+			break;
+		case subtraction:
+			sprintf(newNode->name, "%s - %s", first->name, second->name);
+			break;
+		case multiplication:
+			sprintf(newNode->name, "%s * %s", first->name, second->name);
+			break;
+		case division:
+			sprintf(newNode->name, "%s / %s", first->name, second->name);
+			break;
+	}
+
+	//not to free variables evans
+	// free(first->name);
+	// free(first);
+	// free(second->name);
+	// free(second);
+	return newNode;
+}
+
+Node buildJavaRelationalExpression(Node first, Node second, int operator) {
+	Node newNode = clone(first);
+	int length = strlen(first->name) + 1 + strlen(second->name) + 1 + 3;
+	newNode->name = calloc(length, sizeof(char));
+
+	if(newNode->name == NULL) {
+		fprintf(stderr, "Cannot allocate memory\n");
+		exit(1);
+	}
+
+	switch(operator) {
+		case LESSTHAN:
+			sprintf(newNode->name, "%s < %s", first->name, second->name);
+			break;
+		case LESSTHANOREQUALTO:
+			sprintf(newNode->name, "%s <= %s", first->name, second->name);
+			break;
+		case GREATERTHAN:
+			sprintf(newNode->name, "%s > %s", first->name, second->name);
+			break;
+		case GREATERTHANOREQUALTO:
+			sprintf(newNode->name, "%s >= %s", first->name, second->name);
+			break;
+		case EQUALTO:
+			sprintf(newNode->name, "%s == %s", first->name, second->name);
+			break;
+		case NOTEQUALTO:
+			sprintf(newNode->name, "%s != %s", first->name, second->name);
+			break;
+	}
+
+	//not to free variables evans
+	// free(first->name);
+	// free(first);
+	// free(second->name);
+	// free(second);
+	return newNode;
+}
+
+Node buildJavaLogicalExpression(Node first, Node second, int operator) {
+	Node newNode = clone(first);
+	int length = strlen(first->name) + 1 + strlen(second->name) + 1 + 3;
+	newNode->name = calloc(length, sizeof(char));
+
+	if(newNode->name == NULL) {
+		fprintf(stderr, "Cannot allocate memory\n");
+		exit(1);
+	}
+
+	switch(operator) {
+		case and:
+			sprintf(newNode->name, "%s && %s", first->name, second->name);
+			break;
+		case or:
+			sprintf(newNode->name, "%s || %s", first->name, second->name);
+			break;
+	}
+
+	//not to free variables evans
+	// free(first->name);
+	// free(first);
+	// free(second->name);
+	// free(second);
+	return newNode;
+}
+
+Node buildJavaParenthesisExpression(Node n) {
+	Node newNode = clone(n);
+	newNode->name = calloc(strlen(n->name) + 3, sizeof(char));
+
+	if(newNode->name == NULL) {
+		fprintf(stderr, "Cannot allocate memory\n");
+		exit(1);
+	}
+
+	sprintf(newNode->name, "(%s)", n->name);
+
+	//not to free variables evans
+	//free(n->name);
+	//free(n);
+	return newNode;
+
+}
