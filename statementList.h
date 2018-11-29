@@ -47,6 +47,7 @@ void generateCodeStart();
 void generateCodeEnd();
 void generateConditionBlockCode(sList l);
 void generateLoopBlockCode(sList l);
+void generatePrintCode(sList l);
 
 //expressions
 Node buildBooleanExpression(Node n);

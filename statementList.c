@@ -116,6 +116,7 @@ void printList(sList l) {
 				break;
 
 			case PRINT:
+				generatePrintCode(l);
 				printf("print\n");
 				break;
 		}
@@ -221,6 +222,19 @@ void generateConditionBlockCode(sList l) {
 void generateLoopBlockCode(sList l) {
 	if(language == C) {
 		generateCLoopBlock(l);
+	}
+	else if(language == JAVA) {
+		fprintf(stderr, "java on development\n");
+	}
+	else {
+		fprintf(stderr, "unsupported language\n");
+
+	}
+}
+
+void generatePrintCode(sList l) {
+	if(language == C) {
+		generateCPrintCode(l);
 	}
 	else if(language == JAVA) {
 		fprintf(stderr, "java on development\n");

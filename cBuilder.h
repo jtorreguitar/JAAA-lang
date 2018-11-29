@@ -14,6 +14,8 @@ void generateCCodeStart();
 void generateCCodeEnd();
 void generateCConditionBlock(sList l);
 void generateCLoopBlock(sList l);
+void generateCPrintCode(sList l);
+
 
 //expressions
 Node buildCBooleanExpression(Node n);

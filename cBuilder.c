@@ -2,6 +2,9 @@
 #include <stdio.h>
 #include <string.h>
 
+static int printNode(textNode n);
+static textNode printVariables(textNode n, int *var);
+
 void createCVar(int type, char *name, struct node *expression) {
 	switch(type) {
 		case integer:
@@ -126,6 +129,65 @@ void generateCLoopBlock(sList l) {
 	printf("while( %s ) {", l->condition);
 	printList(l->block);
 	printf("} ");
+}
+
+void generateCPrintCode(sList l) {
+	textNode text = l->text->first;
+	textNode aux = text;
+	int vars = 0;
+	printf("printf(\"");
+	while(aux != NULL) {
+		vars += printNode(aux);
+		aux = aux->next;
+	}
+	
+	if(vars > 0) {
+		printf("\"");
+		
+		while(vars > 0) {
+			printf(", ");
+			text = printVariables(text, &vars);
+		}
+
+		printf(");");
+	}
+	else {
+		printf("\");");
+	}
+}
+
+static int printNode(textNode n) {
+	if(n->type == TEXT) {
+		printf("%s", n->value);
+		return 0;
+	}
+	else {
+		
+		switch(n->varType) {
+			case integer:
+			case boolean:
+				printf("%%d");
+			break;
+			case floating:
+				printf("%%lf");
+				break;
+			case string:
+				printf("%%s");
+				break;
+		}
+
+		return 1;
+
+	}
+}
+
+static textNode printVariables(textNode n, int *vars) {
+	if(n->type == VAR) {
+		printf("%s", n->value);
+		*vars = *vars - 1;
+	}
+
+	return n->next;
 }
 
 Node buildCBooleanExpression(Node n) {
