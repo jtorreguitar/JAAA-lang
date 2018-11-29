@@ -276,7 +276,7 @@ printExpression: PRINT_TEXT text ';'
 					textNode n = createNode(NULL, $1->value, $1->dataSize, 0);
 					$$ = addNode($$, n);
 					$$ = concatenate($$, $2);
-					//printf("string text\n"); evans
+					printf("string text\n");// evans
 				}
 			| NAME text
 				{
@@ -284,22 +284,21 @@ printExpression: PRINT_TEXT text ';'
 					textNode n = createNode($1->name, NULL, 0, $1->type);
 					$$ = addNode($$, n);
 					$$ = concatenate($$, $2);
-					//printf("name text\n"); evans
+					printf("name text\n");// evans
 				}
 			| STRING
 				{
 					$$ = newTextToPrint();
 					textNode n = createNode(NULL, $1->value, $1->dataSize, 0);
 					$$ = addNode($$, n);
-					//printf("string1\n"); evans
-
+					printf("string1\n");//evans
 				}
 			| NAME
 				{
 					$$ = newTextToPrint();
 					textNode n = createNode($1->name, NULL, 0, $1->type);
 					$$ = addNode($$, n);
-					//printf("name1\n"); evans
+					printf("name1\n");// evans
 				}
 			;
 

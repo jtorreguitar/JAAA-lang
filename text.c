@@ -36,13 +36,13 @@ textNode createNode(char *name, void *value, int dataSize, int type) {
 	}
 	else {
 		text->value = calloc(dataSize, sizeof(char));
-
+		
 		if(text->value == NULL) {
 			fprintf(stderr, "Cannot allocate memory\n");
 			exit(1);
 		}
 		
-		memcpy(text->value, name, strlen(name + 1));
+		memcpy(text->value, value, dataSize);
 		text->type = TEXT;
 		free(value);
 	}
