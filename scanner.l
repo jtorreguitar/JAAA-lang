@@ -1,6 +1,7 @@
 %{
 	#include "node.h"
 	#include "statementList.h"
+	#include "text.h"
 	#include <stdlib.h>
 	#include <string.h>
 	#include "y.tab.h"
@@ -40,6 +41,8 @@
 "exit" {
 	return EXIT;
 }
+
+"print" { return PRINT_TEXT;}
 
 "if" {
 	return IF;
@@ -121,19 +124,6 @@
 	return LOOP;
 }
 
-"print "\"(\\.|[^"\\])*\" {
-	int len = strlen(yytext + 7) - 1;
-	yylval.printedString = calloc(len, sizeof(char));
-	memcpy((void*) yylval.printedString, (void*) (yytext + 7), len*sizeof(char));
-	return PRINTEXPR;
-}
-
-"println "\"(\\.|[^"\\])*\" {
-	int len = strlen(yytext + 9) - 1;
-	yylval.printedString = calloc(len, sizeof(char));
-	memcpy((void*) yylval.printedString, (void*) (yytext + 9), len*sizeof(char));
-	return PRINTEXPR;
-}
 
 [ \t\n] ;
 [a-z]+ {

@@ -1,6 +1,7 @@
 %{
 	#include "node.h"
 	#include "statementList.h"
+	#include "text.h"
 	#include <stdio.h>
 	#include <stdlib.h>
 	#include <string.h>
@@ -15,7 +16,7 @@
 %}
 
 %union {
-	char *printedString;
+	textToPrint printedString;
 	Node n;
 	sList l;
 }
@@ -28,9 +29,7 @@
 %token <n> WHILE
 %token <n> DO
 %token <n> LOOP
-%token <printedString> PRINTEXPR
-%token <printedString> PRINTLNEXPR
-%token CONST LTOET GTOET ET NET AND OR NOT VOIDEXPR EXIT IF END ELSE
+%token CONST LTOET GTOET ET NET AND OR NOT VOIDEXPR EXIT IF END ELSE PRINT_TEXT
 %left AND OR NOT
 %left '<' LTOET '>' GTOET
 %left ET NET
@@ -43,6 +42,8 @@
 %type <l> while_loop
 %type <l> conditional
 %type <l> else_block
+%type <n> text
+%type <printedString> printExpression 
 %%
 
 statement_list: statement
@@ -254,15 +255,38 @@ expression: expression '+' expression
 				}
 				;
 
-printExpression: PRINTEXPR
+printExpression: PRINT_TEXT text ';'
 					{
-						//printf("%s", $1); TODO
+						printf("in text\n"); //TODO
 					}
-				| PRINTLNEXPR
-					{
-						//printf("%s\n", $1); TODO
-					}
+				//| PRINTLN
+				//	{
+				//		//printf("%s\n", $1); TODO
+				//	}
 				;
+
+	text:	STRING text
+				{
+					$$ = $1;
+					printf("string text\n");
+				}
+			| NAME text
+				{
+					$$ = $1;
+					printf("name text\n");
+				}
+			| STRING
+				{
+					$$ = $1;
+					printf("string1\n");
+
+				}
+			| NAME
+				{
+					$$ = $1;
+					printf("name1\n");
+				}
+			;
 
 while_loop: WHILE expression DO statement_list LOOP
 			{

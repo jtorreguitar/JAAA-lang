@@ -9,7 +9,7 @@ typedef enum logicalOperator { and = 0, or, not } LOGICAL_OPERATOR;
 
 struct node
 {
-	char* name;
+	char *name;
 	TYPE type;
 	void* value;
 	int dataSize;
