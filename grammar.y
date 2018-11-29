@@ -41,9 +41,6 @@
 %type <l> statement_list
 %type <l> statement
 %type <l> while_loop
-%type <l> do_while_loop
-%type <l> until_loop
-%type <l> do_until_loop
 %type <l> conditional
 %type <l> else_block
 %type <printedString> text
@@ -128,9 +125,6 @@ statement: NAME '=' expression
 		 | conditional
 		 | exit_statement {$$ = createExitStatement();}
 		 | while_loop
-		 | do_while_loop
-		 | until_loop
-		 | do_until_loop
 		 ;
 
 
@@ -327,34 +321,26 @@ while_loop: WHILE expression DO statement_list LOOP
 				$$->block 		= $4;
 				$$->loopType 	= WHILE_TYPE;
 			}
-			;
-
-do_while_loop: DO statement_list WHILE expression LOOP
+			| DO statement_list WHILE expression LOOP
 				{
 					$$ 				= createLoopStatement();
 					$$->condition 	= $4->name;
 					$$->block 		= $2;
 					$$->loopType	= DO_WHILE_TYPE;
 				}
-				;
-
-until_loop: UNTIL expression DO statement_list LOOP
-			{
-				$$ 				= createLoopStatement();
-				$$->condition 	= $2->name;
-				$$->block 		= $4;
-				$$->loopType 	= UNTIL_TYPE;
-			}
-			;
-
-do_until_loop: DO statement_list UNTIL expression LOOP
+			| UNTIL expression DO statement_list LOOP
 				{
 					$$ 				= createLoopStatement();
-					$$->condition 	= $4->name;
-					$$->block 		= $2;
-					$$->loopType	= DO_UNTIL_TYPE;
+					$$->condition 	= $2->name;
+					$$->block 		= $4;
+					$$->loopType 	= UNTIL_TYPE;
 				}
-				;
+
+			;
+
+
+
+
 
 exit_statement: EXIT;
 

@@ -116,9 +116,18 @@ void generateJavaPrintCode(sList l) {
 	textNode text = l->text->first;
 	textNode aux = text;
 	printf("System.out.print(");
+
 	while(aux != NULL) {
-		printf("\"%s\"", aux->value);
+		
+		if(aux->type == TEXT) {
+			printf("\"%s\"", aux->value);
+		}
+		else {
+			printf("\"\" + %s", aux->value);
+		}
+
 		aux = aux->next;
+		
 		if(aux != NULL) {
 			printf(" + \" \" + ");
 		}
