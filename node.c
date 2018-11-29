@@ -73,6 +73,7 @@ Node newNode(char* name, TYPE type, void* value, int constant)
 	n->type = type;
 	n->constant = constant;
 	n->name = calloc(strlen(name) + 1, sizeof(char));
+	n->loopType = -1;
 	strcpy(n->name, name);
 	assignValue(n, value);
 	assignSize(n, value);

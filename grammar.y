@@ -41,6 +41,8 @@
 %type <l> statement_list
 %type <l> statement
 %type <l> while_loop
+%type <l> do_loop_statement
+%type <n> final_condition
 %type <l> conditional
 %type <l> else_block
 %type <printedString> text
@@ -321,13 +323,13 @@ while_loop: WHILE expression DO statement_list LOOP
 				$$->block 		= $4;
 				$$->loopType 	= WHILE_TYPE;
 			}
-			| DO statement_list WHILE expression LOOP
-				{
-					$$ 				= createLoopStatement();
-					$$->condition 	= $4->name;
-					$$->block 		= $2;
-					$$->loopType	= DO_WHILE_TYPE;
-				}
+			//| DO statement_list LOOP WHILE expression
+			//	{
+			//		$$ 				= createLoopStatement();
+			//		$$->condition 	= $4->name;
+			//		$$->block 		= $2;
+			//		$$->loopType	= DO_WHILE_TYPE;
+			//	}
 			| UNTIL expression DO statement_list LOOP
 				{
 					$$ 				= createLoopStatement();
@@ -335,11 +337,30 @@ while_loop: WHILE expression DO statement_list LOOP
 					$$->block 		= $4;
 					$$->loopType 	= UNTIL_TYPE;
 				}
+			| do_loop_statement
 
 			;
 
+do_loop_statement: DO statement_list LOOP final_condition
+					{
+						$$ 				= createLoopStatement();
+						$$->condition 	= $4->name;
+						$$->block 		= $2;
+						$$->loopType 	= $4->loopType;
 
+					}
 
+final_condition: WHILE expression
+					{
+						$$			  = $2;
+						$$->loopType  = DO_WHILE_TYPE;
+					}
+				| UNTIL expression
+					{
+						$$			  = $2;
+						$$->loopType  = DO_UNTIL_TYPE;
+					}
+				;
 
 
 exit_statement: EXIT;
