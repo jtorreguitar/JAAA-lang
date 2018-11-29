@@ -154,6 +154,7 @@ void generateCLoopBlock(sList l) {
 
 		default:
 			break;
+	}
 }
 
 void generateCPrintCode(sList l) {
