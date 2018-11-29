@@ -42,7 +42,7 @@
 %type <l> while_loop
 %type <l> conditional
 %type <l> else_block
-%type <n> text
+%type <printedString> text
 %type <printedString> printExpression 
 %%
 
@@ -267,23 +267,23 @@ printExpression: PRINT_TEXT text ';'
 
 	text:	STRING text
 				{
-					$$ = $1;
+					//$$ = $1;
 					printf("string text\n");
 				}
 			| NAME text
 				{
-					$$ = $1;
+					//$$ = $1;
 					printf("name text\n");
 				}
 			| STRING
 				{
-					$$ = $1;
+					//$$ = $1;
 					printf("string1\n");
 
 				}
 			| NAME
 				{
-					$$ = $1;
+					//$$ = $1;
 					printf("name1\n");
 				}
 			;
