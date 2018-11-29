@@ -126,9 +126,34 @@ void generateCConditionBlock(sList l) {
 }
 
 void generateCLoopBlock(sList l) {
-	printf("while( %s ) {", l->condition);
-	printList(l->block);
-	printf("} ");
+
+	switch(l->loopType) {
+		case WHILE_LOOP_TYPE:
+			printf("while( %s ) {", l->condition);
+			printList(l->block);
+			printf("} ");
+			break;
+
+		case DO_WHILE_LOOP_TYPE:
+			printf("do {");
+			printList(l->block);
+			printf("} while( %s ); ", l->condition);
+			break;
+
+		case UNTIL_LOOP_TYPE:
+			printf("while( !(%s) ) {", l->condition);
+			printList(l->block);
+			printf("} ");
+			break;
+
+		case DO_UNTIL_LOOP_TYPE:
+			printf("do {");
+			printList(l->block);
+			printf("} while( !(%s) ); ", l->condition);
+			break;
+
+		default:
+			break;
 }
 
 void generateCPrintCode(sList l) {
@@ -140,10 +165,10 @@ void generateCPrintCode(sList l) {
 		vars += printNode(aux);
 		aux = aux->next;
 	}
-	
+
 	if(vars > 0) {
 		printf("\"");
-		
+
 		while(vars > 0) {
 			text = printVariables(text, &vars);
 		}
@@ -161,7 +186,7 @@ static int printNode(textNode n) {
 		return 0;
 	}
 	else {
-		
+
 		switch(n->varType) {
 			case integer:
 			case boolean:

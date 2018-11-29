@@ -27,6 +27,7 @@
 %token <n> STRING
 %token <n> BOOL
 %token <n> WHILE
+%token <n> UNTIL
 %token <n> DO
 %token <n> LOOP
 %token CONST LTOET GTOET ET NET AND OR NOT VOIDEXPR EXIT IF END ELSE PRINT_TEXT
@@ -40,6 +41,9 @@
 %type <l> statement_list
 %type <l> statement
 %type <l> while_loop
+%type <l> do_while_loop
+%type <l> until_loop
+%type <l> do_until_loop
 %type <l> conditional
 %type <l> else_block
 %type <printedString> text
@@ -124,6 +128,9 @@ statement: NAME '=' expression
 		 | conditional
 		 | exit_statement {$$ = createExitStatement();}
 		 | while_loop
+		 | do_while_loop
+		 | until_loop
+		 | do_until_loop
 		 ;
 
 
@@ -315,19 +322,39 @@ printExpression: PRINT_TEXT text ';'
 
 while_loop: WHILE expression DO statement_list LOOP
 			{
-				$$ = createLoopStatement();
-				$$->condition = $2->name;
-				$$->block = $4;
-				/* printf("while(expression) {statement;}"); */
+				$$ 				= createLoopStatement();
+				$$->condition 	= $2->name;
+				$$->block 		= $4;
+				$$->loopType 	= WHILE_LOOP_TYPE;
 			}
 			;
 
 do_while_loop: DO statement_list WHILE expression LOOP
 				{
-					$$ = createLoopStatement();
-					$$->condition = $4->name;
-					$$->block = $2;
+					$$ 				= createLoopStatement();
+					$$->condition 	= $4->name;
+					$$->block 		= $2;
+					$$->loopType	= DO_WHILE_LOOP_TYPE;
 				}
+				;
+
+until_loop: UNTIL expression DO statement_list LOOP
+			{
+				$$ 				= createLoopStatement();
+				$$->condition 	= $2->name;
+				$$->block 		= $4;
+				$$->loopType 	= UNTIL_LOOP_TYPE;
+			}
+			;
+
+do_until_loop: DO statement_list UNTIL expression LOOP
+				{
+					$$ 				= createLoopStatement();
+					$$->condition 	= $4->name;
+					$$->block 		= $2;
+					$$->loopType	= DO_UNTIL_LOOP_TYPE;
+				}
+				;
 
 exit_statement: EXIT;
 

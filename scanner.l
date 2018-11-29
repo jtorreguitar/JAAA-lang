@@ -116,6 +116,10 @@
 	return WHILE;
 }
 
+"until" {
+	return UNTIL;
+}
+
 "do" {
 	return DO;
 }
