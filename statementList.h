@@ -8,14 +8,17 @@
 
 enum STATEMENT_TYPE { UNDEFINED = 0, DECLARATION, ASIGNATION, CONST_DECLARATION,
 								PRINT, CONDITION_BLOCK, LOOP_BLOCK, EXIT_STATEMENT};
-enum CONDITIONAL_TYPE {UNDEFINED_TYPE = 0, IF_TYPE, IF_ELSE_TYPE, ELSE_IF_TYPE,
+enum CONDITIONAL_TYPE { UNDEFINED_TYPE = 0, IF_TYPE, IF_ELSE_TYPE, ELSE_IF_TYPE,
 													ELSE_IF_ELSE_TYPE, ELSE_TYPE};
+enum LOOP_TYPE { UNDEFINED_TYPE = 0, WHILE_TYPE, DO_WHILE_TYPE, UNTIL_TYPE,
+	 			 DO_UNTIL_TYPE};
 
 enum OUTPUT_CODE {C = 0, JAVA = 1};
 
 struct statementList {
 	enum STATEMENT_TYPE type;
 	enum CONDITIONAL_TYPE conditionType;
+	enum LOOP_TYPE loopType;
 	struct statementList *block;
 	struct statementList *elseBlock;
 	char *condition;
@@ -23,9 +26,7 @@ struct statementList {
 	Node node;
 	Node second;
 	textToPrint text;
-
 };
-
 
 typedef struct statementList *sList;
 

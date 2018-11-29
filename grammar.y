@@ -43,7 +43,7 @@
 %type <l> conditional
 %type <l> else_block
 %type <printedString> text
-%type <printedString> printExpression 
+%type <printedString> printExpression
 %%
 
 statement_list: statement
@@ -116,7 +116,7 @@ statement: NAME '=' expression
 						$$ = createConstDeclareStatement(var, $4);
 					}
 				}
-		 | printExpression 
+		 | printExpression
 		 	{
 		 		$$ = createPrintStatement();
 		 		$$->text = $1;
@@ -282,7 +282,7 @@ printExpression: PRINT_TEXT text ';'
 				{
 					$$ = newTextToPrint();
 					Node var = (Node) getL(symbolList, $1->name);
-					
+
 					if(var == NULL) {
 						yyerror("Can't print undefined variable");
 					}
@@ -303,7 +303,7 @@ printExpression: PRINT_TEXT text ';'
 				{
 					$$ = newTextToPrint();
 					Node var = (Node) getL(symbolList, $1->name);
-					
+
 					if(var == NULL) {
 						yyerror("Can't print undefined variable");
 					}
@@ -321,6 +321,13 @@ while_loop: WHILE expression DO statement_list LOOP
 				/* printf("while(expression) {statement;}"); */
 			}
 			;
+
+do_while_loop: DO statement_list WHILE expression LOOP
+				{
+					$$ = createLoopStatement();
+					$$->condition = $4->name;
+					$$->block = $2;
+				}
 
 exit_statement: EXIT;
 
