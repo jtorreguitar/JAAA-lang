@@ -1,15 +1,18 @@
-number  = 10
-oddMsg  = "Is odd"
-evenMsg = "Is even"
-isEven  = true
+number = 10
+isEven = 1
 
 while number != 0 do
 	number = number - 1
-	isEven = !isEven
+	
+	if isEven == 1 do
+		isEven = 0
+	else do
+		isEven = 1
+	end
 loop
 
-if isEven do
-	print(evenMsg)
+if isEven == 1 do
+	print "Is even" ;
 else do
-	print(oddMsg)
+	print "Is odd" ;
 end

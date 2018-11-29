@@ -1,1 +1,24 @@
 #!/bin/sh
+echo "\e[1mCompiling $1 to an executable file\e[0m"
+
+file_path=$1
+file_ext="${file_path##*.}"
+
+if [ "$file_ext" != "jaaa" ]; then
+	echo "\e[91mError: only accept .jaaa files"
+	return 1
+fi
+
+file_name="${file_path##*/}"
+file_name="${file_name%.*}"
+output_ext=".c"
+
+./compiler > "$file_name$output_ext" < $1
+
+exec_ext=".x"
+
+gcc "$file_name$output_ext" -o "$file_name$exec_ext"
+rm "$file_name$output_ext"
+
+echo "\e[32mThe output file is \e[1m$file_name$exec_ext\e[0m"
+return 0

@@ -42,7 +42,9 @@
 	return EXIT;
 }
 
-"print" { return PRINT_TEXT;}
+"print" {
+	return PRINT_TEXT;
+}
 
 "if" {
 	return IF;
@@ -53,10 +55,6 @@
 }
 
 "end" {
-	return END;
-}
-
-"done" {
 	return END;
 }
 
