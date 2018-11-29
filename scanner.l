@@ -58,10 +58,6 @@
 	return END;
 }
 
-"done" {
-	return END;
-}
-
 "true" {
 	yylval.n = calloc(1, sizeof(node));
 	yylval.n->type = boolean;
