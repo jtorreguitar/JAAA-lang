@@ -3,6 +3,7 @@
 #include "javaBuilder.h"
 
 int language = C;
+int scope = 0;
 
 sList newList() {
 	sList l = malloc(sizeof(*l));
@@ -85,17 +86,28 @@ void printList(sList l) {
 			break;
 
 			case CONDITION_BLOCK:
-				
+				scope++;
 				generateConditionBlockCode(l);
 				//printf("if condition=%s\n", l->condition);
+				scope--;
 				break;
 
 			case CONST_DECLARATION:
+
+				if(scope > 0) {
+					fprintf(stderr, "Cannot declare a constant inside a inner block\n");
+				}
+			
 				generateConstDeclaration(l);
 				//printf("const declaration\n"); evans
 				break;
 
 			case DECLARATION:
+			
+				if(scope > 0) {
+					fprintf(stderr, "Cannot declare a variable inside a inner block\n");
+				}
+			
 				generateDeclaration(l);
 				//printf("declaration\n");evans
 				break;
@@ -105,8 +117,10 @@ void printList(sList l) {
 				break;
 
 			case LOOP_BLOCK:
+				scope++;
 				generateLoopBlockCode(l);
 				printf("while\n");
+				scope--;
 				break;
 
 			case EXIT_STATEMENT:
