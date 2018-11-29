@@ -147,7 +147,12 @@ void generateJavaLoopBlock(sList l) {
 void generateJavaPrintCode(sList l) {
 	textNode text = l->text->first;
 	textNode aux = text;
-	printf("System.out.print(");
+	if(l->text->type == ONE_LINE) {
+		printf("System.out.print(");
+	}
+	else {
+		printf("System.out.println(");
+	}
 
 	while(aux != NULL) {
 		
