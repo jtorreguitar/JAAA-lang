@@ -325,7 +325,7 @@ while_loop: WHILE expression DO statement_list LOOP
 				$$ 				= createLoopStatement();
 				$$->condition 	= $2->name;
 				$$->block 		= $4;
-				$$->loopType 	= WHILE_LOOP_TYPE;
+				$$->loopType 	= WHILE_TYPE;
 			}
 			;
 
@@ -334,7 +334,7 @@ do_while_loop: DO statement_list WHILE expression LOOP
 					$$ 				= createLoopStatement();
 					$$->condition 	= $4->name;
 					$$->block 		= $2;
-					$$->loopType	= DO_WHILE_LOOP_TYPE;
+					$$->loopType	= DO_WHILE_TYPE;
 				}
 				;
 
@@ -343,7 +343,7 @@ until_loop: UNTIL expression DO statement_list LOOP
 				$$ 				= createLoopStatement();
 				$$->condition 	= $2->name;
 				$$->block 		= $4;
-				$$->loopType 	= UNTIL_LOOP_TYPE;
+				$$->loopType 	= UNTIL_TYPE;
 			}
 			;
 
@@ -352,7 +352,7 @@ do_until_loop: DO statement_list UNTIL expression LOOP
 					$$ 				= createLoopStatement();
 					$$->condition 	= $4->name;
 					$$->block 		= $2;
-					$$->loopType	= DO_UNTIL_LOOP_TYPE;
+					$$->loopType	= DO_UNTIL_TYPE;
 				}
 				;
 

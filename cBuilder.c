@@ -128,25 +128,25 @@ void generateCConditionBlock(sList l) {
 void generateCLoopBlock(sList l) {
 
 	switch(l->loopType) {
-		case WHILE_LOOP_TYPE:
+		case WHILE_TYPE:
 			printf("while( %s ) {", l->condition);
 			printList(l->block);
 			printf("} ");
 			break;
 
-		case DO_WHILE_LOOP_TYPE:
+		case DO_WHILE_TYPE:
 			printf("do {");
 			printList(l->block);
 			printf("} while( %s ); ", l->condition);
 			break;
 
-		case UNTIL_LOOP_TYPE:
+		case UNTIL_TYPE:
 			printf("while( !(%s) ) {", l->condition);
 			printList(l->block);
 			printf("} ");
 			break;
 
-		case DO_UNTIL_LOOP_TYPE:
+		case DO_UNTIL_TYPE:
 			printf("do {");
 			printList(l->block);
 			printf("} while( !(%s) ); ", l->condition);
