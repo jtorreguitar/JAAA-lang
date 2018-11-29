@@ -1,0 +1,4 @@
+n = 69
+do
+	n = n - 1
+while n > 0 loop
