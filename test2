@@ -1,0 +1,11 @@
+a = 10 b = 100 c = 1000
+if  a > b do
+	print a, "mayor a", b;
+    if a > c do
+        print a, "es el mayor de los tres";
+    else if c > a do
+        print c, "es el mayor de los tres";
+    else do
+    	print "a es igual a c";
+    end
+end
