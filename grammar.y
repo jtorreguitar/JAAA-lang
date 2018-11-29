@@ -323,13 +323,6 @@ while_loop: WHILE expression DO statement_list LOOP
 				$$->block 		= $4;
 				$$->loopType 	= WHILE_TYPE;
 			}
-			//| DO statement_list LOOP WHILE expression
-			//	{
-			//		$$ 				= createLoopStatement();
-			//		$$->condition 	= $4->name;
-			//		$$->block 		= $2;
-			//		$$->loopType	= DO_WHILE_TYPE;
-			//	}
 			| UNTIL expression DO statement_list LOOP
 				{
 					$$ 				= createLoopStatement();
