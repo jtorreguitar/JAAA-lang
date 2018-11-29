@@ -307,7 +307,6 @@ printExpression: PRINT_TEXT text ';'
 					if(var == NULL) {
 						yyerror("Can't print undefined variable");
 					}
-					printf("\nvarName = %s\n", var->name);
 					textNode n = createNode(var->name, NULL, 0, var->type);
 					$$ = addNode($$, n);
 					//printf("name1\n");// evans
