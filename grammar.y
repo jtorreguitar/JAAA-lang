@@ -270,35 +270,47 @@ printExpression: PRINT_TEXT text ';'
 				//	}
 				;
 
-	text:	STRING text
+	text:	STRING ',' text
 				{
 					$$ = newTextToPrint();
 					textNode n = createNode(NULL, $1->value, $1->dataSize, 0);
 					$$ = addNode($$, n);
-					$$ = concatenate($$, $2);
-					printf("string text\n");// evans
+					$$ = concatenate($$, $3);
+					//printf("string text\n");// evans
 				}
-			| NAME text
+			| NAME ',' text
 				{
 					$$ = newTextToPrint();
-					textNode n = createNode($1->name, NULL, 0, $1->type);
+					Node var = (Node) getL(symbolList, $1->name);
+					
+					if(var == NULL) {
+						yyerror("Can't print undefined variable");
+					}
+
+					textNode n = createNode(var->name, NULL, 0, var->type);
 					$$ = addNode($$, n);
-					$$ = concatenate($$, $2);
-					printf("name text\n");// evans
+					$$ = concatenate($$, $3);
+					//printf("name text\n");// evans
 				}
 			| STRING
 				{
 					$$ = newTextToPrint();
 					textNode n = createNode(NULL, $1->value, $1->dataSize, 0);
 					$$ = addNode($$, n);
-					printf("string1\n");//evans
+					//printf("string1\n");//evans
 				}
 			| NAME
 				{
 					$$ = newTextToPrint();
-					textNode n = createNode($1->name, NULL, 0, $1->type);
+					Node var = (Node) getL(symbolList, $1->name);
+					
+					if(var == NULL) {
+						yyerror("Can't print undefined variable");
+					}
+					printf("\nvarName = %s\n", var->name);
+					textNode n = createNode(var->name, NULL, 0, var->type);
 					$$ = addNode($$, n);
-					printf("name1\n");// evans
+					//printf("name1\n");// evans
 				}
 			;
 

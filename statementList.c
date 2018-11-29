@@ -102,7 +102,6 @@ void printList(sList l) {
 
 			case ASIGNATION:
 				generateAsignation(l);
-				//printf("asignation\n");
 				break;
 
 			case LOOP_BLOCK:
@@ -112,12 +111,10 @@ void printList(sList l) {
 
 			case EXIT_STATEMENT:
 				generateExitCode();
-				//printf("exit statement\n");
 				break;
 
 			case PRINT:
 				generatePrintCode(l);
-				printf("print\n");
 				break;
 		}
 

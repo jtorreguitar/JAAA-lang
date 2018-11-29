@@ -145,7 +145,6 @@ void generateCPrintCode(sList l) {
 		printf("\"");
 		
 		while(vars > 0) {
-			printf(", ");
 			text = printVariables(text, &vars);
 		}
 
@@ -158,7 +157,7 @@ void generateCPrintCode(sList l) {
 
 static int printNode(textNode n) {
 	if(n->type == TEXT) {
-		printf("%s", n->value);
+		printf("%s ", n->value);
 		return 0;
 	}
 	else {
@@ -166,13 +165,13 @@ static int printNode(textNode n) {
 		switch(n->varType) {
 			case integer:
 			case boolean:
-				printf("%%d");
+				printf("%%d ");
 			break;
 			case floating:
-				printf("%%lf");
+				printf("%%lf ");
 				break;
 			case string:
-				printf("%%s");
+				printf("%%s ");
 				break;
 		}
 
@@ -183,7 +182,7 @@ static int printNode(textNode n) {
 
 static textNode printVariables(textNode n, int *vars) {
 	if(n->type == VAR) {
-		printf("%s", n->value);
+		printf(", %s", n->value);
 		*vars = *vars - 1;
 	}
 

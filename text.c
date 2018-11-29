@@ -21,18 +21,22 @@ textNode createNode(char *name, void *value, int dataSize, int type) {
 	textNode text = newTextNode();
 
 	if(name != NULL) {
-		text->value = calloc(strlen(name) + 1, sizeof(char));
+		int length = strlen(name) + 1, i = 0;
+		text->value = calloc(length, sizeof(char));
 
 		if(text->value == NULL) {
 			fprintf(stderr, "Cannot allocate memory\n");
 			exit(1);
 		}
 
-		memcpy(text->value, name, strlen(name + 1));
+		while(i < length) {
+			(text->value)[i] = name[i];
+			i++;
+		}
+		//memcpy(text->value, name, strlen(name + 1));
 		text->type = VAR;
 		text->varType = type;
-
-		free(name);
+		//free(name);
 	}
 	else {
 		text->value = calloc(dataSize, sizeof(char));
@@ -44,7 +48,7 @@ textNode createNode(char *name, void *value, int dataSize, int type) {
 		
 		memcpy(text->value, value, dataSize);
 		text->type = TEXT;
-		free(value);
+		//free(value);
 	}
 
 
