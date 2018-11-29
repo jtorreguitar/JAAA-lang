@@ -64,7 +64,7 @@ void generateJavaExitCode() {
 void generateJavaCodeStart() {
 	printf("import java.util.*;\nimport java.lang.*;\n");
 	printf("public class Main {\n");
-	printf("public static coid main(String args[]) {\n");
+	printf("public static void main(String args[]) {\n");
 }
 
 void generateJavaCodeEnd() {
@@ -110,6 +110,7 @@ void generateJavaConditionBlock(sList l) {
 			break;
 	}
 }
+
 
 void generateJavaPrintCode(sList l) {
 	textNode text = l->text->first;
