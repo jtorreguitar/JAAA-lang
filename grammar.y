@@ -411,7 +411,7 @@ int main(int argc, char **argv)
 {
 	if(argc == 2) {
 		if(strcmp(argv[1], "-b") == 0) {
-			printf("language set to JAVA\n");
+			//printf("language set to JAVA\n");
 			setLanguage(JAVA);
 		}
 	}

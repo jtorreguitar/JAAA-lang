@@ -234,7 +234,7 @@ void generateLoopBlockCode(sList l) {
 		generateCLoopBlock(l);
 	}
 	else if(language == JAVA) {
-		fprintf(stderr, "java on development\n");
+		generateJavaLoopBlock(l);
 	}
 	else {
 		fprintf(stderr, "unsupported language\n");

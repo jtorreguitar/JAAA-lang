@@ -15,7 +15,7 @@ void generateJavaExitCode();
 void generateJavaCodeStart();
 void generateJavaCodeEnd();
 void generateJavaConditionBlock(sList l);
-//void generateCLoopBlock(sList l);
+void generateJavaLoopBlock(sList l);
 void generateJavaPrintCode(sList l);
 
 // //expressions

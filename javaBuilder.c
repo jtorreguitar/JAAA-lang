@@ -111,6 +111,38 @@ void generateJavaConditionBlock(sList l) {
 	}
 }
 
+void generateJavaLoopBlock(sList l) {
+
+	switch(l->loopType) {
+		case WHILE_TYPE:
+			printf("while( %s ) {", l->condition);
+			printList(l->block);
+			printf("} ");
+			break;
+
+		case DO_WHILE_TYPE:
+			printf("do {");
+			printList(l->block);
+			printf("} while( %s ); ", l->condition);
+			break;
+
+		case UNTIL_TYPE:
+			printf("while( !(%s) ) {", l->condition);
+			printList(l->block);
+			printf("} ");
+			break;
+
+		case DO_UNTIL_TYPE:
+			printf("do {");
+			printList(l->block);
+			printf("} while( !(%s) ); ", l->condition);
+			break;
+
+		default:
+			break;
+	}
+}
+
 
 void generateJavaPrintCode(sList l) {
 	textNode text = l->text->first;
