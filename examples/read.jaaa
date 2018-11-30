@@ -1,0 +1,7 @@
+x = read 3 characters
+read
+x = read
+read 3 characters
+
+a = 3
+x = read a characters

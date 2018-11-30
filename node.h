@@ -3,7 +3,7 @@
 
 typedef enum type { integer = 0, floating, string, boolean } TYPE;
 typedef enum binaryOperator { addition = 0, subtraction, multiplication, division } BINARY_OPERATOR;
-typedef enum relationalOperator { LESSTHAN = 0, LESSTHANOREQUALTO, GREATERTHAN, GREATERTHANOREQUALTO, 
+typedef enum relationalOperator { LESSTHAN = 0, LESSTHANOREQUALTO, GREATERTHAN, GREATERTHANOREQUALTO,
 									EQUALTO, NOTEQUALTO } RELATIONAL_OPERATOR;
 typedef enum logicalOperator { and = 0, or, not } LOGICAL_OPERATOR;
 
@@ -120,6 +120,6 @@ void toBooleanFromBoolean(Node n, Node result);
 
 Node clone(Node aux);
 int diferentTypes(int type1, int type2);
-
+int isInteger(int n);
 
 #endif

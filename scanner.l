@@ -44,6 +44,14 @@
 
 "print" { return PRINT_TEXT;}
 
+"read" {
+	return READ_TEXT;
+}
+
+"characters" {
+	return CHAR;
+}
+
 "if" {
 	return IF;
 }

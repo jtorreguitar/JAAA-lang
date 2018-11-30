@@ -29,7 +29,7 @@
 %token <n> WHILE
 %token <n> DO
 %token <n> LOOP
-%token CONST LTOET GTOET ET NET AND OR NOT VOIDEXPR EXIT IF END ELSE PRINT_TEXT
+%token CONST LTOET GTOET ET NET AND OR NOT VOIDEXPR EXIT IF END ELSE PRINT_TEXT READ_TEXT CHAR
 %left AND OR NOT
 %left '<' LTOET '>' GTOET
 %left ET NET
@@ -43,7 +43,9 @@
 %type <l> conditional
 %type <l> else_block
 %type <n> text
-%type <printedString> printExpression 
+%type <printedString> printExpression
+%type <n> readExpression
+%type <n> lengthRead
 %%
 
 statement_list: statement
@@ -120,6 +122,33 @@ statement: NAME '=' expression
 		 | conditional
 		 | exit_statement {$$ = createExitStatement();}
 		 | while_loop
+		 | readExpression {
+			 $$ = createReadStatement($1, newNode(NULL, string, NULL, 0));
+		 }
+		 | NAME '=' readExpression
+		 	{
+				Node var = (Node) getL(symbolList, $1->name);
+				if(var != 0  && !var->constant)
+				{
+					if(var->type != string) {
+						yyerror("variables cannot change their type");
+					}
+
+					var->dataSize = *((int *)$3->value);
+					$$ = createReadStatement($3, var);
+				}
+				else if(var != 0 && var->constant)
+				{
+					yyerror("constants cannot change their value");
+				}
+				else
+				{
+					addL(symbolList, newNode($1->name, string, $3->value, 0));
+					Node var = (Node) getL(symbolList, $1->name);
+					var->dataSize = *((int *)$3->value) + 1;
+					$$ = createReadDeclareStatement($3, var);
+				}
+			}
 		 ;
 
 
@@ -253,7 +282,7 @@ expression: expression '+' expression
 					else
 						yyerror("undeclared variable");
 				}
-				;
+		  ;
 
 printExpression: PRINT_TEXT text ';'
 					{
@@ -343,6 +372,34 @@ else_block: ELSE IF expression DO statement_list END
 					$$->block = $3;
 					$$->conditionType = ELSE_TYPE;
 					//printf("\n final else\n");//evans
+				}
+			;
+
+readExpression: READ_TEXT
+				{
+					int i = 1;
+					Node n = newNode(NULL, integer, &i, 0);
+					$$ = n;
+				}
+			| READ_TEXT NAME CHAR
+				{
+					Node var = (Node) getL(symbolList, $2->name);
+					if(var != 0)
+					{
+						if(!isInteger(var->type)) {
+							yyerror("variables is not integer");
+						}
+						$$ = var;
+					}
+					else
+					{
+						yyerror("variable is not initialize");
+					}
+				}
+			| READ_TEXT INTEGER CHAR
+				{
+					$2->name = NULL;
+					$$ = $2;
 				}
 			;
 
