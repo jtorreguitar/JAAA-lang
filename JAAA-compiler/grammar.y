@@ -21,8 +21,6 @@
 	sList l;
 }
 
-
-
 %token <n> NAME
 %token <n> FLOAT
 %token <n> INTEGER
@@ -437,13 +435,13 @@ else_block: ELSE IF expression DO statement_list END
 				}
 			;
 
-readExpression: READ_TEXT
+readExpression: READ_TEXT ';'
 				{
 					int i = 1;
 					Node n = newNode(NULL, integer, &i, 0);
 					$$ = n;
 				}
-			| READ_TEXT NAME CHAR
+			| READ_TEXT NAME CHAR ';'
 				{
 					Node var = (Node) getL(symbolList, $2->name);
 					if(var != 0)
@@ -458,7 +456,7 @@ readExpression: READ_TEXT
 						yyerror("variable is not initialize");
 					}
 				}
-			| READ_TEXT INTEGER CHAR
+			| READ_TEXT INTEGER CHAR ';'
 				{
 					$2->name = NULL;
 					$$ = $2;
