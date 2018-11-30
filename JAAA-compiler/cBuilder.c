@@ -450,7 +450,9 @@ void buildCReadExpression(Node length, char* varName) {
 		printf("%s[i]=", varName);
 	}
 	printf("getchar();}");
-	printf("%s[%d] = 0;", varName, *((int *)length->value));
+	if(varName != NULL) {
+		printf("%s[%d] = 0;", varName, *((int *)length->value));
+	}
 }
 
 void createDeclareString(Node n) {

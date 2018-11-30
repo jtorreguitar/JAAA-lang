@@ -129,9 +129,10 @@ statement: NAME '=' expression
 		 | conditional
 		 | exit_statement {$$ = createExitStatement();}
 		 | while_loop
-		 | readExpression {
+		 | readExpression
+		 	{
 			 $$ = createReadStatement($1, newNode(NULL, string, NULL, 0));
-		 }
+		 	}
 		 | NAME '=' readExpression
 		 	{
 				Node var = (Node) getL(symbolList, $1->name);
