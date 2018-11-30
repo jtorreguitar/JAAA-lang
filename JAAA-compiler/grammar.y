@@ -424,4 +424,5 @@ int main(int argc, char **argv)
 
 	printList(first);
 	generateCodeEnd();
+	//freeMemory();
 }
