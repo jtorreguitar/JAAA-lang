@@ -1,3 +1,6 @@
+%option noinput
+%option nounput
+
 %{
 	#include "node.h"
 	#include "statementList.h"
@@ -6,6 +9,7 @@
 	#include <string.h>
 	#include "y.tab.h"
 %}
+
 
 %%
 
