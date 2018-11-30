@@ -1,7 +1,10 @@
 x = read 3 characters;
+println "primer x:", x;
 read;
 x = read;
+println "segundo x:", x;
 read 3 characters;
 
 a = 3
 x = read a characters;
+println "tercer x:", x;
