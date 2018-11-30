@@ -142,7 +142,7 @@
 	return LOOP;
 }
 
-
+"//".*	{}
 [ \t\n] ;
 [a-z]+ {
 	yylval.n = calloc(1, sizeof(node));
