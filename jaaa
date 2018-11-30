@@ -25,7 +25,8 @@ validate_arguments() {
 		fi
 	elif [ $1 -eq 1 ]
 	then
-		return 0
+		validate_extension $2
+		return $?
 	else
 		echo "Error: invalid arguments"
 		return 1
