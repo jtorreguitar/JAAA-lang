@@ -1,0 +1,89 @@
+#!/bin/bash
+
+validate_extension() {
+	file_path=$1
+	file_extension="${file_path##*.}"
+	
+	if [ ! $file_extension == "jaaa" ]
+	then
+		echo "Error: invalid file extension, required .jaaa"
+		return 1
+	fi
+	return 0
+}
+
+validate_arguments() {
+	if [ $1 -eq 2 ] 
+	then
+		if [ $2 == "-b" ]
+		then
+			language="JAVA"
+			validate_extension $3
+			return $?
+		else
+			echo "Error: invalid arguments"
+		fi
+	elif [ $1 -eq 1 ]
+	then
+		return 0
+	else
+		echo "Error: invalid arguments"
+		return 1
+	fi
+}
+
+make_files() {
+	result=$(ls | grep "compiler" | wc -l)
+	if [ $result -eq 1 ]
+	then
+		make clean
+	fi
+	make compiler		
+}
+
+generate_c_code() {
+	file_path=$1
+	file_name="${file_path##*/}"
+	file_name="$(echo $file_name| cut -d'.' -f 1)"
+	echo $file_name
+	./compiler < ${file_path} > ${file_name}.c
+	gcc -Wall -pedantic -std=c99 ${file_name}.c -o ${file_name}
+	rm ${file_name}.c
+}
+
+generate_java_executable() {
+	file_path=$1
+	file_name="${file_path##*/}"
+	file_name="$(echo $file_name| cut -d'.' -f 1)"
+	echo "java Main" >> ${file_name}
+	chmod +x ${file_name}
+}
+
+generate_java_byte_code() {
+	./compiler -b < $1 > Main.java
+	javac Main.java
+	generate_java_executable $1
+	rm Main.java
+}
+
+
+
+language="C"
+
+validate_arguments $# $1 $2
+
+
+if [ $? -eq 0 ]
+then
+	if [ $language == "C" ]
+	then
+		echo "compiling to generate c executable code"
+		make_files
+		generate_c_code $1
+
+	else
+		echo "compiling to generate bytecode"
+		make_files
+		generate_java_byte_code $2
+	fi
+fi
