@@ -26,13 +26,13 @@ typedOperationFunction subtractionFunctions[] = { subtractIntegers, subtractFloa
 typedOperationFunction multiplicationFunctions[] = { multiplyIntegers, multiplyFloats, multiplyStrings, multiplyBooleans };
 typedOperationFunction divisionFunctions[] = { divideIntegers, divideFloats, divideStrings, divideBooleans };
 
-relationalFunction relationalFunctions[] = { lessThan, lessThanOrEqualTo, greaterThan, greaterThanOrEqualTo, 
+relationalFunction relationalFunctions[] = { lessThan, lessThanOrEqualTo, greaterThan, greaterThanOrEqualTo,
 												equalTo, notEqualTo };
 typedRelationalFunction lessThanFunctions[] = { lessThanInteger, lessThanFloating, lessThanString, lessThanBoolean };
-typedRelationalFunction lessThanOrEqualToFunctions[] = { lessThanOrEqualToInteger, lessThanOrEqualToFloating, lessThanOrEqualToString, 
+typedRelationalFunction lessThanOrEqualToFunctions[] = { lessThanOrEqualToInteger, lessThanOrEqualToFloating, lessThanOrEqualToString,
 															lessThanOrEqualToBoolean };
 typedRelationalFunction greaterThanFunctions[] = { greaterThanInteger, greaterThanFloating, greaterThanString, greaterThanBoolean };
-typedRelationalFunction greaterThanOrEqualToFunctions[] = { greaterThanOrEqualToInteger, greaterThanOrEqualToFloating, 
+typedRelationalFunction greaterThanOrEqualToFunctions[] = { greaterThanOrEqualToInteger, greaterThanOrEqualToFloating,
 																greaterThanOrEqualToString, greaterThanOrEqualToBoolean };
 typedRelationalFunction equalToFunctions[] = { equalToInteger, equalToFloating, equalToString, equalToBoolean };
 typedRelationalFunction notEqualToFunctions[] = { notEqualToInteger, notEqualToFloating, notEqualToString, notEqualToBoolean };
@@ -75,8 +75,14 @@ Node newNode(char* name, TYPE type, void* value, int constant)
 	n->name = calloc(strlen(name) + 1, sizeof(char));
 	n->loopType = -1;
 	strcpy(n->name, name);
-	assignValue(n, value);
-	assignSize(n, value);
+	if(name != NULL) {
+		n->name = calloc(strlen(name) + 1, sizeof(char));
+		strcpy(n->name, name);
+	}
+	if(value != NULL) {
+		assignValue(n, value);
+		assignSize(n, value);
+	}
 	return n;
 }
 
@@ -884,7 +890,7 @@ Node UMinusByType(Node n)
 
 Node clone(Node aux) {
 	Node newNode = malloc(sizeof(*newNode));
-	
+
 	if(newNode == NULL) {
 		fprintf(stderr, "Cannot allocate memory\n");
 	}
@@ -908,4 +914,8 @@ int diferentTypes(int type1, int type2) {
 	else {
 		return 1;
 	}
+}
+
+int isInteger(int type) {
+	return type == integer;
 }

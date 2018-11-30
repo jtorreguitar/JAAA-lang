@@ -430,3 +430,34 @@ Node buildCParenthesisExpression(Node n) {
 	return newNode;
 
 }
+
+void buildCReadExpression(Node length, char* varName) {
+	if(varName != NULL) {
+		printf("%s = malloc(sizeof(char) * %d);", varName, *((int *)length->value) + 1);
+		printf("if(%s == NULL){", length->name);
+		printf("fprintf(stderr,\"Cannot allocate memory\");exit(1);}");
+		printf("read(0,%s,", varName);
+		if(length->name != NULL) {
+			printf("%s", length->name);
+		}
+		else {
+			printf("%d", *((int *)length->value));
+		}
+		printf(");");
+		printf("%s[%d] = 0;", varName, *((int *)length->value));
+	}
+	else {
+		printf("for(int i=0; i<");
+		if(length->name != NULL) {
+			printf("%s", length->name);
+		}
+		else {
+			printf("%d", *((int *)length->value));
+		}
+		printf("; i++){getChar();}");
+	}
+}
+
+void createDeclareString(Node n) {
+	printf("char *%s = NULL;", n->name);
+}

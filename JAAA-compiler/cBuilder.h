@@ -14,6 +14,7 @@ void generateCCodeStart();
 void generateCCodeEnd();
 void generateCConditionBlock(sList l);
 void generateCLoopBlock(sList l);
+void createDeclareString(Node n);
 void generateCPrintCode(sList l);
 
 
@@ -29,6 +30,6 @@ Node buildCRelationalExpression(Node first, Node second, int operator);
 Node buildCLogicalExpression(Node first, Node second, int operator);
 Node buildCParenthesisExpression(Node n);
 
-
+void buildCReadExpression(Node length, char* varName);
 
 #endif

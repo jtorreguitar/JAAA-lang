@@ -68,6 +68,22 @@ sList createLoopStatement() {
 	return l;
 }
 
+sList createReadStatement(Node assing, Node var) {
+	sList l 	= newList();
+	l->type 	= READ_STATEMENT;
+	l->node 	= assing;
+	l->second 	= var;
+	return l;
+}
+
+sList createReadDeclareStatement(Node assing, Node var) {
+	sList l 	= newList();
+	l->type 	= DECLARE_READ_STATEMENT;
+	l->node 	= assing;
+	l->second 	= var;
+	return l;
+}
+
 sList createPrintStatement() {
 	sList l = newList();
 	l->type = PRINT;
@@ -128,6 +144,11 @@ void printList(sList l) {
 
 			case PRINT:
 				generatePrintCode(l);
+				break;
+			case DECLARE_READ_STATEMENT:
+				genearteDeclareString(l->second);
+			case READ_STATEMENT:
+				generateReadStatement(l);
 				break;
 		}
 
@@ -401,4 +422,30 @@ Node buildParenthesisExpression(Node n) {
 	}
 
 	exit(1);
+}
+
+void generateReadStatement(sList l) {
+	if(language == C) {
+		buildCReadExpression(l->node, l->second->name);
+	}
+	else if(language == JAVA) {
+		fprintf(stderr, "java on development\n");
+	}
+	else {
+		fprintf(stderr, "unsupported language\n");
+
+	}
+}
+
+void genearteDeclareString(Node n) {
+	if(language == C) {
+		createDeclareString(n);
+	}
+	else if(language == JAVA) {
+		fprintf(stderr, "java on development\n");
+	}
+	else {
+		fprintf(stderr, "unsupported language\n");
+
+	}
 }

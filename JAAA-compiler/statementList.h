@@ -7,8 +7,9 @@
 #include "text.h"
 
 enum STATEMENT_TYPE { UNDEFINED = 0, DECLARATION, ASIGNATION, CONST_DECLARATION,
-								PRINT, CONDITION_BLOCK, LOOP_BLOCK, EXIT_STATEMENT};
-enum CONDITIONAL_TYPE { UNDEFINED_TYPE = 0, IF_TYPE, IF_ELSE_TYPE, ELSE_IF_TYPE,
+								PRINT, CONDITION_BLOCK, LOOP_BLOCK, EXIT_STATEMENT,
+								READ_STATEMENT, DECLARE_READ_STATEMENT};
+enum CONDITIONAL_TYPE {UNDEFINED_TYPE = 0, IF_TYPE, IF_ELSE_TYPE, ELSE_IF_TYPE,
 													ELSE_IF_ELSE_TYPE, ELSE_TYPE};
 enum LOOP_TYPE { WHILE_TYPE, DO_WHILE_TYPE, UNTIL_TYPE, DO_UNTIL_TYPE};
 
@@ -36,7 +37,10 @@ sList createConstDeclareStatement(Node n, Node expression);
 sList createConditionalStatement();
 sList createExitStatement();
 sList createLoopStatement();
+sList createReadStatement(Node assing, Node var);
+sList createReadDeclareStatement(Node assing, Node var);
 sList createPrintStatement();
+
 void printList(sList l);
 void generateConstDeclaration(sList l);
 void generateDeclaration(sList l);
@@ -47,6 +51,8 @@ void generateCodeStart();
 void generateCodeEnd();
 void generateConditionBlockCode(sList l);
 void generateLoopBlockCode(sList l);
+void generateReadStatement(sList l);
+void genearteDeclareString(Node n);
 void generatePrintCode(sList l);
 
 //expressions

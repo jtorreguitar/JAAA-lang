@@ -50,6 +50,14 @@
 	return PRINT_TEXT_NEW_LINE;
 }
 
+"read" {
+	return READ_TEXT;
+}
+
+"characters" {
+	return CHAR;
+}
+
 "if" {
 	return IF;
 }
