@@ -487,6 +487,19 @@ void freeMemory(sList l) {
 }
 
 static void freeNode(Node n) {
+	// if(n == NULL) {
+	// 	return;
+	// }
+
+	// if(n->name != NULL) {
+	// 	free(n->name);
+	// }
+
+	// if(n->value != NULL) {
+	// 	free(n->name);
+	// }
+
+	// free(n);
 	return;
 }
 

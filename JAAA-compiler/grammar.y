@@ -162,46 +162,94 @@ statement: NAME '=' expression
 expression: expression '+' expression
 				{
 					//$$ = binaryOperation($1, $3, addition); interpreter mode
+					if($1->type == string || $3->type == string) {
+				    	yyerror("Cannot apply '+' to string type");
+				    }
+					
 					$$ = buildBinaryExpression($1, $3, addition);
-					//printf("expression = %s\n", $$->name); evans
+					
+					if($1->type == floating || $3->type ==floating) {
+						$$->type = floating;
+					}
+					else {
+						$$->type = integer;
+					}
 				}
 		  | expression '-' expression
 		  		{
 		  			//$$ = binaryOperation($1, $3, subtraction); interpreter mode
+		  			if($1->type == string || $3->type == string) {
+				    	yyerror("Cannot apply '-' to string type");
+				    }
+		  			
 		  			$$ = buildBinaryExpression($1, $3, subtraction);
-		  			//printf("expression = %s\n", $$->name); evans
-
+		  			
+		  			if($1->type == floating || $3->type ==floating) {
+						$$->type = floating;
+					}
+					else {
+						$$->type = integer;
+					}
 
 		  		}
 		  | expression '*' expression
 		  		{
 		  			//$$ = binaryOperation($1, $3, multiplication); interpreter mode
+		  			if($1->type == string || $3->type == string) {
+				    	yyerror("Cannot apply '*' to string type");
+				    }
+		  			
 		  			$$ = buildBinaryExpression($1, $3, multiplication);
-		  			//printf("expression = %s\n", $$->name); evans
+		  			
+		  			if($1->type == floating || $3->type ==floating) {
+						$$->type = floating;
+					}
+					else {
+						$$->type = integer;
+					}
 		  		}
 		  | expression '/' expression
 				{
 					//$$ = binaryOperation($1, $3, division); interpreter mode
+					if($1->type == string || $3->type == string) {
+				    	yyerror("Cannot apply '/' to string type");
+				    }
+					
 					$$ = buildBinaryExpression($1, $3, division);
-					//printf("expression = %s\n", $$->name); evans
+					
+					if($1->type == floating || $3->type ==floating) {
+						$$->type = floating;
+					}
+					else {
+						$$->type = integer;
+					}
 				}
 		  | '-' expression %prec UMINUS
 		  		{
 		  			//$$ = UMinusByType($2); interpreter mode
+		  			if($2->type == string) {
+				    	yyerror("Cannot apply '-' to string type");
+				    }
+		  			
 		  			$$ = buildMinusExpression($2);
-		  			//printf("expression = %s\n", $$->name); evans
+		  			$$->type = $2->type;
 		  		}
 		  | '(' expression ')'
 		  		{
 		  			//$$ = $2; interpreter mode
+		  			if($2->type == string) {
+				    	yyerror("string type cannot be between parenthesis");
+				    }
+		  			
 		  			$$ = buildParenthesisExpression($2);
-		  			//printf("expression = %s\n", $$->name); evans
+		  			$$->type = $2->type;
+
 		  		}
 		  | expression '<' expression
 				{
 					//$$ = relationalOperation($1, $3, LESSTHAN); interpreter mode
 					$$ = buildRelationalExpression($1, $3, LESSTHAN);
-					//printf("expression = %s\n", $$->name); evans
+					$$->type = boolean;
 
 
 				}
@@ -209,50 +257,65 @@ expression: expression '+' expression
 		  		{
 					//$$ = relationalOperation($1, $3, LESSTHANOREQUALTO); interpreter
 					$$ = buildRelationalExpression($1, $3, LESSTHANOREQUALTO);
-					//printf("expression = %s\n", $$->name); evans
+					$$->type = boolean;
 				}
 		  | expression '>' expression
 		  		{
 					//$$ = relationalOperation($1, $3, GREATERTHAN); interpreter mode
 					$$ = buildRelationalExpression($1, $3, GREATERTHAN);
-					//printf("expression = %s\n", $$->name); evans
+					$$->type = boolean;
 
 				}
 		  | expression GTOET expression
 		  		{
 					//$$ = relationalOperation($1, $3, GREATERTHANOREQUALTO);interpreter
 					$$ = buildRelationalExpression($1, $3, GREATERTHANOREQUALTO);
-					//printf("expression = %s\n", $$->name);evans
+					$$->type = boolean;
 				}
 		  | expression ET expression
 		  		{
 					//$$ = relationalOperation($1, $3, EQUALTO); interpreter mode
 					$$ = buildRelationalExpression($1, $3, EQUALTO);
-					//printf("expression = %s\n", $$->name); evans
+					$$->type = boolean;
 				}
 		  | expression NET expression
 		  		{
 					//$$ = relationalOperation($1, $3, NOTEQUALTO); interpreter mode
 					$$ = buildRelationalExpression($1, $3, NOTEQUALTO);
+					$$->type = boolean;
 					//printf("expression = %s\n", $$->name); evans
 				}
 		  | expression AND expression
 		  		{
 					//$$ = logicalOperation($1, $3, and); interpreter mode
+					if($1->type == string || $3->type == string) {
+				    	yyerror("string type cannot be on a logical expression");
+				    }
+					
 					$$ = buildLogicalExpression($1, $3, and);
-					//printf("expression = %s\n", $$->name);evans
+					$$->type = boolean;
 				}
 		  | expression OR expression
 		  		{
 					//$$ = logicalOperation($1, $3, or); interpreter mode
+					if($1->type == string || $3->type == string) {
+				    	yyerror("string type cannot be on a logical expression");
+				    }
+					
 					$$ = buildLogicalExpression($1, $3, or);
-					//printf("expression = %s\n", $$->name); evans
+					$$->type = boolean;
+
 				}
 		  | NOT expression
 		  		{
 				    //$$ = logicalOperation($2, NULL, not); interpreter mode
+				    
+				    if($2->type == string) {
+				    	yyerror("string type cannot be on a logical expression");
+				    }
+				 	
 				 	$$ = buildNotExpression($2);
-					//printf("name3= %s", $$->name); evans
+				 	$$->type = boolean;
 				}
 		  | FLOAT
 		  		{
@@ -437,12 +500,15 @@ else_block: ELSE IF expression DO statement_list END
 
 readExpression: READ_TEXT ';'
 				{
+					printf("llego\n");
 					int i = 1;
 					Node n = newNode(NULL, integer, &i, 0);
 					$$ = n;
 				}
 			| READ_TEXT NAME CHAR ';'
 				{
+					printf("llego a read_text name char\n");
+
 					Node var = (Node) getL(symbolList, $2->name);
 					if(var != 0)
 					{
