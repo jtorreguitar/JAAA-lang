@@ -387,5 +387,5 @@ void buildJavaReadExpression(Node length, char* varName) {
 	if(varName != NULL) {
 		printf("%s +=", varName);
 	}
-	printf("System.in.read();}catch(IOException e){System.out.println(\"Error reading from user\");System.exit(0);}");
+	printf("System.in.read();}}catch(IOException e){System.out.println(\"Error reading from user\");System.exit(0);}");
 }

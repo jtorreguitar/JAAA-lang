@@ -449,7 +449,7 @@ void genearteDeclareString(Node n) {
 		createDeclareString(n);
 	}
 	else if(language == JAVA) {
-		printf("String %s;\n", n->name);
+		printf("String %s;", n->name);
 	}
 	else {
 		fprintf(stderr, "unsupported language\n");
