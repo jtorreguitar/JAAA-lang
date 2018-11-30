@@ -8,3 +8,5 @@ compiler:
 	$(GCC) -o compiler lex.yy.c y.tab.c $(CSOURCES) -ly -ll $(GCCFLAGS)
 clean:
 	rm compiler y.tab.c y.tab.h lex.yy.c
+.PHONY:
+	clean
