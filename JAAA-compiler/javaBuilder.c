@@ -377,6 +377,9 @@ Node buildJavaParenthesisExpression(Node n) {
 }
 
 void buildJavaReadExpression(Node length, char* varName) {
+	if(varName != NULL) {
+		printf("%s = \"\";", varName);
+	}
 	printf("try {for(int i=0; i<");
 	if(length->name != NULL) {
 		printf("%s", length->name);
