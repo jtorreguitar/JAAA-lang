@@ -180,9 +180,9 @@ void generateCPrintCode(sList l) {
 		while(vars > 0) {
 			text = printVariables(text, &vars);
 		}
-		
+
 		printf(");");
-		
+
 	}
 	else {
 		if(l->text->type == ONE_LINE) {
@@ -435,28 +435,22 @@ Node buildCParenthesisExpression(Node n) {
 void buildCReadExpression(Node length, char* varName) {
 	if(varName != NULL) {
 		printf("%s = malloc(sizeof(char) * %d);", varName, *((int *)length->value) + 1);
-		printf("if(%s == NULL){", length->name);
+		printf("if(%s == NULL){", varName);
 		printf("fprintf(stderr,\"Cannot allocate memory\");exit(1);}");
-		printf("read(0,%s,", varName);
-		if(length->name != NULL) {
-			printf("%s", length->name);
-		}
-		else {
-			printf("%d", *((int *)length->value));
-		}
-		printf(");");
-		printf("%s[%d] = 0;", varName, *((int *)length->value));
+	}
+	printf("for(int i=0; i<");
+	if(length->name != NULL) {
+		printf("%s", length->name);
 	}
 	else {
-		printf("for(int i=0; i<");
-		if(length->name != NULL) {
-			printf("%s", length->name);
-		}
-		else {
-			printf("%d", *((int *)length->value));
-		}
-		printf("; i++){getChar();}");
+		printf("%d", *((int *)length->value));
 	}
+	printf("; i++){");
+	if(varName != NULL) {
+		printf("%s[i]=", varName);
+	}
+	printf("getchar();}");
+	printf("%s[%d] = 0;", varName, *((int *)length->value));
 }
 
 void createDeclareString(Node n) {
