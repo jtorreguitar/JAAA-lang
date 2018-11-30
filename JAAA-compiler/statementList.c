@@ -2,6 +2,11 @@
 #include "cBuilder.h"
 #include "javaBuilder.h"
 
+static void freeNode(Node n);
+static void freeTextList(textToPrint text);
+
+
+
 int language = C;
 int scope = 0;
 
@@ -145,8 +150,10 @@ void printList(sList l) {
 			case PRINT:
 				generatePrintCode(l);
 				break;
+
 			case DECLARE_READ_STATEMENT:
 				genearteDeclareString(l->second);
+
 			case READ_STATEMENT:
 				generateReadStatement(l);
 				break;
@@ -448,4 +455,41 @@ void genearteDeclareString(Node n) {
 		fprintf(stderr, "unsupported language\n");
 
 	}
+}
+
+void freeMemory(sList l) {
+	sList aux;
+
+	while(l != NULL) {
+		aux = l;
+		freeMemory(aux->block);
+		freeMemory(aux->elseBlock);
+		
+		if(aux->condition != NULL) {
+			free(aux->condition);
+		}
+
+		if(aux->node != NULL) {
+			freeNode(aux->node);
+		}
+
+		if(aux->second != NULL) {
+			freeNode(aux->second);
+		}
+
+		if(aux->text != NULL) {
+			freeTextList(aux->text);
+		}
+
+		l = l->next;
+		free(aux);
+	}
+}
+
+static void freeNode(Node n) {
+	return;
+}
+
+static void freeTextList(textToPrint text) {
+	return;
 }

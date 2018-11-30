@@ -54,6 +54,7 @@ void generateLoopBlockCode(sList l);
 void generateReadStatement(sList l);
 void genearteDeclareString(Node n);
 void generatePrintCode(sList l);
+void freeMemory(sList l);
 
 //expressions
 Node buildBooleanExpression(Node n);

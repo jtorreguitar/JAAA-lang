@@ -78,6 +78,7 @@ void generateCExitCode() {
 
 void generateCCodeStart() {
 	printf("#include <stdio.h>\n#include<stdlib.h>\n#include<string.h>\n");
+	printf("#include <unistd.h>\n");
 	printf("int main(void) {");
 }
 
