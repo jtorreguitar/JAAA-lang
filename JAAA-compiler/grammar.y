@@ -501,15 +501,12 @@ else_block: ELSE IF expression DO statement_list END
 
 readExpression: READ_TEXT ';'
 				{
-					printf("llego\n");
 					int i = 1;
 					Node n = newNode(NULL, integer, &i, 0);
 					$$ = n;
 				}
 			| READ_TEXT NAME CHAR ';'
 				{
-					printf("llego a read_text name char\n");
-
 					Node var = (Node) getL(symbolList, $2->name);
 					if(var != 0)
 					{

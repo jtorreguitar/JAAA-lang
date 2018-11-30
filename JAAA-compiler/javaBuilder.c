@@ -63,6 +63,7 @@ void generateJavaExitCode() {
 
 void generateJavaCodeStart() {
 	printf("import java.util.*;\nimport java.lang.*;\n");
+	printf("import java.io.*;\n");
 	printf("public class Main {\n");
 	printf("public static void main(String args[]) {\n");
 }
