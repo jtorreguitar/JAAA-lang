@@ -14,6 +14,7 @@ struct node
 	void* value;
 	int dataSize;
 	int constant;
+	int loopType;
 };
 
 typedef struct node node;

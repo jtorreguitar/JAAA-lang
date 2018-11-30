@@ -27,9 +27,11 @@
 %token <n> STRING
 %token <n> BOOL
 %token <n> WHILE
+%token <n> UNTIL
 %token <n> DO
 %token <n> LOOP
 %token CONST LTOET GTOET ET NET AND OR NOT VOIDEXPR EXIT IF END ELSE PRINT_TEXT READ_TEXT CHAR
+%token PRINT_TEXT_NEW_LINE
 %left AND OR NOT
 %left '<' LTOET '>' GTOET
 %left ET NET
@@ -40,12 +42,14 @@
 %type <l> statement_list
 %type <l> statement
 %type <l> while_loop
+%type <l> do_loop_statement
+%type <n> final_condition
 %type <l> conditional
 %type <l> else_block
-%type <n> text
-%type <printedString> printExpression
 %type <n> readExpression
 %type <n> lengthRead
+%type <printedString> text
+%type <printedString> printExpression
 %%
 
 statement_list: statement
@@ -118,7 +122,11 @@ statement: NAME '=' expression
 						$$ = createConstDeclareStatement(var, $4);
 					}
 				}
-		 | printExpression {$$ = newList();}
+		 | printExpression
+		 	{
+		 		$$ = createPrintStatement();
+		 		$$->text = $1;
+		 	}
 		 | conditional
 		 | exit_statement {$$ = createExitStatement();}
 		 | while_loop
@@ -286,45 +294,98 @@ expression: expression '+' expression
 
 printExpression: PRINT_TEXT text ';'
 					{
-						printf("in text\n"); //TODO
+						$$ = $2;
+						$$->type = ONE_LINE;
 					}
-				//| PRINTLN
-				//	{
-				//		//printf("%s\n", $1); TODO
-				//	}
+				| PRINT_TEXT_NEW_LINE text ';'
+					{
+						$$ = $2;
+						$$->type = NEW_LINE;
+					}
 				;
 
-	text:	STRING text
+	text:	STRING ',' text
 				{
-					$$ = $1;
-					printf("string text\n");
+					$$ = newTextToPrint();
+					textNode n = createNode(NULL, $1->value, $1->dataSize, 0);
+					$$ = addNode($$, n);
+					$$ = concatenate($$, $3);
+					//printf("string text\n");// evans
 				}
-			| NAME text
+			| NAME ',' text
 				{
-					$$ = $1;
-					printf("name text\n");
+					$$ = newTextToPrint();
+					Node var = (Node) getL(symbolList, $1->name);
+
+					if(var == NULL) {
+						yyerror("Can't print undefined variable");
+					}
+
+					textNode n = createNode(var->name, NULL, 0, var->type);
+					$$ = addNode($$, n);
+					$$ = concatenate($$, $3);
+					//printf("name text\n");// evans
 				}
 			| STRING
 				{
-					$$ = $1;
-					printf("string1\n");
-
+					$$ = newTextToPrint();
+					textNode n = createNode(NULL, $1->value, $1->dataSize, 0);
+					$$ = addNode($$, n);
+					//printf("string1\n");//evans
 				}
 			| NAME
 				{
-					$$ = $1;
-					printf("name1\n");
+					$$ = newTextToPrint();
+					Node var = (Node) getL(symbolList, $1->name);
+
+					if(var == NULL) {
+						yyerror("Can't print undefined variable");
+					}
+					textNode n = createNode(var->name, NULL, 0, var->type);
+					$$ = addNode($$, n);
+					//printf("name1\n");// evans
 				}
 			;
 
 while_loop: WHILE expression DO statement_list LOOP
 			{
-				$$ = createLoopStatement();
-				$$->condition = $2->name;
-				$$->block = $4;
-				/* printf("while(expression) {statement;}"); */
+				$$ 				= createLoopStatement();
+				$$->condition 	= $2->name;
+				$$->block 		= $4;
+				$$->loopType 	= WHILE_TYPE;
 			}
+			| UNTIL expression DO statement_list LOOP
+				{
+					$$ 				= createLoopStatement();
+					$$->condition 	= $2->name;
+					$$->block 		= $4;
+					$$->loopType 	= UNTIL_TYPE;
+				}
+			| do_loop_statement
+
 			;
+
+do_loop_statement: DO statement_list LOOP final_condition
+					{
+						$$ 				= createLoopStatement();
+						$$->condition 	= $4->name;
+						$$->block 		= $2;
+						$$->loopType 	= $4->loopType;
+
+					}
+
+final_condition: WHILE expression
+					{
+						$$			  = $2;
+						$$->loopType  = DO_WHILE_TYPE;
+					}
+				| UNTIL expression
+					{
+						$$			  = $2;
+						$$->loopType  = DO_UNTIL_TYPE;
+					}
+				;
+
 
 exit_statement: EXIT;
 
@@ -409,7 +470,7 @@ int main(int argc, char **argv)
 {
 	if(argc == 2) {
 		if(strcmp(argv[1], "-b") == 0) {
-			printf("language set to JAVA\n");
+			//printf("language set to JAVA\n");
 			setLanguage(JAVA);
 		}
 	}
@@ -420,4 +481,5 @@ int main(int argc, char **argv)
 
 	printList(first);
 	generateCodeEnd();
+	//freeMemory();
 }

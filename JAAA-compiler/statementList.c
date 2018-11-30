@@ -3,6 +3,7 @@
 #include "javaBuilder.h"
 
 int language = C;
+int scope = 0;
 
 sList newList() {
 	sList l = malloc(sizeof(*l));
@@ -20,6 +21,7 @@ sList newList() {
 	l->condition 		= NULL;
 	l->node 			= NULL;
 	l->second 			= NULL;
+	l->text				= NULL;
 
 	return l;
 }
@@ -82,6 +84,12 @@ sList createReadDeclareStatement(Node assing, Node var) {
 	return l;
 }
 
+sList createPrintStatement() {
+	sList l = newList();
+	l->type = PRINT;
+	return l;
+}
+
 void printList(sList l) {
 	if(l == NULL) {
 		return;
@@ -94,38 +102,48 @@ void printList(sList l) {
 			break;
 
 			case CONDITION_BLOCK:
-
+				scope++;
 				generateConditionBlockCode(l);
 				//printf("if condition=%s\n", l->condition);
+				scope--;
 				break;
 
 			case CONST_DECLARATION:
+
+				if(scope > 0) {
+					fprintf(stderr, "Cannot declare a constant inside a inner block\n");
+				}
+
 				generateConstDeclaration(l);
 				//printf("const declaration\n"); evans
 				break;
 
 			case DECLARATION:
+
+				if(scope > 0) {
+					fprintf(stderr, "Cannot declare a variable inside a inner block\n");
+				}
+
 				generateDeclaration(l);
 				//printf("declaration\n");evans
 				break;
 
 			case ASIGNATION:
 				generateAsignation(l);
-				//printf("asignation\n");
 				break;
 
 			case LOOP_BLOCK:
+				scope++;
 				generateLoopBlockCode(l);
-				printf("while\n");
+				scope--;
 				break;
 
 			case EXIT_STATEMENT:
 				generateExitCode();
-				//printf("exit statement\n");
 				break;
 
 			case PRINT:
-				printf("print\n");
+				generatePrintCode(l);
 				break;
 			case DECLARE_READ_STATEMENT:
 				genearteDeclareString(l->second);
@@ -224,7 +242,7 @@ void generateConditionBlockCode(sList l) {
 		generateCConditionBlock(l);
 	}
 	else if(language == JAVA) {
-		fprintf(stderr, "java on development\n");
+		generateJavaConditionBlock(l);
 	}
 	else {
 		fprintf(stderr, "unsupported language\n");
@@ -237,7 +255,20 @@ void generateLoopBlockCode(sList l) {
 		generateCLoopBlock(l);
 	}
 	else if(language == JAVA) {
-		fprintf(stderr, "java on development\n");
+		generateJavaLoopBlock(l);
+	}
+	else {
+		fprintf(stderr, "unsupported language\n");
+
+	}
+}
+
+void generatePrintCode(sList l) {
+	if(language == C) {
+		generateCPrintCode(l);
+	}
+	else if(language == JAVA) {
+		generateJavaPrintCode(l);
 	}
 	else {
 		fprintf(stderr, "unsupported language\n");
@@ -250,11 +281,12 @@ Node buildBooleanExpression(Node n) {
 		return buildCBooleanExpression(n);
 	}
 	else if(language == JAVA) {
-		fprintf(stderr, "java on development\n");
+		return buildJavaBooleanExpression(n);
 	}
 	else {
 		fprintf(stderr, "unsupported language\n");
 	}
+
 	exit(1);
 }
 
@@ -263,11 +295,12 @@ Node buildStringExpression(Node n) {
 		return buildCStringExpression(n);
 	}
 	else if(language == JAVA) {
-		fprintf(stderr, "java on development\n");
+		return buildJavaStringExpression(n);
 	}
 	else {
 		fprintf(stderr, "unsupported language\n");
 	}
+
 	exit(1);
 }
 
@@ -276,11 +309,12 @@ Node buildIntegerExpression(Node n) {
 		return buildCIntegerExpression(n);
 	}
 	else if(language == JAVA) {
-		fprintf(stderr, "java on development\n");
+		return buildJavaIntegerExpression(n);
 	}
 	else {
 		fprintf(stderr, "unsupported language\n");
 	}
+
 	exit(1);
 }
 
@@ -289,11 +323,12 @@ Node buildFloatExpression(Node n) {
 		return buildCFloatExpression(n);
 	}
 	else if(language == JAVA) {
-		fprintf(stderr, "java on development\n");
+		return buildJavaFloatExpression(n);
 	}
 	else {
 		fprintf(stderr, "unsupported language\n");
 	}
+
 	exit(1);
 
 }
@@ -303,12 +338,13 @@ Node buildNotExpression(Node n) {
 		return buildCNotExpression(n);
 	}
 	else if(language == JAVA) {
-		fprintf(stderr, "java on development\n");
+		return buildJavaNotExpression(n);
 	}
 	else {
 		fprintf(stderr, "unsupported language\n");
 
 	}
+
 	exit(1);
 
 }
@@ -318,12 +354,13 @@ Node buildMinusExpression(Node n) {
 		return buildCMinusExpression(n);
 	}
 	else if(language == JAVA) {
-		fprintf(stderr, "java on development\n");
+		return buildJavaMinusExpression(n);
 	}
 	else {
 		fprintf(stderr, "unsupported language\n");
 
 	}
+
 	exit(1);
 
 }
@@ -333,7 +370,7 @@ Node buildBinaryExpression(Node first, Node second, int operator) {
 		return buildCBinaryExpression(first, second, operator);
 	}
 	else if(language == JAVA) {
-		fprintf(stderr, "java on development\n");
+		return buildJavaBinaryExpression(first, second, operator);
 	}
 	else {
 		fprintf(stderr, "unsupported language\n");
@@ -347,12 +384,13 @@ Node buildRelationalExpression(Node first, Node second, int operator) {
 		return buildCRelationalExpression(first, second, operator);
 	}
 	else if(language == JAVA) {
-		fprintf(stderr, "java on development\n");
+		return buildJavaRelationalExpression(first, second, operator);
 	}
 	else {
 		fprintf(stderr, "unsupported language\n");
 
 	}
+
 	exit(1);
 }
 
@@ -361,12 +399,13 @@ Node buildLogicalExpression(Node first, Node second, int operator) {
 		return buildCLogicalExpression(first, second, operator);
 	}
 	else if(language == JAVA) {
-		fprintf(stderr, "java on development\n");
+		return buildJavaLogicalExpression(first, second, operator);
 	}
 	else {
 		fprintf(stderr, "unsupported language\n");
 
 	}
+
 	exit(1);
 }
 
@@ -375,12 +414,13 @@ Node buildParenthesisExpression(Node n) {
 		return buildCParenthesisExpression(n);
 	}
 	else if(language == JAVA) {
-		fprintf(stderr, "java on development\n");
+		return buildJavaParenthesisExpression(n);
 	}
 	else {
 		fprintf(stderr, "unsupported language\n");
 
 	}
+
 	exit(1);
 }
 

@@ -42,7 +42,13 @@
 	return EXIT;
 }
 
-"print" { return PRINT_TEXT;}
+"print" {
+	return PRINT_TEXT;
+}
+
+"println" {
+	return PRINT_TEXT_NEW_LINE;
+}
 
 "read" {
 	return READ_TEXT;
@@ -61,10 +67,6 @@
 }
 
 "end" {
-	return END;
-}
-
-"done" {
 	return END;
 }
 
@@ -122,6 +124,10 @@
 
 "while" {
 	return WHILE;
+}
+
+"until" {
+	return UNTIL;
 }
 
 "do" {

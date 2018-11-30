@@ -1,8 +1,8 @@
-#include "cBuilder.h"
+#include "javaBuilder.h"
 #include <stdio.h>
 #include <string.h>
 
-void createCVar(int type, char *name, struct node *expression) {
+void createJavaVar(int type, char *name, struct node *expression) {
 	switch(type) {
 		case integer:
 		case boolean:
@@ -14,17 +14,12 @@ void createCVar(int type, char *name, struct node *expression) {
 			break;
 
 		case string:
-			printf("char *%s = malloc(sizeof(char) * %d);", name,
-												expression->dataSize);
-			printf("if(%s == NULL){", name);
-			printf("fprintf(stderr,\"Cannot allocate memory\");exit(1);}");
-			printf("memcpy(%s, \"%s\", %d);", name, (char *)expression->value,
-														expression->dataSize);
+			printf("String %s = %s;", name, (char *)expression->value);
 			break;
 	}
 }
 
-void assignCVar(struct node *var, struct node *newValue) {
+void assignJavaVar(struct node *var, struct node *newValue) {
 	switch(var->type) {
 		case integer:
 		case boolean:
@@ -36,53 +31,47 @@ void assignCVar(struct node *var, struct node *newValue) {
 			break;
 
 		case string:
-			if(var->dataSize < newValue->dataSize) {
-				printf("%s = realloc(%s, sizeof(char) * %d);", var->name,
-											var->name, newValue->dataSize);
-				printf("if(%s == NULL){", var->name);
-				printf("fprintf(stderr,\"Cannot allocate memory\");exit(1);}");
-			}
-
-			printf("memcpy(%s, \"%s\", %d);", var->name, (char *)newValue->value,
-																newValue->dataSize);
-
+			printf("%s = %s;", var->name, (char *)newValue->value);
 			break;
 	}
 }
 
-void createConstantCVar(int type, char *name, struct node *expression) {
+void createConstantJavaVar(int type, char *name, struct node *expression) {
 	switch(type) {
 		case integer:
+			printf("private static final int %s = %s;", name, expression->name);
+
 		case boolean:
-			printf("const int %s = %s;", name, expression->name);
+			printf("private static final boolean %s = %s;", name, expression->name);
 			break;
 
 		case floating:
-			printf("const double %s = %s;", name, expression->name);
+			printf("private static final double %s = %s;", name, expression->name);
 			break;
 
 		case string:
-			printf("const char *%s = %s);", name, expression->name);
-
+			printf("private static final String %s = %s);", name, expression->name);
+		
 			break;
 	}
 
 }
 
-void generateCExitCode() {
-	printf("exit(0);");
+void generateJavaExitCode() {
+	printf("System.exit(0);");
 }
 
-void generateCCodeStart() {
-	printf("#include <stdio.h>\n#include<stdlib.h>\n#include<string.h>\n");
-	printf("int main(void) {");
+void generateJavaCodeStart() {
+	printf("import java.util.*;\nimport java.lang.*;\n");
+	printf("public class Main {\n");
+	printf("public static void main(String args[]) {\n");
 }
 
-void generateCCodeEnd() {
-	printf("return 0;}");
+void generateJavaCodeEnd() {
+	printf("}}");
 }
 
-void generateCConditionBlock(sList l) {
+void generateJavaConditionBlock(sList l) {
 
 	switch(l->conditionType) {
 		case IF_TYPE:
@@ -122,13 +111,68 @@ void generateCConditionBlock(sList l) {
 	}
 }
 
-void generateCLoopBlock(sList l) {
-	printf("while( %s ) {", l->condition);
-	printList(l->block);
-	printf("} ");
+void generateJavaLoopBlock(sList l) {
+
+	switch(l->loopType) {
+		case WHILE_TYPE:
+			printf("while( %s ) {", l->condition);
+			printList(l->block);
+			printf("} ");
+			break;
+
+		case DO_WHILE_TYPE:
+			printf("do {");
+			printList(l->block);
+			printf("} while( %s ); ", l->condition);
+			break;
+
+		case UNTIL_TYPE:
+			printf("while( !(%s) ) {", l->condition);
+			printList(l->block);
+			printf("} ");
+			break;
+
+		case DO_UNTIL_TYPE:
+			printf("do {");
+			printList(l->block);
+			printf("} while( !(%s) ); ", l->condition);
+			break;
+
+		default:
+			break;
+	}
 }
 
-Node buildCBooleanExpression(Node n) {
+
+void generateJavaPrintCode(sList l) {
+	textNode text = l->text->first;
+	textNode aux = text;
+	if(l->text->type == ONE_LINE) {
+		printf("System.out.print(");
+	}
+	else {
+		printf("System.out.println(");
+	}
+
+	while(aux != NULL) {
+		
+		if(aux->type == TEXT) {
+			printf("\"%s\"", aux->value);
+		}
+		else {
+			printf("\"\" + %s", aux->value);
+		}
+
+		aux = aux->next;
+		
+		if(aux != NULL) {
+			printf(" + \" \" + ");
+		}
+	}
+	printf(");");
+}
+
+Node buildJavaBooleanExpression(Node n) {
 	n->name = calloc(2, sizeof(char));
 	if(n->name == NULL) {
 		fprintf(stderr, "Cannot allocate memory\n");
@@ -145,7 +189,7 @@ Node buildCBooleanExpression(Node n) {
 	return n;
 }
 
-Node buildCStringExpression(Node n) {
+Node buildJavaStringExpression(Node n) {
 	n->name = calloc(n->dataSize, sizeof(char));
 	if(n->name == NULL) {
 		fprintf(stderr, "Cannot allocate memory\n");
@@ -156,7 +200,7 @@ Node buildCStringExpression(Node n) {
 	return n;
 }
 
-Node buildCIntegerExpression(Node n) {
+Node buildJavaIntegerExpression(Node n) {
 	n->name = calloc(MAX_NUMBER_LENGTH, sizeof(char));
 
 	if(n->name == NULL) {
@@ -168,7 +212,7 @@ Node buildCIntegerExpression(Node n) {
 	return n;
 }
 
-Node buildCFloatExpression(Node n) {
+Node buildJavaFloatExpression(Node n) {
 	n->name = calloc(MAX_NUMBER_LENGTH, sizeof(char));
 
 	if(n->name == NULL) {
@@ -180,7 +224,7 @@ Node buildCFloatExpression(Node n) {
 	return n;
 }
 
-Node buildCNotExpression(Node n) {
+Node buildJavaNotExpression(Node n) {
 	Node newNode = clone(n);
 	newNode->name = calloc(strlen(n->name) + 2, sizeof(char));
 
@@ -197,7 +241,7 @@ Node buildCNotExpression(Node n) {
 	return newNode;
 }
 
-Node buildCMinusExpression(Node n) {
+Node buildJavaMinusExpression(Node n) {
 	Node newNode = clone(n);
 	newNode->name = calloc(strlen(n->name) + 2, sizeof(char));
 
@@ -214,8 +258,7 @@ Node buildCMinusExpression(Node n) {
 	return newNode;
 }
 
-
-Node buildCBinaryExpression(Node first, Node second, int operator) {
+Node buildJavaBinaryExpression(Node first, Node second, int operator) {
 	Node newNode = clone(first);
 	int length = strlen(first->name) + 1 + strlen(second->name) + 1 +2;
 	newNode->name = calloc(length, sizeof(char));
@@ -248,7 +291,7 @@ Node buildCBinaryExpression(Node first, Node second, int operator) {
 	return newNode;
 }
 
-Node buildCRelationalExpression(Node first, Node second, int operator) {
+Node buildJavaRelationalExpression(Node first, Node second, int operator) {
 	Node newNode = clone(first);
 	int length = strlen(first->name) + 1 + strlen(second->name) + 1 + 3;
 	newNode->name = calloc(length, sizeof(char));
@@ -287,7 +330,7 @@ Node buildCRelationalExpression(Node first, Node second, int operator) {
 	return newNode;
 }
 
-Node buildCLogicalExpression(Node first, Node second, int operator) {
+Node buildJavaLogicalExpression(Node first, Node second, int operator) {
 	Node newNode = clone(first);
 	int length = strlen(first->name) + 1 + strlen(second->name) + 1 + 3;
 	newNode->name = calloc(length, sizeof(char));
@@ -314,7 +357,7 @@ Node buildCLogicalExpression(Node first, Node second, int operator) {
 	return newNode;
 }
 
-Node buildCParenthesisExpression(Node n) {
+Node buildJavaParenthesisExpression(Node n) {
 	Node newNode = clone(n);
 	newNode->name = calloc(strlen(n->name) + 3, sizeof(char));
 
@@ -330,35 +373,4 @@ Node buildCParenthesisExpression(Node n) {
 	//free(n);
 	return newNode;
 
-}
-
-void buildCReadExpression(Node length, char* varName) {
-	if(varName != NULL) {
-		printf("%s = malloc(sizeof(char) * %d);", varName, *((int *)length->value) + 1);
-		printf("if(%s == NULL){", length->name);
-		printf("fprintf(stderr,\"Cannot allocate memory\");exit(1);}");
-		printf("read(0,%s,", varName);
-		if(length->name != NULL) {
-			printf("%s", length->name);
-		}
-		else {
-			printf("%d", *((int *)length->value));
-		}
-		printf(");");
-		printf("%s[%d] = 0;", varName, *((int *)length->value));
-	}
-	else {
-		printf("for(int i=0; i<");
-		if(length->name != NULL) {
-			printf("%s", length->name);
-		}
-		else {
-			printf("%d", *((int *)length->value));
-		}
-		printf("; i++){getChar();}");
-	}
-}
-
-void createDeclareString(Node n) {
-	printf("char *%s = NULL;", n->name);
 }
