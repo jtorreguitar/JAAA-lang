@@ -436,7 +436,7 @@ void generateReadStatement(sList l) {
 		buildCReadExpression(l->node, l->second->name);
 	}
 	else if(language == JAVA) {
-		fprintf(stderr, "java on development\n");
+		buildJavaReadExpression(l->node, l->second->name);
 	}
 	else {
 		fprintf(stderr, "unsupported language\n");
@@ -449,7 +449,7 @@ void genearteDeclareString(Node n) {
 		createDeclareString(n);
 	}
 	else if(language == JAVA) {
-		fprintf(stderr, "java on development\n");
+		printf("String %s;\n", n->name);
 	}
 	else {
 		fprintf(stderr, "unsupported language\n");
@@ -464,7 +464,7 @@ void freeMemory(sList l) {
 		aux = l;
 		freeMemory(aux->block);
 		freeMemory(aux->elseBlock);
-		
+
 		if(aux->condition != NULL) {
 			free(aux->condition);
 		}

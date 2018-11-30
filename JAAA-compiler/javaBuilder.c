@@ -51,7 +51,7 @@ void createConstantJavaVar(int type, char *name, struct node *expression) {
 
 		case string:
 			printf("private static final String %s = %s);", name, expression->name);
-		
+
 			break;
 	}
 
@@ -155,7 +155,7 @@ void generateJavaPrintCode(sList l) {
 	}
 
 	while(aux != NULL) {
-		
+
 		if(aux->type == TEXT) {
 			printf("\"%s\"", aux->value);
 		}
@@ -164,7 +164,7 @@ void generateJavaPrintCode(sList l) {
 		}
 
 		aux = aux->next;
-		
+
 		if(aux != NULL) {
 			printf(" + \" \" + ");
 		}
@@ -373,4 +373,19 @@ Node buildJavaParenthesisExpression(Node n) {
 	//free(n);
 	return newNode;
 
+}
+
+void buildJavaReadExpression(Node length, char* varName) {
+	printf("try {for(int i=0; i<");
+	if(length->name != NULL) {
+		printf("%s", length->name);
+	}
+	else {
+		printf("%d", *((int *)length->value));
+	}
+	printf("; i++){");
+	if(varName != NULL) {
+		printf("%s +=", varName);
+	}
+	printf("System.in.read();}catch(IOException e){System.out.println(\"Error reading from user\");System.exit(0);}");
 }

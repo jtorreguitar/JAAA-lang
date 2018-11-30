@@ -17,6 +17,7 @@ void generateJavaCodeEnd();
 void generateJavaConditionBlock(sList l);
 void generateJavaLoopBlock(sList l);
 void generateJavaPrintCode(sList l);
+void buildJavaReadExpression(Node length, char* varName);
 
 // //expressions
 Node buildJavaBooleanExpression(Node n);
