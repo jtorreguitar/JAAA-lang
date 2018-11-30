@@ -47,7 +47,6 @@
 %type <l> conditional
 %type <l> else_block
 %type <n> readExpression
-%type <n> lengthRead
 %type <printedString> text
 %type <printedString> printExpression
 %%
