@@ -1,10 +1,18 @@
+print "reading 3 chars: ";
 x = read 3 characters;
-println "primer x:", x;
+println "chars read:", x;
+println "reading 1 char.";
 read;
+print "reading 1 char: ";
 x = read;
-println "segundo x:", x;
+print "char read: ", x;
+
+println "reading 3 chars.";
 read 3 characters;
+println "chars read: ", x;
+
 
 a = 3
+println "reading 3 last chars: ";
 x = read a characters;
-println "tercer x:", x;
+print "characters read: ", x;
