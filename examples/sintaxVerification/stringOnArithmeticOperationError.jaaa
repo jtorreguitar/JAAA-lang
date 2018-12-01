@@ -1,0 +1,3 @@
+if "string1" + "string2" do
+	println "This shouldn't work";
+end

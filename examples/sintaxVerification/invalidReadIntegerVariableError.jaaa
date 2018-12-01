@@ -1,0 +1,3 @@
+a = "string"
+
+b = read a characters;

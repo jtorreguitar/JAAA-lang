@@ -1,0 +1,6 @@
+string = "hello world"
+int = 10
+
+if string < int do
+	println "This shouldn't compile";
+end
