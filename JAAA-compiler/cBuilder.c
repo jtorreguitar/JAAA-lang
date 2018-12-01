@@ -379,7 +379,7 @@ Node buildCRelationalExpression(Node first, Node second, int operator) {
 			}
 
 			break;
-		
+
 		case LESSTHANOREQUALTO:
 			if(first->type == string) {
 				if(first->variable == 1 && second->variable == 1) {
@@ -398,9 +398,9 @@ Node buildCRelationalExpression(Node first, Node second, int operator) {
 			else {
 				sprintf(newNode->name, "%s <= %s", first->name, second->name);
 			}
-			
+
 			break;
-		
+
 		case GREATERTHAN:
 			if(first->type == string) {
 				if(first->variable == 1 && second->variable == 1) {
@@ -419,9 +419,9 @@ Node buildCRelationalExpression(Node first, Node second, int operator) {
 			else {
 				sprintf(newNode->name, "%s > %s", first->name, second->name);
 			}
-			
+
 			break;
-		
+
 		case GREATERTHANOREQUALTO:
 			if(first->type == string) {
 				if(first->variable == 1 && second->variable == 1) {
@@ -440,9 +440,9 @@ Node buildCRelationalExpression(Node first, Node second, int operator) {
 			else {
 				sprintf(newNode->name, "%s >= %s", first->name, second->name);
 			}
-			
+
 			break;
-		
+
 		case EQUALTO:
 			if(first->type == string) {
 				if(first->variable == 1 && second->variable == 1) {
@@ -463,7 +463,7 @@ Node buildCRelationalExpression(Node first, Node second, int operator) {
 			}
 
 			break;
-		
+
 		case NOTEQUALTO:
 			if(first->type == string) {
 				if(first->variable == 1 && second->variable == 1) {
@@ -482,7 +482,7 @@ Node buildCRelationalExpression(Node first, Node second, int operator) {
 			else {
 				sprintf(newNode->name, "%s != %s", first->name, second->name);
 			}
-			
+
 			break;
 	}
 
@@ -545,16 +545,16 @@ void buildCReadExpression(Node length, char* varName) {
 		printf("if(%s == NULL){", varName);
 		printf("fprintf(stderr,\"Cannot allocate memory\");exit(1);}");
 	}
-	printf("for(int i=0; i<");
+	printf("for(int I=0; I<");
 	if(length->name != NULL) {
 		printf("%s", length->name);
 	}
 	else {
 		printf("%d", *((int *)length->value));
 	}
-	printf("; i++){");
+	printf("; I++){");
 	if(varName != NULL) {
-		printf("%s[i]=", varName);
+		printf("%s[I]=", varName);
 	}
 	printf("getchar();}");
 	if(varName != NULL) {

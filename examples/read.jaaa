@@ -5,14 +5,12 @@ println "reading 1 char.";
 read;
 print "reading 1 char: ";
 x = read;
-print "char read: ", x;
+println "char read:", x;
 
 println "reading 3 chars.";
 read 3 characters;
-println "chars read: ", x;
-
 
 a = 3
 println "reading 3 last chars: ";
 x = read a characters;
-print "characters read: ", x;
+println "characters read: ", x;

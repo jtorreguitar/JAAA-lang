@@ -65,6 +65,12 @@ generate_c_code() {
 	file_name="${file_path##*/}"
 	file_name="$(echo $file_name| cut -d'.' -f 1)"
 	./compiler < ${file_path} > ${file_name}.c
+	
+	if [ $? -eq 1 ]
+	then
+		exit 1
+	fi
+
 	gcc -Wall -pedantic -std=c99 ${file_name}.c -o ${file_name}
 	rm ${file_name}.c
 	rm compiler
@@ -75,18 +81,24 @@ generate_java_executable() {
 	file_path=$1
 	file_name="${file_path##*/}"
 	file_name="$(echo $file_name| cut -d'.' -f 1)"
-	echo "cd JAAA-compiler" > ${file_name}
-	echo "java Main" >> ${file_name}
-	echo "cd .." >> ${file_name}
+	#echo "cd JAAA-compiler" > ${file_name}
+	echo "java Main" > ${file_name}
+	#echo "cd .." >> ${file_name}
 	chmod +x ${file_name}
 }
 
 generate_java_byte_code() {
 	./compiler -b < $1 > Main.java
+	
+	if [ $? -eq 1 ]
+	then
+		exit 1
+	fi
+	
 	javac Main.java
 	generate_java_executable $1
 	rm Main.java
-	mv Main.class ./JAAA-compiler
+	#mv Main.class ./JAAA-compiler
 }
 
 
