@@ -767,8 +767,8 @@ void toFloatingFromString(Node n, Node result)
 void toFloatingFromBoolean(Node n, Node result)
 {
 	int auxint = *(int*)n->value;
-	int auxdouble = (double) auxint;
-	memcpy(result->value, (void*)&auxdouble, sizeof(double));
+	int auxdouble = auxint;
+	memcpy(result->value, (void*)&auxdouble, sizeof(int));
 }
 
 Node toString(Node n)
