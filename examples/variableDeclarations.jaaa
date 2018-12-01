@@ -1,3 +1,5 @@
 number 	= 10
-a 		= 1
-b		= 69
+a 		= 1.0
+b		= "string"
+
+println number, a, b;

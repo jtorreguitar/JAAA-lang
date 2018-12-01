@@ -1,4 +1,5 @@
 a = 10
 if a < 15 do
+	println "if statement working fine";
 	a = 16
 end

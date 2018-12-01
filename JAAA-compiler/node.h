@@ -2,7 +2,7 @@
 #define NODE_H
 
 typedef enum type { integer = 0, floating, string, boolean } TYPE;
-typedef enum binaryOperator { addition = 0, subtraction, multiplication, division } BINARY_OPERATOR;
+typedef enum binaryOperator { addition = 0, subtraction, multiplication, division} BINARY_OPERATOR;
 typedef enum relationalOperator { LESSTHAN = 0, LESSTHANOREQUALTO, GREATERTHAN, GREATERTHANOREQUALTO,
 									EQUALTO, NOTEQUALTO } RELATIONAL_OPERATOR;
 typedef enum logicalOperator { and = 0, or, not } LOGICAL_OPERATOR;

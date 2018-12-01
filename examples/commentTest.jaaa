@@ -1,3 +1,4 @@
-a = 100
+a = "comments"
 //This is a JAAA comment
-b = 10
+b = "works!"
+println a, b;
