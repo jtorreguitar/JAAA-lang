@@ -71,7 +71,7 @@ generate_c_code() {
 		exit 1
 	fi
 
-	gcc -Wall -pedantic -std=c99 ${file_name}.c -o ${file_name}
+	gcc -Wall -pedantic -std=c99 ${file_name}.c -o ${file_name} 2>> /dev/null
 	rm ${file_name}.c
 	rm compiler
 
