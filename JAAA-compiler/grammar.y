@@ -249,6 +249,10 @@ expression: expression '+' expression
 		  | expression '<' expression
 				{
 					//$$ = relationalOperation($1, $3, LESSTHAN); interpreter mode
+					if(validateRelationalExpressionType($1->type, $3->type)) {
+						yyerror("Incompatible type for relational operation");
+					}
+
 					$$ = buildRelationalExpression($1, $3, LESSTHAN);
 					$$->type = boolean;
 
@@ -257,12 +261,20 @@ expression: expression '+' expression
 		  | expression LTOET expression
 		  		{
 					//$$ = relationalOperation($1, $3, LESSTHANOREQUALTO); interpreter
+					if(validateRelationalExpressionType($1->type, $3->type)) {
+						yyerror("Incompatible type for relational operation");
+					}
+
 					$$ = buildRelationalExpression($1, $3, LESSTHANOREQUALTO);
 					$$->type = boolean;
 				}
 		  | expression '>' expression
 		  		{
 					//$$ = relationalOperation($1, $3, GREATERTHAN); interpreter mode
+					if(validateRelationalExpressionType($1->type, $3->type)) {
+						yyerror("Incompatible type for relational operation");
+					}
+
 					$$ = buildRelationalExpression($1, $3, GREATERTHAN);
 					$$->type = boolean;
 
@@ -270,18 +282,30 @@ expression: expression '+' expression
 		  | expression GTOET expression
 		  		{
 					//$$ = relationalOperation($1, $3, GREATERTHANOREQUALTO);interpreter
+					if(validateRelationalExpressionType($1->type, $3->type)) {
+						yyerror("Incompatible type for relational operation");
+					}
+
 					$$ = buildRelationalExpression($1, $3, GREATERTHANOREQUALTO);
 					$$->type = boolean;
 				}
 		  | expression ET expression
 		  		{
 					//$$ = relationalOperation($1, $3, EQUALTO); interpreter mode
+					if(validateRelationalExpressionType($1->type, $3->type)) {
+						yyerror("Incompatible type for relational operation");
+					}
+
 					$$ = buildRelationalExpression($1, $3, EQUALTO);
 					$$->type = boolean;
 				}
 		  | expression NET expression
 		  		{
 					//$$ = relationalOperation($1, $3, NOTEQUALTO); interpreter mode
+					if(validateRelationalExpressionType($1->type, $3->type)) {
+						yyerror("Incompatible type for relational operation");
+					}
+
 					$$ = buildRelationalExpression($1, $3, NOTEQUALTO);
 					$$->type = boolean;
 					//printf("expression = %s\n", $$->name); evans
@@ -348,6 +372,7 @@ expression: expression '+' expression
 
 					if(n != 0) {
 						$$ = n;
+						$$->variable = 1;
 					}
 
 					else

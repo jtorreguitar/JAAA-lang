@@ -15,6 +15,7 @@ struct node
 	int dataSize;
 	int constant;
 	int loopType;
+	int variable;
 };
 
 typedef struct node node;

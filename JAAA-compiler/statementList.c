@@ -457,6 +457,19 @@ void genearteDeclareString(Node n) {
 	}
 }
 
+int validateRelationalExpressionType(int type1, int type2) {
+	if(type1 == type2) {
+		return 0;
+	}
+
+	if(type1 == string || type2 == string) {
+		return 1;
+	}
+	else {
+		return 0;
+	}
+}
+
 void freeMemory(sList l) {
 	sList aux;
 

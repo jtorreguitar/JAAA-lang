@@ -67,5 +67,6 @@ Node buildBinaryExpression(Node first, Node second, int operator);
 Node buildRelationalExpression(Node first, Node second, int operator);
 Node buildLogicalExpression(Node first, Node second, int operator);
 Node buildParenthesisExpression(Node n);
+int validateRelationalExpressionType(int type1, int type2);
 
 #endif
