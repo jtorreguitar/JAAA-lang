@@ -2,7 +2,11 @@ i = 10
 j = 0
 while i>0 do
 	i = i - 1
+	println "i value:", i;
+	j = 0
 	while j < i do
+		print j;
 		j = j + 1
 	loop
+	println "";
 loop
