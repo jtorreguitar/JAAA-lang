@@ -76,7 +76,7 @@ generate_java_executable() {
 	file_name="${file_path##*/}"
 	file_name="$(echo $file_name| cut -d'.' -f 1)"
 	#echo "cd JAAA-compiler" > ${file_name}
-	echo "java Main" >> ${file_name}
+	echo "java Main" > ${file_name}
 	#echo "cd .." >> ${file_name}
 	chmod +x ${file_name}
 }
