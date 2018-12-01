@@ -14,7 +14,7 @@ void createJavaVar(int type, char *name, struct node *expression) {
 			break;
 
 		case string:
-			printf("String %s = %s;", name, (char *)expression->value);
+			printf("String %s = \"%s\";", name, (char *)expression->value);
 			break;
 	}
 }
@@ -304,24 +304,132 @@ Node buildJavaRelationalExpression(Node first, Node second, int operator) {
 
 	switch(operator) {
 		case LESSTHAN:
-			sprintf(newNode->name, "%s < %s", first->name, second->name);
+			if(first->type == string) {
+				if(first->variable == 1 && second->variable == 1) {
+					sprintf(newNode->name, "%s.compareTo(%s) < 0", first->name, second->name);
+				}
+				else if(first->variable == 1) {
+					sprintf(newNode->name, "%s.compareTo(\"%s\") < 0", first->name, second->name);
+				}
+				else if(second->variable == 1) {
+					sprintf(newNode->name, "\"%s\".compareTo(%s) < 0", first->name, second->name);
+				}
+				else {
+					sprintf(newNode->name, "\"%s\".compareTo(\"%s\") < 0", first->name, second->name);
+				}
+			}
+			else {
+				sprintf(newNode->name, "%s < %s", first->name, second->name);
+			}
+
 			break;
+		
 		case LESSTHANOREQUALTO:
-			sprintf(newNode->name, "%s <= %s", first->name, second->name);
+			if(first->type == string) {
+				if(first->variable == 1 && second->variable == 1) {
+					sprintf(newNode->name, "%s.compareTo(%s) <= 0", first->name, second->name);
+				}
+				else if(first->variable == 1) {
+					sprintf(newNode->name, "%s.compareTo(\"%s\") <= 0", first->name, second->name);
+				}
+				else if(second->variable == 1) {
+					sprintf(newNode->name, "\"%s\".compareTo(%s) <= 0", first->name, second->name);
+				}
+				else {
+					sprintf(newNode->name, "\"%s\".compareTo(\"%s\") <= 0", first->name, second->name);
+				}
+			}
+			else {
+				sprintf(newNode->name, "%s <= %s", first->name, second->name);
+			}
+			
 			break;
+		
 		case GREATERTHAN:
-			sprintf(newNode->name, "%s > %s", first->name, second->name);
+			if(first->type == string) {
+				if(first->variable == 1 && second->variable == 1) {
+					sprintf(newNode->name, "%s.compareTo(%s) > 0", first->name, second->name);
+				}
+				else if(first->variable == 1) {
+					sprintf(newNode->name, "%s.compareTo(\"%s\") > 0", first->name, second->name);
+				}
+				else if(second->variable == 1) {
+					sprintf(newNode->name, "\"%s\".compareTo(%s) > 0", first->name, second->name);
+				}
+				else {
+					sprintf(newNode->name, "\"%s\".compareTo(\"%s\") > 0", first->name, second->name);
+				}
+			}
+			else {
+				sprintf(newNode->name, "%s > %s", first->name, second->name);
+			}
+			
 			break;
+		
 		case GREATERTHANOREQUALTO:
-			sprintf(newNode->name, "%s >= %s", first->name, second->name);
+			if(first->type == string) {
+				if(first->variable == 1 && second->variable == 1) {
+					sprintf(newNode->name, "%s.compareTo(%s) >= 0", first->name, second->name);
+				}
+				else if(first->variable == 1) {
+					sprintf(newNode->name, "%s.compareTo(\"%s\") >= 0", first->name, second->name);
+				}
+				else if(second->variable == 1) {
+					sprintf(newNode->name, "\"%s\".compareTo(%s) >= 0", first->name, second->name);
+				}
+				else {
+					sprintf(newNode->name, "\"%s\".compareTo(\"%s\") >= 0", first->name, second->name);
+				}
+			}
+			else {
+				sprintf(newNode->name, "%s >= %s", first->name, second->name);
+			}
+			
 			break;
+		
 		case EQUALTO:
-			sprintf(newNode->name, "%s == %s", first->name, second->name);
+			if(first->type == string) {
+				if(first->variable == 1 && second->variable == 1) {
+					sprintf(newNode->name, "%s.compareTo(%s) == 0", first->name, second->name);
+				}
+				else if(first->variable == 1) {
+					sprintf(newNode->name, "%s.compareTo(\"%s\") == 0", first->name, second->name);
+				}
+				else if(second->variable == 1) {
+					sprintf(newNode->name, "\"%s\".compareTo(%s) == 0", first->name, second->name);
+				}
+				else {
+					sprintf(newNode->name, "\"%s\".compareTo(\"%s\") == 0", first->name, second->name);
+				}
+			}
+			else {
+				sprintf(newNode->name, "%s == %s", first->name, second->name);
+			}
+
 			break;
+		
 		case NOTEQUALTO:
-			sprintf(newNode->name, "%s != %s", first->name, second->name);
+			if(first->type == string) {
+				if(first->variable == 1 && second->variable == 1) {
+					sprintf(newNode->name, "%s.compareTo(%s) != 0", first->name, second->name);
+				}
+				else if(first->variable == 1) {
+					sprintf(newNode->name, "%s.compareTo(\"%s\") != 0", first->name, second->name);
+				}
+				else if(second->variable == 1) {
+					sprintf(newNode->name, "\"%s\".compareTo(%s) != 0", first->name, second->name);
+				}
+				else {
+					sprintf(newNode->name, "\"%s\".compareTo(\"%s\") != 0", first->name, second->name);
+				}
+			}
+			else {
+				sprintf(newNode->name, "%s != %s", first->name, second->name);
+			}
+			
 			break;
 	}
+
 
 	//not to free variables evans
 	// free(first->name);

@@ -1,0 +1,11 @@
+var = "string1"
+foo = "string2"
+
+if var < foo do
+	println "string comparison works fine";
+	if var == foo do
+		println "string comparison doesn't work";
+	end
+else do
+	println "string comparison doesn't work";
+end
