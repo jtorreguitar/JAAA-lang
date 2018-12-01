@@ -81,9 +81,12 @@ statement: NAME '=' expression
 						free(var->value);
 
 						if(diferentTypes(var->type, $3->type)) {
-							yyerror("variables cannot change their type");
+							yyerror("Constants cannot change their value");
 						}
 
+						if(var->constant) {
+							yyerror("Cannot reasignate a constant");
+						}
 						//var->type = $3->type; to add weak typed
 						assignValue(var, $3->value);
 						Node oldNode = clone(var);

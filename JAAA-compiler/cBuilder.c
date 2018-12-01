@@ -65,7 +65,7 @@ void createConstantCVar(int type, char *name, struct node *expression) {
 			break;
 
 		case string:
-			printf("const char *%s = %s);", name, expression->name);
+			printf("const char *%s = \"%s\";", name, expression->name);
 
 			break;
 	}
