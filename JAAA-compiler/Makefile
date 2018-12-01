@@ -5,7 +5,7 @@ CSOURCES   = $(wildcard *.c)
 compiler: 
 	yacc -d grammar.y 
 	flex scanner.l
-	$(GCC) -o compiler lex.yy.c y.tab.c $(CSOURCES) -ly -ll $(GCCFLAGS)
+	$(GCC) $(GCCFLAGS) y.tab.c lex.yy.c $(CSOURCES) -o compiler -ly 
 clean:
 	rm compiler y.tab.c y.tab.h lex.yy.c
 .PHONY:

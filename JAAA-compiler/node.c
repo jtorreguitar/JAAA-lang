@@ -779,13 +779,13 @@ Node toString(Node n)
 	return ret;
 }
 
-void toStringFromInteger(Node n, Node result)
-{
-	int digits = floor(log10(abs(*((int*)n->value)))) + 1;
-	result->dataSize = (digits + 1)*sizeof(char);
-	result->value = calloc(digits + 1, sizeof(char));
-	my_itoa(*((int*)n->value), ((char*)result->value));
-}
+ void toStringFromInteger(Node n, Node result)
+ {
+// 	int digits = floor(log10(abs(*((int*)n->value)))) + 1;
+// 	result->dataSize = (digits + 1)*sizeof(char);
+// 	result->value = calloc(digits + 1, sizeof(char));
+// 	my_itoa(*((int*)n->value), ((char*)result->value));
+ }
 
 void toStringFromFloating(Node n, Node result)
 {
