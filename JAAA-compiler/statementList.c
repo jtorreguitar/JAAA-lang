@@ -117,6 +117,7 @@ void printList(sList l) {
 
 				if(scope > 0) {
 					fprintf(stderr, "Cannot declare a constant inside a inner block\n");
+					exit(1);
 				}
 
 				generateConstDeclaration(l);
@@ -127,6 +128,7 @@ void printList(sList l) {
 
 				if(scope > 0) {
 					fprintf(stderr, "Cannot declare a variable inside a inner block\n");
+					exit(1);
 				}
 
 				generateDeclaration(l);
@@ -176,6 +178,7 @@ void generateConstDeclaration(sList l) {
 	}
 	else {
 		fprintf(stderr, "unsupported language\n");
+		exit(1);
 
 	}
 }
@@ -189,6 +192,7 @@ void generateDeclaration(sList l) {
 	}
 	else {
 		fprintf(stderr, "unsupported language\n");
+		exit(1);
 
 	}
 }
@@ -202,7 +206,7 @@ void generateAsignation(sList l) {
 	}
 	else {
 		fprintf(stderr, "unsupported language\n");
-
+		exit(1);
 	}
 }
 
@@ -215,6 +219,8 @@ void generateExitCode() {
 	}
 	else {
 		fprintf(stderr, "unsupported language\n");
+		exit(1);
+
 	}
 }
 
@@ -227,7 +233,7 @@ void generateCodeStart() {
 	}
 	else {
 		fprintf(stderr, "unsupported language\n");
-
+		exit(1);
 	}
 }
 
@@ -240,6 +246,7 @@ void generateCodeEnd() {
 	}
 	else {
 		fprintf(stderr, "unsupported language\n");
+		exit(1);
 	}
 
 }
@@ -253,7 +260,7 @@ void generateConditionBlockCode(sList l) {
 	}
 	else {
 		fprintf(stderr, "unsupported language\n");
-
+		exit(1);
 	}
 }
 
@@ -266,7 +273,7 @@ void generateLoopBlockCode(sList l) {
 	}
 	else {
 		fprintf(stderr, "unsupported language\n");
-
+		exit(1);
 	}
 }
 
@@ -279,7 +286,7 @@ void generatePrintCode(sList l) {
 	}
 	else {
 		fprintf(stderr, "unsupported language\n");
-
+		exit(1);
 	}
 }
 
@@ -440,7 +447,7 @@ void generateReadStatement(sList l) {
 	}
 	else {
 		fprintf(stderr, "unsupported language\n");
-
+		exit(1);
 	}
 }
 
@@ -453,7 +460,7 @@ void genearteDeclareString(Node n) {
 	}
 	else {
 		fprintf(stderr, "unsupported language\n");
-
+		exit(1);
 	}
 }
 
