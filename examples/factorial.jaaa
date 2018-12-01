@@ -1,0 +1,12 @@
+number = 10 //factorial.jaaa
+aux = number
+factorial = number
+
+while aux > 0 do
+	aux = aux -1
+	if aux != 0 do
+		factorial = factorial * aux
+	end
+loop
+
+print number, "factorial is:", factorial;
